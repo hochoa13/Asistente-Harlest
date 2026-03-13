@@ -1,40 +1,40 @@
 ---
 sidebar_position: 9
-title: "voz & TTS"
-description: "Texto a Voz and voz message transcription across all platforms"
+title: "Voz y TTS"
+description: "Texto a voz y transcripción de mensajes de voz en todas las plataformas"
 ---
 
-# voz & TTS
+# Voz y TTS
 
-Hermes Agent supports both Texto a Voz output and voz message transcription across all messaging platforms.
+Hermes Agent admite tanto la salida de texto a voz como la transcripción de mensajes de voz en todas las plataformas de mensajería.
 
 ## Texto a Voz
 
-Convert text to Habla with three Proveedores:
+Convierte texto a voz con tres proveedores:
 
-| Provider | Quality | Cost | clave API |
+| Proveedor | Calidad | Costo | Clave API |
 |----------|---------|------|---------|
-| **Edge TTS** (default) | Good | Free | None needed |
-| **ElevenLabs** | Excellent | Paid | `ELEVENLABS_API_KEY` |
-| **OpenAI TTS** | Good | Paid | `VOICE_TOOLS_OPENAI_KEY` |
+| **Edge TTS** (predeterminado) | Buena | Gratis | Ninguno necesario |
+| **ElevenLabs** | Excelente | Pagado | `ELEVENLABS_API_KEY` |
+| **OpenAI TTS** | Buena | Pagado | `VOICE_TOOLS_OPENAI_KEY` |
 
-### entrega de plataforma
+### Entrega por Plataforma
 
-| Platform | Delivery | Format |
+| Plataforma | Entrega | Formato |
 |----------|----------|--------|
-| Telegram | voz bubble (plays inline) | Opus `.ogg` |
-| Discord | Audio archivo attachment | MP3 |
-| WhatsApp | Audio archivo attachment | MP3 |
-| CLI | Saved to `~/.hermes/audio_cache/` | MP3 |
+| Telegram | Burbuja de voz (reproduce en línea) | Opus `.ogg` |
+| Discord | Archivo adjunto de audio | MP3 |
+| WhatsApp | Archivo adjunto de audio | MP3 |
+| CLI | Guardado en `~/.hermes/audio_cache/` | MP3 |
 
 ### Configuración
 
 ```yaml
-# In ~/.hermes/config.yaml
+# En ~/.hermes/config.yaml
 tts:
   provider: "edge"              # "edge" | "elevenlabs" | "openai"
   edge:
-    voice: "en-US-AriaNeural"   # 322 voices, 74 languages
+    voice: "en-US-AriaNeural"   # 322 voces, 74 idiomas
   elevenlabs:
     voice_id: "pNInz6obpgDQGcFmaJgB"  # Adam
     model_id: "eleven_multilingual_v2"
@@ -43,12 +43,12 @@ tts:
     voice: "alloy"              # alloy, echo, fable, onyx, nova, shimmer
 ```
 
-### Telegram voz Bubbles & ffmpeg
+### Burbujas de Voz en Telegram y ffmpeg
 
-Telegram voz bubbles require Opus/OGG Audio format:
+Las burbujas de voz en Telegram requieren formato de audio Opus/OGG:
 
-- **OpenAI and ElevenLabs** produce Opus natively — no extra Configuración
-- **Edge TTS** (default) outputs MP3 and needs **ffmpeg** to convert:
+- **OpenAI y ElevenLabs** producen Opus nativamente — sin configuración extra
+- **Edge TTS** (predeterminado) produce MP3 y necesita **ffmpeg** para convertir:
 
 ```bash
 # Ubuntu/Debian
@@ -61,28 +61,28 @@ brew install ffmpeg
 sudo dnf install ffmpeg
 ```
 
-Without ffmpeg, Edge TTS Audio is sent as a regular Audio archivo (playable, but shows as a rectangular player instead of a voz bubble).
+Sin ffmpeg, el audio de Edge TTS se envía como archivo de audio normal (reproducible, pero se muestra como un reproductor rectangular en lugar de una burbuja de voz).
 
-:::Consejo
-If you want voz bubbles without installing ffmpeg, switch to the OpenAI or ElevenLabs provider.
+:::consejo
+Si quieres burbujas de voz sin instalar ffmpeg, cambia al proveedor OpenAI o ElevenLabs.
 :::
 
-## voz Message Transcription
+## Transcripción de Mensajes de Voz
 
-voz messages sent on Telegram, Discord, WhatsApp, or Slack are automatically transcribed and injected as text into the conversation. The agent sees the transcript as normal text.
+Los mensajes de voz enviados en Telegram, Discord, WhatsApp o Slack se transcriben automáticamente e inyectan como texto en la conversación. El agente ve la transcripción como texto normal.
 
-| Provider | Model | Quality | Cost |
+| Proveedor | Modelo | Calidad | Costo |
 |----------|-------|---------|------|
-| **OpenAI Whisper** | `whisper-1` (default) | Good | Low |
-| **OpenAI GPT-4o** | `gpt-4o-mini-transcribe` | Better | Medium |
-| **OpenAI GPT-4o** | `gpt-4o-transcribe` | Best | Higher |
+| **OpenAI Whisper** | `whisper-1` (predeterminado) | Buena | Bajo |
+| **OpenAI GPT-4o** | `gpt-4o-mini-transcribe` | Mejor | Medio |
+| **OpenAI GPT-4o** | `gpt-4o-transcribe` | Mejor | Más alto |
 
-Requires `VOICE_TOOLS_OPENAI_KEY` in `~/.hermes/.env`.
+Requiere `VOICE_TOOLS_OPENAI_KEY` en `~/.hermes/.env`.
 
 ### Configuración
 
 ```yaml
-# In ~/.hermes/config.yaml
+# En ~/.hermes/config.yaml
 stt:
   enabled: true
   model: "whisper-1"
