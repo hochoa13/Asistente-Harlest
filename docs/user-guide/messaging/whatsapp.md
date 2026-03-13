@@ -4,41 +4,34 @@ title: "WhatsApp"
 description: "Configura Hermes Agent como un bot WhatsApp a través del puente Baileys integrado"
 ---
 
-# WhatsApp Configuración
+# Configuración de WhatsApp
 
-Hermes connects to WhatsApp through a built-in bridge using [whatsapp-web.js](https://github.com/pedroslopez/whatsapp-web.js)
-(Baileys-based). This works by emulating a WhatsApp Web session — **not** through the official
-WhatsApp Business API. No Meta developer account or Business verification is required.
+Hermes Agent se conecta a WhatsApp a través de un puente integrado usando [whatsapp-web.js](https://github.com/pedroslopez/whatsapp-web.js) (basado en Baileys). Esto funciona emulando una sesión de WhatsApp Web — **no** a través de la API oficial de WhatsApp Business. No requieres una cuenta de desarrollador de Meta ni verificación empresarial.
 
-:::warning Unofficial API — Ban Risk
-WhatsApp does **not** officially support third-party bots outside the Business API. Using
-whatsapp-web.js carries a small risk of account restrictions. To minimize risk:
-- **Use a dedicated phone number** for the bot (not your personal number)
-- **Don't enviar bulk/spam mensajes** — keep usage conversational
-- **Don't automate outbound messaging** to people who haven't mensajed first
+:::warning[API No Oficial — Riesgo de Restricción]
+WhatsApp **no apoya** oficialmente bots de terceros fuera de la API Business. Usar whatsapp-web.js lleva un pequeño riesgo de restricciones de cuenta. Para minimizar el riesgo:
+- **Usa un número de teléfono dedicado** para el bot (no tu número personal)
+- **No envíes mensajes masivos/spam** — mantén el uso conversacional
+- **No automatices mensajes salientes** a personas que no hayan escrito primero
 :::
 
-:::warning WhatsApp Web Protocol Updates
-WhatsApp periodically updates their Web protocol, which can temporarily break compatibility
-with whatsapp-web.js. When this happens, Hermes will update the bridge dependency. If the
-bot stops working after a WhatsApp update, pull the latest Hermes version and re-pair.
+:::warning[Actualizaciones de Protocolo de WhatsApp Web]
+WhatsApp periódicamente actualiza su protocolo web, lo que puede romper temporalmente la compatibilidad con whatsapp-web.js. Cuando esto sucede, Hermes actualiza la dependencia del puente. Si el bot deja de funcionar después de una actualización de WhatsApp, obtén la última versión de Hermes y vuelve a emparejar.
 :::
 
-## Two Modes
+## Dos Modos
 
-| Mode | Cómo funciona | Best for |
-|------|-------------|----------|
-| **Separate bot number** (recommended) | Dedicate a phone number to the bot. People mensaje that number directly. | Clean UX, multiple usuarios, lower ban risk |
-| **Personal self-chat** | Use your own WhatsApp. You mensaje yourself to talk to the agent. | Quick setup, single usuario, testing |
-
----
+| Modo | Cómo funciona | Mejor para |
+|------|-------------|-----------|
+| **Número de bot separado** (recomendado) | Dedica un número de teléfono al bot. Las personas envían mensajes a ese número directamente. | UX limpia, múltiples usuarios, riesgo menor de restricción |
+| **Auto-chat personal** | Usa tu propio WhatsApp. Tú te envías mensajes a ti mismo para hablar con el agente. | Configuración rápida, usuario único, pruebas |
 
 ## Requisitos Previos
 
-- **Node.js v18+** and **npm** — the WhatsApp bridge runs as a Node.js process
-- **A phone with WhatsApp** installed (for scanning the QR code)
+- **Node.js v18+** y **npm** — el puente de WhatsApp se ejecuta como un proceso Node.js
+- **Un teléfono con WhatsApp** instalado (para escanear el código QR)
 
-**On Linux headless servers**, you also need Chromium/Puppeteer dependencies:
+**En servidores Linux sin cabezal**, también necesitas dependencias de Chromium/Puppeteer:
 
 ```bash
 # Debian / Ubuntu
@@ -54,140 +47,117 @@ sudo dnf install -y \
   pango cairo alsa-lib
 ```
 
----
-
-## Step 1: Run the Configuración Wizard
+## Paso 1: Ejecutar el Asistente de Configuración
 
 ```bash
 hermes whatsapp
 ```
 
-The wizard will:
+El asistente:
 
-1. Ask which mode you want (**bot** or **self-chat**)
-2. Install bridge dependencies if needed
-3. Display a **QR code** in your terminal
-4. Wait for you to scan it
+1. Te preguntará qué modo deseas (**bot** o **self-chat**)
+2. Instalará dependencias del puente si es necesario
+3. Mostrará un **código QR** en tu terminal
+4. Esperará a que lo escanees
 
-**To scan the QR code:**
+**Para escanear el código QR:**
 
-1. Open WhatsApp on your phone
-2. Go to **Settings → Linked Devices**
-3. Tap **Link a Device**
-4. Point your camera at the terminal QR code
+1. Abre WhatsApp en tu teléfono
+2. Ve a **Configuración → Dispositivos Vinculados**
+3. Toque **Vincular un Dispositivo**
+4. Apunta tu cámara al código QR de la terminal
 
-Once paired, the wizard confirms the connection and exits. Your session is saved automatically.
+Una vez emparejado, el asistente confirma la conexión y sale. Tu sesión se guarda automáticamente.
 
 :::tip
-If the QR code looks garbled, make sure your terminal is at least 60 columns wide and supports
-Unicode. You can also try a different terminal emulator.
+Si el código QR se ve borroso, asegúrate de que tu terminal tenga al menos 60 columnas de ancho y admita Unicode. También puedes probar un emulador de terminal diferente.
 :::
 
----
+## Paso 2: Obtener un Segundo Número de Teléfono (Modo Bot)
 
-## Step 2: Getting a Second Phone Number (Bot Mode)
+Para el modo bot, necesitas un número de teléfono que no esté ya registrado con WhatsApp. Tres opciones:
 
-For bot mode, you need a phone number that isn't already registered with WhatsApp. Three options:
-
-| Option | Cost | Notes |
+| Opción | Costo | Notas |
 |--------|------|-------|
-| **Google Voice** | Free | US only. Get a number at [voice.google.com](https://voice.google.com). Verify WhatsApp via SMS through the Google Voice app. |
-| **Prepaid SIM** | $5–15 one-time | Any carrier. Activate, verify WhatsApp, then the SIM can sit in a drawer. Number must stay active (make a call every 90 days). |
-| **VoIP services** | Free–$5/month | TextNow, TextFree, or similar. Some VoIP numbers are blocked by WhatsApp — try a few if the first doesn't work. |
+| **Google Voice** | Gratis | Solo EE.UU. Obtén un número en [voice.google.com](https://voice.google.com). Verifica WhatsApp vía SMS a través de la aplicación Google Voice. |
+| **SIM Prepago** | $5–15 una vez | Cualquier operador. Activa, verifica WhatsApp, luego el SIM puede quedarse en un cajón. El número debe mantenerse activo (hacer una llamada cada 90 días). |
+| **Servicios VoIP** | Gratis–$5/mes | TextNow, TextFree, o similares. Algunos números VoIP están bloqueados por WhatsApp — prueba algunos si el primero no funciona. |
 
-After getting the number:
+Después de obtener el número:
 
-1. Install WhatsApp on a phone (or use WhatsApp Business app with dual-SIM)
-2. Register the new number with WhatsApp
-3. Run `hermes whatsapp` and scan the QR code from that WhatsApp account
+1. Instala WhatsApp en un teléfono (o usa la aplicación WhatsApp Business con SIM dual)
+2. Registra el nuevo número con WhatsApp
+3. Ejecuta `hermes whatsapp` y escanea el código QR desde esa cuenta de WhatsApp
 
----
+## Paso 3: Configurar Hermes
 
-## Step 3: Configure Hermes
-
-Add the following to your `~/.hermes/.env` file:
+Añade lo siguiente a tu archivo `~/.hermes/.env`:
 
 ```bash
-# Required
+# Requerido
 WHATSAPP_ENABLED=true
-WHATSAPP_MODE=bot                          # "bot" or "self-chat"
-WHATSAPP_ALLOWED_USERS=15551234567         # Comma-separated phone numbers (with country code, no +)
+WHATSAPP_MODE=bot                          # "bot" o "self-chat"
+WHATSAPP_ALLOWED_USERS=15551234567         # Números de teléfono separados por comas (con código de país, sin +)
 
-# Optional
-WHATSAPP_HOME_CONTACT=15551234567          # Default contact for proactive/scheduled mensajes
+# Opcional
+WHATSAPP_HOME_CONTACT=15551234567          # Contacto predeterminado para mensajes proactivos/programados
 ```
 
-Then start the gateway:
+Luego inicia la puerta de enlace:
 
 ```bash
-hermes gateway              # Foreground
-hermes gateway install      # Install as a system service
+hermes gateway              # Primer plano
+hermes gateway install      # Instalar como servicio del sistema
 ```
 
-The gateway starts the WhatsApp bridge automatically using the saved session.
+La puerta de enlace inicia automáticamente el puente de WhatsApp usando la sesión guardada.
 
----
+## Persistencia de Sesión
 
-## Session Persistence
+La estrategia `LocalAuth` de whatsapp-web.js guarda tu sesión en la carpeta `.wwebjs_auth` dentro de tu directorio de datos de Hermes (`~/.hermes/`). Esto significa:
 
-The whatsapp-web.js `LocalAuth` strategy saves your session to the `.wwebjs_auth` folder inside
-your Hermes data directory (`~/.hermes/`). This means:
+- **Las sesiones sobreviven a los reinicios** — no necesitas volver a escanear el código QR cada vez
+- Los datos de sesión incluyen claves de cifrado y credenciales de dispositivo
+- **No compartas ni confirmes la carpeta `.wwebjs_auth`** — otorga acceso completo a la cuenta de WhatsApp
 
-- **Sessions survive restarts** — you don't need to re-scan the QR code every time
-- The session data includes encryption keys and device credentials
-- **Do not share or commit the `.wwebjs_auth` folder** — it grants full access to the WhatsApp account
+## Reemparejamiento
 
----
-
-## Re-pairing
-
-If the session breaks (phone reset, WhatsApp update, manually unlinked), you'll see connection
-errors in the gateway logs. To fix it:
+Si la sesión se rompe (reinicio del teléfono, actualización de WhatsApp, desvinculación manual), verás errores de conexión en los registros de la puerta de enlace. Para solucionarlo:
 
 ```bash
 hermes whatsapp
 ```
 
-This generates a fresh QR code. Scan it again and the session is re-established. The gateway
-handles **temporary** disconnections (network blips, phone going offline briefly) automatically
-with reconnection logic.
+Esto genera un nuevo código QR. Escanéalo de nuevo y la sesión se restablece. La puerta de enlace maneja **desconexiones temporales** (interrupciones de red, teléfono desconectándose brevemente) automáticamente con lógica de reconexión.
 
----
+## Mensajes de Voz
 
-## Voice Messages
+Hermes Agent admite mensajes de voz en WhatsApp:
 
-Hermes supports voice on WhatsApp:
-
-- **Incoming:** Voice mensajes (`.ogg` opus) are automatically transcribed using Whisper (requires `VOICE_TOOLS_OPENAI_KEY`)
-- **Outgoing:** TTS responses are sent as MP3 audio file attachments
-- Agent responses are prefixed with "⚕ **Hermes Agent**" for easy identification
-
----
+- **Entrada**: Los mensajes de voz (`.ogg` opus) se transcriben automáticamente usando Whisper (requiere `VOICE_TOOLS_OPENAI_KEY`)
+- **Salida**: Las respuestas TTS se envían como adjuntos de archivo de audio MP3
+- Las respuestas del agente van prefijadas con "⚕ **Hermes Agent**" para fácil identificación
 
 ## Solución de Problemas
 
-| Problem | Solution |
-|---------|----------|
-| **QR code not scanning** | Ensure terminal is wide enough (60+ columns). Try a different terminal. Make sure you're scanning from the correct WhatsApp account (bot number, not personal). |
-| **QR code expires** | QR codes refresh every ~20 seconds. If it times out, restart `hermes whatsapp`. |
-| **Session not persisting** | Check that `~/.hermes/.wwebjs_auth/` exists and is writable. On Docker, mount this as a volume. |
-| **Logged out unexpectedly** | WhatsApp unlinks devices after ~14 days of phone inactivity. Keep the phone on and connected to WiFi. Re-pair with `hermes whatsapp`. |
-| **"Execution context was destroyed"** | Chromium crashed. Install the Puppeteer dependencies listed in Requisitos Previos. On low-RAM servers, add swap space. |
-| **Bot stops working after WhatsApp update** | Update Hermes to get the latest bridge version, then re-pair. |
-| **Messages not being recibird** | Verify `WHATSAPP_ALLOWED_USERS` includes the enviarer's number (with country code, no `+` or spaces). |
+| Problema | Solución |
+|----------|----------|
+| **El código QR no escanea** | Asegúrate de que la terminal sea lo suficientemente ancha (60+ columnas). Prueba un terminal diferente. Asegúrate de estar escaneando desde la cuenta de WhatsApp correcta (número del bot, no personal). |
+| **El código QR vence** | Los códigos QR se actualizan cada ~20 segundos. Si vence, reinicia `hermes whatsapp`. |
+| **La sesión no persiste** | Verifica que `~/.hermes/.wwebjs_auth/` exista y sea escribible. En Docker, móntalo como un volumen. |
+| **Deslogueado inesperadamente** | WhatsApp desvincula dispositivos después de ~14 días de inactividad del teléfono. Mantén el teléfono encendido y conectado a WiFi. Vuelve a emparejar con `hermes whatsapp`. |
+| **"El contexto de ejecución fue destruido"** | Chromium se bloqueó. Instala las dependencias de Puppeteer listadas en Requisitos Previos. En servidores con poca RAM, añade espacio de intercambio. |
+| **El bot deja de funcionar después de una actualización de WhatsApp** | Actualiza Hermes para obtener la última versión del puente, luego vuelve a emparejar. |
+| **Los mensajes no se están recibiendo** | Verifica que `WHATSAPP_ALLOWED_USERS` incluya el número del remitente (con código de país, sin `+` ni espacios). |
 
----
-
-## Security
+## Seguridad
 
 :::warning
-**Always set `WHATSAPP_ALLOWED_USERS`** with phone numbers (including country code, without the `+`)
-of authorized usuarios. Without this setting, the gateway will **deny all incoming mensajes** as a
-safety measure.
+**Siempre establece `WHATSAPP_ALLOWED_USERS`** con números de teléfono (incluyendo código de país, sin el `+`) de usuarios autorizados. Sin esta configuración, la puerta de enlace **negará todos los mensajes entrantes** como medida de seguridad.
 :::
 
-- The `.wwebjs_auth` folder contains full session credentials — protect it like a password
-- Set file permisos: `chmod 700 ~/.hermes/.wwebjs_auth`
-- Use a **dedicated phone number** for the bot to isolate risk from your personal account
-- If you suspect compromise, unlink the device from WhatsApp → Settings → Linked Devices
-- Phone numbers in logs are partially redacted, but review your log retention policy
+- La carpeta `.wwebjs_auth` contiene credenciales de sesión completas — protégela como una contraseña
+- Establece permisos de archivo: `chmod 700 ~/.hermes/.wwebjs_auth`
+- Usa un **número de teléfono dedicado** para el bot para aislar el riesgo de tu cuenta personal
+- Si sospechas compromiso, desvincula el dispositivo desde WhatsApp → Configuración → Dispositivos Vinculados
+- Los números de teléfono en los registros están parcialmente redactados, pero revisa tu política de retención de registros

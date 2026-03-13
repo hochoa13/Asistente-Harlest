@@ -4,257 +4,257 @@ title: "Discord"
 description: "Configura Hermes Agent como un bot Discord"
 ---
 
-# Discord Configuración
+# Configuración de Discord
 
-Hermes Agent integrates with Discord as a bot, letting you chat with your AI assistant through direct mensajes or server canals. The bot recibirs your mensajes, processes them through the Hermes Agent pipeline (including tool use, memory, and reasoning), and responds in real time. It supports text, voice mensajes, file attachments, and slash commands.
+Hermes Agent se integra con Discord como un bot, permitiéndote chatear con tu asistente de IA a través de mensajes directos o canales del servidor. El bot recibe tus mensajes, los procesa a través de la tubería de Hermes Agent (incluyendo uso de herramientas, memoria y razonamiento), y responde en tiempo real. Admite texto, mensajes de voz, adjuntos de archivos y comandos de barra.
 
-This guía walks you through the full setup process — from creating your bot on Discord's Developer Portal to enviaring your first mensaje.
+Esta guía te acompaña en el proceso de configuración completo — desde crear tu bot en el Portal de Desarrolladores de Discord hasta enviar tu primer mensaje.
 
-## Step 1: Create a Discord Application
+## Paso 1: Crear una Aplicación Discord
 
-1. Go to the [Discord Developer Portal](https://discord.com/developers/applications) and sign in with your Discord account.
-2. Click **New Application** in the top-right corner.
-3. Enter a name for your application (e.g., "Hermes Agent") and accept the Developer Terms of Service.
-4. Click **Create**.
+1. Ve al [Portal de Desarrolladores de Discord](https://discord.com/developers/applications) e inicia sesión con tu cuenta de Discord.
+2. Haz clic en **Nueva Aplicación** en la esquina superior derecha.
+3. Ingresa un nombre para tu aplicación (p. ej., "Hermes Agent") y acepta los Términos de Servicio del Desarrollador.
+4. Haz clic en **Crear**.
 
-You'll land on the **General Information** page. Note the **Application ID** — you'll need it later to build the invite URL.
+Aterrizarás en la página **Información General**. Nota el **ID de Aplicación** — lo necesitarás más adelante para construir la URL de invitación.
 
-## Step 2: Create the Bot
+## Paso 2: Crear el Bot
 
-1. In the left sidebar, click **Bot**.
-2. Discord automatically creates a bot usuario for your application. You'll see the bot's usuarioname, which you can customize.
-3. Under **Authorization Flow**:
-   - Set **Public Bot** to **OFF** — this prevents other people from inviting your bot to their servers.
-   - Leave **Require OAuth2 Code Grant** set to **OFF**.
+1. En la barra lateral izquierda, haz clic en **Bot**.
+2. Discord crea automáticamente un usuario bot para tu aplicación. Verás el nombre de usuario del bot, que puedes personalizar.
+3. En **Flujo de Autorización**:
+   - Establece **Bot Público** en **DESACTIVADO** — esto previene que otras personas inviten tu bot a sus servidores.
+   - Deja **Requerir Concesión de Código OAuth2** establecido en **DESACTIVADO**.
 
 :::tip
-You can set a custom avatar and banner for your bot on this page. This is what usuarios will see in Discord.
+Puedes establecer un avatar y pancarta personalizados para tu bot en esta página. Esto es lo que los usuarios verán en Discord.
 :::
 
-## Step 3: Enable Privileged Gateway Intenciones
+## Paso 3: Habilitar Intenciones de Puerta de Enlace Privilegiadas
 
-This is the most critical step in the entire setup. Without the correct intents enabled, your bot will connect to Discord but **will not be able to read mensaje content**.
+Este es el paso más crítico en toda la configuración. Sin los intents correctos habilitados, tu bot se conectará a Discord pero **no podrá leer el contenido del mensaje**.
 
-On the **Bot** page, scroll down to **Privileged Gateway Intenciones**. You'll see three toggles:
+En la página **Bot**, desplázate hacia abajo a **Intenciones de Puerta de Enlace Privilegiadas**. Verás tres alternadores:
 
-| Intent | Purpose | Required? |
-|--------|---------|-----------|
-| **Presence Intent** | See usuario online/offline status | Optional |
-| **Server Members Intent** | Access the member list | Optional |
-| **Message Content Intent** | Read the text content of mensajes | **Required** |
+| Intent | Propósito | ¿Requerido? |
+|--------|-----------|-----------|
+| **Intent de Presencia** | Ver estado en línea/desconectado de usuarios | Opcional |
+| **Intent de Miembros del Servidor** | Acceder a la lista de miembros | Opcional |
+| **Intent de Contenido de Mensaje** | Leer el contenido de texto de los mensajes | **Requerido** |
 
-**Enable Message Content Intent** by toggling it **ON**. Without this, your bot recibirs mensaje events but the mensaje text is empty — the bot literally cannot see what you typed.
+**Habilita el Intent de Contenido de Mensaje** alternándolo **ACTIVADO**. Sin esto, tu bot recibe eventos de mensaje pero el texto del mensaje está vacío — el bot literalmente no puede ver lo que escribiste.
 
-:::warning[This is the #1 reason Discord bots don't work]
-If your bot is online but never responds to mensajes, the **Message Content Intent** is almost certainly disabled. Go back to the [Developer Portal](https://discord.com/developers/applications), select your application → Bot → Privileged Gateway Intenciones, and make sure **Message Content Intent** is toggled ON. Click **Save Changes**.
+:::warning[Esta es la #1 razón por la que los bots Discord no funcionan]
+Si tu bot está en línea pero nunca responde a mensajes, el **Intent de Contenido de Mensaje** casi seguramente está deshabilitado. Ve atrás al [Portal de Desarrolladores](https://discord.com/developers/applications), selecciona tu aplicación → Bot → Intenciones de Puerta de Enlace Privilegiadas, y asegúrate de que **Intent de Contenido de Mensaje** está alternado ACTIVADO. Haz clic en **Guardar Cambios**.
 :::
 
-**Regarding server count:**
-- If your bot is in **fewer than 100 servers**, you can simply toggle intents on and off freely.
-- If your bot is in **100 or more servers**, Discord requires you to submit a verification application to use privileged intents. For personal use, this is not a concern.
+**Respecto a la cantidad de servidores:**
+- Si tu bot está en **menos de 100 servidores**, puedes simplemente alternar intents libremente.
+- Si tu bot está en **100 o más servidores**, Discord requiere que envíes una solicitud de verificación para usar intents privilegiados. Para uso personal, esto no es una preocupación.
 
-Click **Save Changes** at the bottom of the page.
+Haz clic en **Guardar Cambios** en la parte inferior de la página.
 
-## Step 4: Get the Token del Bot
+## Paso 4: Obtener el Token del Bot
 
-The bot token is the credential Hermes Agent uses to log in as your bot. Still on the **Bot** page:
+El token del bot es la credencial que Hermes Agent utiliza para iniciar sesión como tu bot. Aún en la página **Bot**:
 
-1. Under the **Token** section, click **Reset Token**.
-2. If you have two-factor autenticación enabled on your Discord account, enter your 2FA code.
-3. Discord will display your new token. **Copy it immediately.**
+1. Bajo la sección **Token**, haz clic en **Restablecer Token**.
+2. Si tienes autenticación de dos factores habilitada en tu cuenta de Discord, ingresa tu código 2FA.
+3. Discord mostrará tu nuevo token. **Cópialo inmediatamente.**
 
-:::warning[Token shown only once]
-The token is only displayed once. If you lose it, you'll need to reset it and generate a new one. Never share your token publicly or commit it to Git — anyone with this token has full control of your bot.
+:::warning[Token mostrado solo una vez]
+El token se muestra solo una vez. Si lo pierdes, necesitarás restablecerlo y generar uno nuevo. Nunca compartas tu token públicamente o lo confirmes a Git — cualquiera con este token tiene control total de tu bot.
 :::
 
-Store the token somewhere safe (a password manager, for example). You'll need it in Step 8.
+Almacena el token en algún lugar seguro (un gestor de contraseñas, por ejemplo). Lo necesitarás en el Paso 8.
 
-## Step 5: Generate the Invite URL
+## Paso 5: Generar la URL de Invitación
 
-You need an OAuth2 URL to invite the bot to your server. There are two ways to do this:
+Necesitas una URL de OAuth2 para invitar el bot a tu servidor. Hay dos formas de hacer esto:
 
-### Option A: Using the Instalación Tab (Recommended)
+### Opción A: Usar la Pestaña de Instalación (Recomendado)
 
-1. In the left sidebar, click **Instalación**.
-2. Under **Instalación Contexts**, enable **Guild Install**.
-3. For **Install Link**, select **Discord Provided Link**.
-4. Under **Default Install Settings** for Guild Install:
-   - **Scopes**: select `bot` and `applications.commands`
-   - **Permissions**: select the permisos listed below.
+1. En la barra lateral izquierda, haz clic en **Instalación**.
+2. Bajo **Contextos de Instalación**, habilita **Instalación de Gremio**.
+3. Para **Enlace de Instalación**, selecciona **Enlace Proporcionado por Discord**.
+4. Bajo **Configuración de Instalación Predeterminada** para Instalación de Gremio:
+   - **Ámbitos**: selecciona `bot` y `applications.commands`
+   - **Permisos**: selecciona los permisos listados a continuación.
 
-### Option B: Manual URL
+### Opción B: URL Manual
 
-You can construct the invite URL directly using this format:
+Puedes construir la URL de invitación directamente usando este formato:
 
 ```
-https://discord.com/oauth2/authorize?client_id=YOUR_APP_ID&scope=bot+applications.commands&permisos=274878286912
+https://discord.com/oauth2/authorize?client_id=TU_ID_APLICACION&scope=bot+applications.commands&permissions=274878286912
 ```
 
-Replace `YOUR_APP_ID` with the Application ID from Step 1.
+Reemplaza `TU_ID_APLICACION` con el ID de Aplicación del Paso 1.
 
-### Required Permissions
+### Permisos Requeridos
 
-These are the minimum permisos your bot needs:
+Estos son los permisos mínimos que tu bot necesita:
 
-- **View Channels** — see the canals it has access to
-- **Send Messages** — respond to your mensajes
-- **Embed Links** — format rich responses
-- **Attach Files** — enviar images, audio, and file outputs
-- **Read Message History** — maintain conversation context
+- **Ver Canales** — ver los canales a los que tiene acceso
+- **Enviar Mensajes** — responder a tus mensajes
+- **Incrustar Enlaces** — formatear respuestas ricas
+- **Adjuntar Archivos** — enviar imágenes, audio y salidas de archivos
+- **Leer Historial de Mensajes** — mantener contexto de conversación
 
-### Recommended Additional Permissions
+### Permisos Recomendados Adicionales
 
-- **Send Messages in Threads** — respond in thread conversations
-- **Add Reactions** — react to mensajes for acknowledgment
+- **Enviar Mensajes en Hilos** — responder en conversaciones de hilos
+- **Añadir Reacciones** — reaccionar a mensajes para reconocimiento
 
-### Permission Integers
+### Números de Permiso
 
-| Level | Permissions Integer | What's Included |
-|-------|-------------------|-----------------|
-| Minimal | `117760` | View Channels, Send Messages, Read Message History, Attach Files |
-| Recommended | `274878286912` | All of the above plus Embed Links, Send Messages in Threads, Add Reactions |
+| Nivel | Número de Permisos | Qué se Incluye |
+|-------|-------------------|----------------|
+| Mínimo | `117760` | Ver Canales, Enviar Mensajes, Leer Historial de Mensajes, Adjuntar Archivos |
+| Recomendado | `274878286912` | Todos los anteriores más Incrustar Enlaces, Enviar Mensajes en Hilos, Añadir Reacciones |
 
-## Step 6: Invite to Your Server
+## Paso 6: Invitar a tu Servidor
 
-1. Open the invite URL in your browser (from the Instalación tab or the manual URL you constructed).
-2. In the **Add to Server** dropdown, select your server.
-3. Click **Continue**, then **Authorize**.
-4. Complete the CAPTCHA if prompted.
+1. Abre la URL de invitación en tu navegador (de la pestaña de Instalación o la URL manual que construiste).
+2. En el menú desplegable **Añadir a Servidor**, selecciona tu servidor.
+3. Haz clic en **Continuar**, luego en **Autorizar**.
+4. Completa el CAPTCHA si se te solicita.
 
 :::info
-You need the **Manage Server** permiso on the Discord server to invite a bot. If you don't see your server in the dropdown, ask a server admin to use the invite link instead.
+Necesitas el permiso **Gestionar Servidor** en el servidor Discord para invitar un bot. Si no ves tu servidor en el menú desplegable, pide a un administrador del servidor que use el enlace de invitación en su lugar.
 :::
 
-After authorizing, the bot will appear in your server's member list (it will show as offline until you start the Hermes gateway).
+Después de autorizar, el bot aparecerá en la lista de miembros de tu servidor (mostrará como desconectado hasta que inicies la puerta de enlace Hermes).
 
-## Step 7: Find Your Discord User ID
+## Paso 7: Encontrar tu ID de Usuario de Discord
 
-Hermes Agent uses your Discord User ID to control who can interact with the bot. To find it:
+Hermes Agent utiliza tu ID de Usuario de Discord para controlar quién puede interactuar con el bot. Para encontrarlo:
 
-1. Open Discord (desktop or web app).
-2. Go to **Settings** → **Advanced** → toggle **Developer Mode** to **ON**.
-3. Close settings.
-4. Right-click your own usuarioname (in a mensaje, the member list, or your profile) → **Copy User ID**.
+1. Abre Discord (aplicación de escritorio o web).
+2. Ve a **Configuración** → **Avanzado** → alterna **Modo de Desarrollador** a **ACTIVADO**.
+3. Cierra configuración.
+4. Haz clic derecho en tu propio nombre de usuario (en un mensaje, la lista de miembros, o tu perfil) → **Copiar ID de Usuario**.
 
-Your User ID is a long number like `284102345871466496`.
+Tu ID de Usuario es un número largo como `284102345871466496`.
 
 :::tip
-Developer Mode also lets you copy **Channel IDs** and **Server IDs** the same way — right-click the canal or server name and select Copy ID. You'll need a Channel ID if you want to set a home canal manually.
+El Modo de Desarrollador también te permite copiar **IDs de Canal** e **IDs de Servidor** de la misma manera — haz clic derecho en el nombre del canal o servidor y selecciona Copiar ID. Necesitarás un ID de Canal si deseas establecer un canal principal manualmente.
 :::
 
-## Step 8: Configure Hermes Agent
+## Paso 8: Configurar Hermes Agent
 
-### Option A: Interactive Configuración (Recommended)
+### Opción A: Configuración Interactiva (Recomendado)
 
-Run the guíad setup command:
+Ejecuta el comando de configuración guiado:
 
 ```bash
 hermes gateway setup
 ```
 
-Select **Discord** when prompted, then paste your bot token and usuario ID when asked.
+Selecciona **Discord** cuando se te solicite, luego pega tu token de bot e ID de usuario cuando se te pregunte.
 
-### Option B: Manual Configuración
+### Opción B: Configuración Manual
 
-Add the following to your `~/.hermes/.env` file:
+Añade lo siguiente a tu archivo `~/.hermes/.env`:
 
 ```bash
-# Required
-DISCORD_BOT_TOKEN=your-bot-token-from-developer-portal
+# Requerido
+DISCORD_BOT_TOKEN=tu-token-de-bot-del-portal-desarrollador
 DISCORD_ALLOWED_USERS=284102345871466496
 
-# Multiple allowed usuarios (comma-separated)
+# Múltiples usuarios permitidos (separados por comas)
 # DISCORD_ALLOWED_USERS=284102345871466496,198765432109876543
 ```
 
-### Start the Gateway
+### Iniciar la Puerta de Enlace
 
-Once configuraciónured, start the Discord gateway:
+Una vez configurado, inicia la puerta de enlace Discord:
 
 ```bash
 hermes gateway
 ```
 
-The bot should come online in Discord within a few seconds. Send it a mensaje — either a DM or in a canal it can see — to test.
+El bot debe estar en línea en Discord en cuestión de segundos. Envíale un mensaje — ya sea un DM o en un canal que pueda ver — para probar.
 
 :::tip
-You can run `hermes gateway` in the background or as a systemd service for persistent operation. Ver la deployment docs for details.
+Puedes ejecutar `hermes gateway` en segundo plano o como un servicio systemd para operación persistente. Ver la documentación de despliegue para detalles.
 :::
 
-## Home Channel
+## Canal Principal
 
-You can designate a "home canal" where the bot enviars proactive mensajes (such as cron job output, reminders, and notifications). There are two ways to set it:
+Puedes designar un "canal principal" donde el bot envía mensajes proactivos (tales como salida de trabajos cron, recordatorios y notificaciones). Hay dos formas de establecerlo:
 
-### Using the Slash Command
+### Usando el Comando de Barra
 
-Type `/sethome` in any Discord canal where the bot is present. That canal becomes the home canal.
+Escribe `/sethome` en cualquier canal Discord donde el bot esté presente. Ese canal se convierte en el canal principal.
 
-### Manual Configuración
+### Configuración Manual
 
-Add these to your `~/.hermes/.env`:
+Añade estas variables a tu `~/.hermes/.env`:
 
 ```bash
 DISCORD_HOME_CHANNEL=123456789012345678
-DISCORD_HOME_CHANNEL_NAME="#bot-updates"
+DISCORD_HOME_CHANNEL_NAME="#actualizaciones-bot"
 ```
 
-Replace the ID with the actual canal ID (right-click → Copy Channel ID with Developer Mode on).
+Reemplaza el ID con el ID real del canal (haz clic derecho → Copiar ID de Canal con Modo de Desarrollador activado).
 
-## Bot Behavior
+## Comportamiento del Bot
 
-- **Server canals**: The bot responds to all mensajes from allowed usuarios in canals it can access. It does **not** require a mention or prefix — any mensaje from an allowed usuario is treated as a prompt.
-- **Direct mensajes**: DMs always work, even without the Message Content Intent enabled (Discord exempts DMs from this requirement). However, you should still enable the intent for server canal support.
-- **Conversations**: Each canal or DM maintains its own conversation context.
+- **Canales del servidor**: El bot responde a todos los mensajes de usuarios permitidos en canales a los que puede acceder. **No** requiere una mención o prefijo — cualquier mensaje de un usuario permitido se trata como un aviso.
+- **Mensajes directos**: Los DMs siempre funcionan, incluso sin el Intent de Contenido de Mensaje habilitado (Discord exime los DMs de este requisito). Sin embargo, aún debes habilitar el intent para soporte de canal de servidor.
+- **Conversaciones**: Cada canal o DM mantiene su propio contexto de conversación.
 
-## Voice Messages
+## Mensajes de Voz
 
-Hermes Agent supports Discord voice mensajes:
+Hermes Agent admite mensajes de voz de Discord:
 
-- **Incoming voice mensajes** are automatically transcribed using Whisper (requires `VOICE_TOOLS_OPENAI_KEY` to be set in your environment).
-- **Text-to-speech**: When TTS is enabled, the bot can enviar spoken responses as MP3 file attachments.
+- Los **mensajes de voz entrantes** se transcriben automáticamente usando Whisper (requiere `VOICE_TOOLS_OPENAI_KEY` configurado en tu ambiente).
+- **Texto a voz**: Cuando TTS está habilitado, el bot puede enviar respuestas habladas como adjuntos de archivo MP3.
 
 ## Solución de Problemas
 
-### Bot is online but not responding to mensajes
+### El bot está en línea pero no responde a mensajes
 
-**Cause**: Message Content Intent is disabled.
+**Causa**: El Intent de Contenido de Mensaje está deshabilitado.
 
-**Fix**: Go to [Developer Portal](https://discord.com/developers/applications) → your app → Bot → Privileged Gateway Intenciones → enable **Message Content Intent** → Save Changes. Restart the gateway.
+**Solución**: Ve a [Portal de Desarrolladores](https://discord.com/developers/applications) → tu aplicación → Bot → Intenciones de Puerta de Enlace Privilegiadas → habilita **Intent de Contenido de Mensaje** → Guardar Cambios. Reinicia la puerta de enlace.
 
-### "Disallowed Intenciones" error on startup
+### Error "Intents Desautorizados" al iniciar
 
-**Cause**: Your code requests intents that aren't enabled in the Developer Portal.
+**Causa**: Tu código solicita intents que no están habilitados en el Portal de Desarrolladores.
 
-**Fix**: Enable all three Privileged Gateway Intenciones (Presence, Server Members, Message Content) in the Bot settings, then restart.
+**Solución**: Habilita los tres Intents de Puerta de Enlace Privilegiados (Presencia, Miembros del Servidor, Contenido de Mensaje) en la configuración del Bot, luego reinicia.
 
-### Bot can't see mensajes in a specific canal
+### El bot no puede ver mensajes en un canal específico
 
-**Cause**: The bot's role doesn't have permiso to view that canal.
+**Causa**: El rol del bot no tiene permiso para ver ese canal.
 
-**Fix**: In Discord, go to the canal's settings → Permissions → add the bot's role with **View Channel** and **Read Message History** enabled.
+**Solución**: En Discord, ve a la configuración del canal → Permisos → añade el rol del bot con **Ver Canal** y **Leer Historial de Mensajes** habilitados.
 
-### 403 Forbidden errors
+### Errores 403 Prohibido
 
-**Cause**: The bot is missing required permisos.
+**Causa**: Al bot le faltan permisos requeridos.
 
-**Fix**: Re-invite the bot with the correct permisos using the URL from Step 5, or manually adjust the bot's role permisos in Server Settings → Roles.
+**Solución**: Vuelve a invitar al bot con los permisos correctos usando la URL del Paso 5, o ajusta manualmente los permisos del rol del bot en Configuración del Servidor → Roles.
 
-### Bot is offline
+### El bot está desconectado
 
-**Cause**: The Hermes gateway isn't running, or the token is incorrect.
+**Causa**: La puerta de enlace Hermes no está ejecutándose, o el token es incorrecto.
 
-**Fix**: Check that `hermes gateway` is running. Verify `DISCORD_BOT_TOKEN` in your `.env` file. If you recently reset the token, update it.
+**Solución**: Verifica que `hermes gateway` esté ejecutándose. Verifica `DISCORD_BOT_TOKEN` en tu archivo `.env`. Si recientemente restableciste el token, actualízalo.
 
-### "User not allowed" / Bot ignores you
+### "Usuario no permitido" / El bot te ignora
 
-**Cause**: Your User ID isn't in `DISCORD_ALLOWED_USERS`.
+**Causa**: Tu ID de Usuario no está en `DISCORD_ALLOWED_USERS`.
 
-**Fix**: Add your User ID to `DISCORD_ALLOWED_USERS` in `~/.hermes/.env` and restart the gateway.
+**Solución**: Añade tu ID de Usuario a `DISCORD_ALLOWED_USERS` en `~/.hermes/.env` y reinicia la puerta de enlace.
 
-## Security
+## Seguridad
 
 :::warning
-Always set `DISCORD_ALLOWED_USERS` to restrict who can interact with the bot. Without it, the gateway denies all usuarios by default as a safety measure. Only add User IDs of people you trust — authorized usuarios have full access to the agent's capabilities, including tool use and system access.
+Siempre establece `DISCORD_ALLOWED_USERS` para restringir quién puede interactuar con el bot. Sin esto, la puerta de enlace deniega a todos los usuarios por defecto como medida de seguridad. Solo añade IDs de Usuario de personas en las que confías — los usuarios autorizados tienen acceso completo a las capacidades del agente, incluyendo uso de herramientas y acceso al sistema.
 :::
 
-For more information on securing your Hermes Agent deployment, see the [Security Guide](../security.md).
+Para más información sobre asegurar tu despliegue de Hermes Agent, ver la [Guía de Seguridad](../security.md).
