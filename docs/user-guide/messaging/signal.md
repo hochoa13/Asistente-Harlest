@@ -1,102 +1,207 @@
 ---
-sidebar_position: 6
+sidebar_position: 5
 title: "Signal"
-description: "Configura Hermes Agent como un bot de mensajería Signal a través del demonio signal-cli"
+description: "Configuración de Signal — Mensajería privada con cifrado de extremo a extremo"
 ---
 
-# Signal Configuración
+# Configuración de Signal
 
-Hermes connects to Signal through the [signal-cli](https://github.com/AsamK/signal-cli) daemon running in HTTP mode. The adapter streams mensajes in real-time via SSE (Server-Sent Events) and enviars responses via JSON-RPC.
-
-Signal is the most privacy-focused mainstream messenger — end-to-end encrypted by default, open-source protocol, minimal metadata collection. This makes it ideal for security-sensitive agent workflows.
-
-:::info No New Python Dependencies
-The Signal adapter uses `httpx` (already a core Hermes dependency) for all communication. No additional Python packages are required. You just need signal-cli installed externally.
-:::
-
----
+Signal es una aplicación de mensajería de código abierto con cifrado de extremo a extremo de forma predeterminada. Hermes se conecta a través de [signal-cli](https://github.com/AsamK/signal-cli/), un cliente sin interfaz gráfica que se ejecuta como daemon.
 
 ## Requisitos Previos
 
-- **signal-cli** — Java-based Signal client ([GitHub](https://github.com/AsamK/signal-cli))
-- **Java 17+** runtime — required by signal-cli
-- **A phone number** with Signal installed (for linking as a secondary device)
+- **signal-cli** (Java 17 o superior)
+- **Signal app** instalado en tu teléfono
+- **Cuenta de Signal** vinculada a un número de teléfono
 
-### Installing signal-cli
+## Instalación
+
+### Linux (apt)
 
 ```bash
-# Linux (Debian/Ubuntu)
-sudo apt install signal-cli
+sudo apt-get install default-jre
+wget https://github.com/AsamK/signal-cli/releases/download/v0.13.10/signal-cli-0.13.10.tar.gz
+tar xzf signal-cli-0.13.10.tar.gz
+sudo mv signal-cli-0.13.10 /opt/signal-cli
+sudo ln -s /opt/signal-cli/bin/signal-cli /usr/local/bin/signal-cli
 
-# macOS
+# O usando Homebrew si está disponible:
 brew install signal-cli
-
-# Manual install (any platform)
-# Download from https://github.com/AsamK/signal-cli/releases
-# Extract and add to PATH
 ```
 
-### Alternative: Docker (signal-cli-rest-api)
-
-If you prefer Docker, use the [signal-cli-rest-api](https://github.com/bbernhard/signal-cli-rest-api) container:
+### macOS (Homebrew)
 
 ```bash
+brew install signal-cli
+```
+
+### Docker (Alternativa)
+
+```bash
+docker pull bbernhard/signal-cli-rest-api:latest
 docker run -d --name signal-cli \
   -p 8080:8080 \
-  -v $HOME/.local/share/signal-cli:/home/.local/share/signal-cli \
-  -e MODE=json-rpc \
-  bbernhard/signal-cli-rest-api
+  -v signal-cli-config:/home/signal-cli/.local/share/signal-cli \
+  bbernhard/signal-cli-rest-api:latest
 ```
 
-:::tip
-Use `MODE=json-rpc` for best performance. The `normal` mode spawns a JVM per request and is much slower.
-:::
+## Vinculación de Cuenta
 
----
-
-## Step 1: Link Your Signal Account
-
-Signal-cli works as a **linked device** — like WhatsApp Web, but for Signal. Your phone stays the primary device.
+### Opción 1: Código QR (Recomendado)
 
 ```bash
-# Generate a linking URI (displays a QR code or link)
-signal-cli link -n "HermesAgent"
+signal-cli --config ~/.signal-cli link --use-voice
+# Aparecerá un código QR
+# Abre Signal en tu teléfono → Ajustes → Dispositivos vinculados → Añadir dispositivo
+# Escanea el código QR
 ```
 
-1. Open **Signal** on your phone
-2. Go to **Settings → Linked Devices**
-3. Tap **Link New Device**
-4. Scan the QR code or enter the URI
-
----
-
-## Step 2: Start the signal-cli Daemon
+### Opción 2: URI Manual
 
 ```bash
-# Replace +1234567890 with your Signal phone number (E.164 format)
-signal-cli --account +1234567890 daemon --http 127.0.0.1:8080
+signal-cli --config ~/.signal-cli link --use-voice
+# Proporciona un URI como: ts://XXXXXXXXXXX...
+# Cópialo a `~/.signal-cli/config.json` en libsignal_encrypted.json
 ```
 
-:::tip
-Keep this running in the background. You can use `systemd`, `tmux`, `screen`, or run it as a service.
-:::
+## Configuración de Hermes
 
-Verify it's running:
-
-```bash
-curl http://127.0.0.1:8080/api/v1/check
-# Should return: {"versions":{"signal-cli":...}}
-```
-
----
-
-## Step 3: Configure Hermes
-
-The easiest way:
+### Opción 1: Asistente Interactivo
 
 ```bash
 hermes gateway setup
+# Selecciona Signal, proporciona el número de teléfono
 ```
+
+### Opción 2: Manual .env
+
+```bash
+SIGNAL_PHONE_NUMBER="+15551234567"
+SIGNAL_CLI_PATH="/usr/local/bin/signal-cli"    # Ruta opcional
+SIGNAL_ALLOWED_USERS="+15559876543"            # Números autorizados
+GATEWAY_ALLOW_ALL_USERS=false                  # Denegar por defecto
+```
+
+### Opción 3: Docker con REST API
+
+```bash
+SIGNAL_USE_REST_API=true
+SIGNAL_REST_API_URL="http://localhost:8080"
+SIGNAL_PHONE_NUMBER="+15551234567"
+```
+
+## Iniciando el Daemon
+
+```bash
+# Ejecución interactiva con logs:
+signal-cli --config ~/.signal-cli daemon
+
+# O en segundo plano con nohup:
+nohup signal-cli --config ~/.signal-cli daemon > ~/.signal-cli/daemon.log 2>&1 &
+
+# Verificar con:
+ps aux | grep signal-cli
+```
+
+## Control de Acceso
+
+### Permitir Números Específicos
+
+```bash
+SIGNAL_ALLOWED_USERS="+15551111111,+15552222222,+15553333333"
+```
+
+### Emparejamiento de MD
+
+Si un número desconocido intenta contactar:
+
+```bash
+# Recibirá: "Código de emparejamiento: XKGH5N7P"
+# Aprueba con:
+hermes pairing approve signal XKGH5N7P
+```
+
+### Políticas de Grupo
+
+Se pueden configurar políticas de aceptación de grupo en `~/.hermes/config.yaml`:
+
+```yaml
+gatewayPlatformSettings:
+  signal:
+    allowGroupRequests: true       # Aceptar invitaciones de grupo
+    blockListedContacts: []        # Bloquear números específicos
+```
+
+## Características
+
+### Archivos Adjuntos
+
+Signal soporta:
+- Imágenes (JPEG, PNG)
+- Documentos (PDF, Office)
+- Archivos (ZIP, TAR)
+
+Los archivos se descargan a `~/.hermes/attachments/signal/`.
+
+### Indicadores de Escritura
+
+Los indicadores de escritura se envían automáticamente cuando el bot está escribiendo.
+
+### Privacidad: Números Ocultos
+
+En logs y salida, los números de teléfono se oscurecen automáticamente:
+```
+Mensaje de +155***4567
+```
+
+### Monitoreo de Salud
+
+Signal-CLI se supervisa continuamente. Si falla, se reinicia automáticamente con backoff exponencial.
+
+## Solución de Problemas
+
+| Problema | Causa | Solución |
+|----------|-------|----------|
+| "command not found: signal-cli" | signal-cli no instalado | `which signal-cli` y reinstalar |
+| "Link with URI has failed" | Formato URI incorrecto | Vuelve a ejecutar `signal-cli link --use-voice` |
+| "Failed to decrypt message" | Problema de sincronización | Resincroniza el dispositivo: `signal-cli -c ~/.signal-cli daemon --verbose` |
+| "No se envían mensajes" | Daemon no corriendo | Verifica: `ps aux \| grep signal-cli` |
+| "Permission denied ~/.signal-cli" | Permisos de carpeta | `chmod 700 ~/.signal-cli` |
+| Puerto 8080 en uso (Docker) | Conflicto de puerto | Usa `-p 8081:8080` en lugar de `-p 8080:8080` |
+| "Unknown group" | Grupo no sincronizado | Envía un mensaje de grupo desde Signal app |
+| Timeout en recepción | Red lenta/bloqueada | Aumenta `SIGNAL_POLL_INTERVAL` a 10000 ms |
+| "Untrusted identity key" | Cambio de clave de identidad | Ejecuta `signal-cli -c ~/.signal-cli updateAccountIdentity` |
+
+## Variables de Entorno
+
+```bash
+SIGNAL_PHONE_NUMBER          # Número de teléfono del bot (requerido, formato E.164 +15551234567)
+SIGNAL_CLI_PATH              # Ruta a signal-cli (default: /usr/local/bin/signal-cli)
+SIGNAL_USE_REST_API          # Usar REST API en lugar de daemon (true/false)
+SIGNAL_REST_API_URL          # URL de REST API (ej. http://localhost:8080)
+SIGNAL_ALLOWED_USERS         # Números autorizados separados por comas (ej. +15551111111,+15552222222)
+SIGNAL_POLL_INTERVAL         # Intervalo de polling en ms (default: 5000)
+SIGNAL_DATA_DIR              # Directorio de datos de signal-cli (default: ~/.signal-cli)
+SIGNAL_REPLY_WITH_TEXT_QUOTE # Incluir cita de texto en respuestas (true/false)
+```
+
+## Seguridad
+
+⚠️ **Advertencias Importantes:**
+
+- **No compartas números de teléfono**: Los números vinculados a Hermes están expuestos en logs
+- **Dedica un número**: Usa un número de teléfono separado para Hermes, no tu número personal
+- **Protege `.signal-cli/`**: Los datos de cifrado se almacenan aquí
+  ```bash
+  chmod 700 ~/.signal-cli
+  chmod 600 ~/.signal-cli/config.json
+  ```
+- **Rotación de contraseñas**: Si cambia tu contraseña Signal, actualiza la configuración
+- **Salida de logs**: Los usuarios pueden ver mensajes en el registro con `/status`
+
+## Siguiente Paso Recomendado
+
+Lee sobre [Control de Acceso](../security.md) para configurar allowlists y emparejamiento.
 
 Select **Signal** from the platform menu. The wizard will:
 

@@ -1,30 +1,31 @@
 ---
 sidebar_position: 1
 title: "Puerta de Enlace de Mensajería"
-description: "Chat with Hermes from Telegram, Discord, Slack, WhatsApp, Signal, or Email — architecture and setup overview"
+description: "Chatea con Hermes desde Telegram, Discord, Slack, WhatsApp, Signal o Email — descripción general de arquitectura y configuración"
 ---
 
-# Messaging Gateway
+# Puerta de Enlace de Mensajería
 
-Chat with Hermes from Telegram, Discord, Slack, WhatsApp, Signal, or Email. The gateway is a single background process that connects to all your configured platforms, handles sessions, runs cron jobs, and delivers voice messages.
+Chatea con Hermes desde Telegram, Discord, Slack, WhatsApp, Signal o Email. La puerta de enlace es un único proceso en segundo plano que se conecta a todas tus plataformas configuradas, gestiona sesiones, ejecuta trabajos cron y entrega mensajes de voz.
 
-## Architecture
+## Arquitectura
 
 ```text
 ┌─────────────────────────────────────────────────────────────────┐
-│                      Hermes Gateway                             │
+│                   Puerta de Enlace Hermes                       │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌────────┐ ┌────────┐ ┌───────┐│
 │  │ Telegram │ │ Discord  │ │ WhatsApp │ │ Slack  │ │ Signal │ │ Email ││
-│  │ Adapter  │ │ Adapter  │ │ Adapter  │ │Adapter │ │Adapter │ │Adapter││
+│  │Adaptador │ │Adaptador │ │Adaptador │ │Adaptador│Adaptador│ │Adaptador││
 │  └────┬─────┘ └────┬─────┘ └────┬─────┘ └───┬────┘ └───┬────┘ └──┬────┘│
 │       │             │            │            │          │         │     │
 │       └─────────────┼────────────┼────────────┼──────────┼─────────┘     │
 │                           │                                     │
 │                  ┌────────▼────────┐                            │
-│                  │  Session Store  │                            │
-│                  │  (per-chat)     │                            │
+│                  │  Almacén de     │                            │
+│                  │  Sesiones       │                            │
+│                  │  (por chat)     │                            │
 │                  └────────┬────────┘                            │
 │                           │                                     │
 │                  ┌────────▼────────┐                            │
@@ -35,65 +36,65 @@ Chat with Hermes from Telegram, Discord, Slack, WhatsApp, Signal, or Email. The 
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-Each platform adapter receives messages, routes them through a per-chat session store, and dispatches them to the AIAgent for processing. The gateway also runs the cron scheduler, ticking every 60 seconds to execute any due jobs.
+Cada adaptador de plataforma recibe mensajes, los enruta a través de un almacén de sesiones por chat y los envía al AIAgent para su procesamiento. La puerta de enlace también ejecuta el planificador cron, que se ejecuta cada 60 segundos para ejecutar cualquier trabajo que esté vencido.
 
-## Quick Setup
+## Configuración Rápida
 
-The easiest way to configure messaging platforms is the interactive wizard:
-
-```bash
-hermes gateway setup        # Interactive setup for all messaging platforms
-```
-
-This walks you through configuring each platform with arrow-key selection, shows which platforms are already configured, and offers to start/restart the gateway when done.
-
-## Gateway Commands
+La forma más fácil de configurar las plataformas de mensajería es el asistente interactivo:
 
 ```bash
-hermes gateway              # Run in foreground
-hermes gateway setup        # Configure messaging platforms interactively
-hermes gateway install      # Install as systemd service (Linux) / launchd (macOS)
-hermes gateway start        # Start the service
-hermes gateway stop         # Stop the service
-hermes gateway status       # Check service status
+hermes gateway setup        # Configuración interactiva para todas las plataformas de mensajería
 ```
 
-## Chat Commands (Inside Messaging)
+Esto te guía a través de la configuración de cada plataforma con selección de teclas de dirección, muestra qué plataformas ya están configuradas y ofrece iniciar/reiniciar la puerta de enlace cuando hayas terminado.
 
-| Command | Description |
+## Comandos de la Puerta de Enlace
+
+```bash
+hermes gateway              # Ejecutar en primer plano
+hermes gateway setup        # Configurar plataformas de mensajería interactivamente
+hermes gateway install      # Instalar como servicio systemd (Linux) / launchd (macOS)
+hermes gateway start        # Iniciar el servicio
+hermes gateway stop         # Detener el servicio
+hermes gateway status       # Comprobar el estado del servicio
+```
+
+## Comandos de Chat (Dentro de Mensajería)
+
+| Comando | Descripción |
 |---------|-------------|
-| `/new` or `/reset` | Start fresh conversation |
-| `/model [provider:model]` | Show or change the model (supports `provider:model` syntax) |
-| `/provider` | Show available providers with auth status |
-| `/personality [name]` | Set a personality |
-| `/retry` | Retry the last message |
-| `/undo` | Remove the last exchange |
-| `/status` | Show session info |
-| `/stop` | Stop the running agent |
-| `/sethome` | Set this chat as the home channel |
-| `/compress` | Manually compress conversation context |
-| `/usage` | Show token usage for this session |
-| `/insights [days]` | Show usage insights and analytics |
-| `/reload-mcp` | Reload MCP servers from config |
-| `/update` | Update Hermes Agent to the latest version |
-| `/help` | Show available commands |
-| `/<skill-name>` | Invoke any installed skill |
+| `/new` o `/reset` | Comienza una nueva conversación |
+| `/model [provider:model]` | Mostrar o cambiar el modelo (admite sintaxis `provider:model`) |
+| `/provider` | Mostrar proveedores disponibles con estado de autenticación |
+| `/personality [name]` | Establecer una personalidad |
+| `/retry` | Reintentar el último mensaje |
+| `/undo` | Eliminar el último intercambio |
+| `/status` | Mostrar información de la sesión |
+| `/stop` | Detener el agente en ejecución |
+| `/sethome` | Establecer este chat como canal principal |
+| `/compress` | Comprimir manualmente el contexto de conversación |
+| `/usage` | Mostrar uso de tokens para esta sesión |
+| `/insights [days]` | Mostrar información de uso y análisis |
+| `/reload-mcp` | Recargar servidores MCP desde la configuración |
+| `/update` | Actualizar Hermes Agent a la versión más reciente |
+| `/help` | Mostrar comandos disponibles |
+| `/<skill-name>` | Invocar cualquier habilidad instalada |
 
-## Session Management
+## Gestión de Sesiones
 
-### Session Persistence
+### Persistencia de Sesiones
 
-Sessions persist across messages until they reset. The agent remembers your conversation context.
+Las sesiones persisten a través de mensajes hasta que se restablecen. El agente recuerda el contexto de tu conversación.
 
-### Reset Policies
+### Políticas de Reinicio
 
-Sessions reset based on configurable policies:
+Las sesiones se restablecen según políticas configurables:
 
-| Policy | Default | Description |
-|--------|---------|-------------|
-| Daily | 4:00 AM | Reset at a specific hour each day |
-| Idle | 120 min | Reset after N minutes of inactivity |
-| Both | (combined) | Whichever triggers first |
+| Política | Predeterminado | Descripción |
+|----------|---------|-------------|
+| Diaria | 4:00 AM | Reiniciar a una hora específica cada día |
+| Inactiva | 120 min | Reiniciar después de N minutos de inactividad |
+| Ambas | (combinadas) | La que se desencadene primero |
 
 Configure per-platform overrides in `~/.hermes/gateway.json`:
 
@@ -106,59 +107,59 @@ Configure per-platform overrides in `~/.hermes/gateway.json`:
 }
 ```
 
-## Security
+## Seguridad
 
-**By default, the gateway denies all users who are not in an allowlist or paired via DM.** This is the safe default for a bot with terminal access.
+**De forma predeterminada, la puerta de enlace deniega todos los usuarios que no estén en una lista blanca o emparejados mediante MD.** Este es el ajuste predeterminado seguro para un bot con acceso de terminal.
 
 ```bash
-# Restrict to specific users (recommended):
+# Restringir a usuarios específicos (recomendado):
 TELEGRAM_ALLOWED_USERS=123456789,987654321
 DISCORD_ALLOWED_USERS=123456789012345678
 SIGNAL_ALLOWED_USERS=+155****4567,+155****6543
 EMAIL_ALLOWED_USERS=trusted@example.com,colleague@work.com
 
-# Or allow
+# O permitir
 GATEWAY_ALLOWED_USERS=123456789,987654321
 
-# Or explicitly allow all users (NOT recommended for bots with terminal access):
+# O permitir explícitamente a todos los usuarios (NO recomendado para bots con acceso de terminal):
 GATEWAY_ALLOW_ALL_USERS=true
 ```
 
-### DM Pairing (Alternative to Allowlists)
+### Emparejamiento de MD (Alternativa a Listas Blancas)
 
-Instead of manually configuring user IDs, unknown users receive a one-time pairing code when they DM the bot:
+En lugar de configurar manualmente ID de usuarios, los usuarios desconocidos reciben un código de emparejamiento único cuando envían un MD al bot:
 
 ```bash
-# The user sees: "Pairing code: XKGH5N7P"
-# You approve them with:
+# El usuario ve: "Código de emparejamiento: XKGH5N7P"
+# Los apruebas con:
 hermes pairing approve telegram XKGH5N7P
 
-# Other pairing commands:
-hermes pairing list          # View pending + approved users
-hermes pairing revoke telegram 123456789  # Remove access
+# Otros comandos de emparejamiento:
+hermes pairing list          # Ver usuarios pendientes + aprobados
+hermes pairing revoke telegram 123456789  # Eliminar acceso
 ```
 
-Pairing codes expire after 1 hour, are rate-limited, and use cryptographic randomness.
+Los códigos de emparejamiento expiran después de 1 hora, están limitados en velocidad y utilizan aleatoriedad criptográfica.
 
-## Interrupting the Agent
+## Interrumpiendo el Agente
 
-Send any message while the agent is working to interrupt it. Key behaviors:
+Envía cualquier mensaje mientras el agente está trabajando para interrumpirlo. Comportamientos clave:
 
-- **In-progress terminal commands are killed immediately** (SIGTERM, then SIGKILL after 1s)
-- **Tool calls are cancelled** — only the currently-executing one runs, the rest are skipped
-- **Multiple messages are combined** — messages sent during interruption are joined into one prompt
-- **`/stop` command** — interrupts without queuing a follow-up message
+- **Los comandos de terminal en progreso se cierran inmediatamente** (SIGTERM, luego SIGKILL después de 1s)
+- **Las llamadas de herramientas se cancelan** — solo se ejecuta la actualmente en ejecución, el resto se omiten
+- **Múltiples mensajes se combinan** — los mensajes enviados durante la interrupción se unen en un solo aviso
+- **Comando `/stop`** — interrumpe sin encolar un mensaje de seguimiento
 
-## Tool Progress Notifications
+## Notificaciones de Progreso de Herramientas
 
-Control how much tool activity is displayed in `~/.hermes/config.yaml`:
+Controla cuánta actividad de herramientas se muestra en `~/.hermes/config.yaml`:
 
 ```yaml
 display:
   tool_progress: all    # off | new | all | verbose
 ```
 
-When enabled, the bot sends status messages as it works:
+Cuando está habilitado, el bot envía mensajes de estado mientras funciona:
 
 ```text
 💻 `ls -la`...
@@ -167,18 +168,18 @@ When enabled, the bot sends status messages as it works:
 🐍 execute_code...
 ```
 
-## Service Management
+## Gestión de Servicios
 
 ### Linux (systemd)
 
 ```bash
-hermes gateway install               # Install as user service
+hermes gateway install               # Instalar como servicio de usuario
 systemctl --user start hermes-gateway
 systemctl --user stop hermes-gateway
 systemctl --user status hermes-gateway
 journalctl --user -u hermes-gateway -f
 
-# Enable lingering (keeps running after logout)
+# Habilitar lingering (mantiene la ejecución después del cierre de sesión)
 sudo loginctl enable-linger $USER
 ```
 
@@ -191,25 +192,25 @@ launchctl stop ai.hermes.gateway
 tail -f ~/.hermes/logs/gateway.log
 ```
 
-## Platform-Specific Toolsets
+## Conjuntos de Herramientas Específicos de Plataforma
 
-Each platform has its own toolset:
+Cada plataforma tiene su propio conjunto de herramientas:
 
-| Platform | Toolset | Capabilities |
+| Plataforma | Conjunto de Herramientas | Capacidades |
 |----------|---------|--------------|
-| CLI | `hermes-cli` | Full access |
-| Telegram | `hermes-telegram` | Full tools including terminal |
-| Discord | `hermes-discord` | Full tools including terminal |
-| WhatsApp | `hermes-whatsapp` | Full tools including terminal |
-| Slack | `hermes-slack` | Full tools including terminal |
-| Signal | `hermes-signal` | Full tools including terminal |
-| Email | `hermes-email` | Full tools including terminal |
+| CLI | `hermes-cli` | Acceso completo |
+| Telegram | `hermes-telegram` | Herramientas completas incluyendo terminal |
+| Discord | `hermes-discord` | Herramientas completas incluyendo terminal |
+| WhatsApp | `hermes-whatsapp` | Herramientas completas incluyendo terminal |
+| Slack | `hermes-slack` | Herramientas completas incluyendo terminal |
+| Signal | `hermes-signal` | Herramientas completas incluyendo terminal |
+| Email | `hermes-email` | Herramientas completas incluyendo terminal |
 
-## Next Steps
+## Próximos Pasos
 
-- [Telegram Setup](telegram.md)
-- [Discord Setup](discord.md)
-- [Slack Setup](slack.md)
-- [WhatsApp Setup](whatsapp.md)
-- [Signal Setup](signal.md)
-- [Email Setup](email.md)
+- [Configuración de Telegram](telegram.md)
+- [Configuración de Discord](discord.md)
+- [Configuración de Slack](slack.md)
+- [Configuración de WhatsApp](whatsapp.md)
+- [Configuración de Signal](signal.md)
+- [Configuración de Email](email.md)

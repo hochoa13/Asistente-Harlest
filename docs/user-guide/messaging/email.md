@@ -1,176 +1,176 @@
 ---
 sidebar_position: 7
 title: "Email"
-description: "Configura Hermes Agent comon email assistant via IMAP/SMTP"
+description: "Configura Hermes Agent como asistente de correo electrónico a través de IMAP/SMTP"
 ---
 
-# Email Configuración
+# Configuración de Email
 
-Hermes can recibir and reply to emails using standard IMAP and SMTP protocols. Send an email to the agent's address and it replies in-thread — no special client or bot API needed. Works with Gmail, Outlook, Yahoo, Fastmail, or any provider that supports IMAP/SMTP.
+Hermes puede recibir y responder correos electrónicos usando protocolos IMAP y SMTP estándar. Envía un correo a la dirección del agente y responde en hilo — no se necesita cliente especial ni API de bot. Funciona con Gmail, Outlook, Yahoo, Fastmail, o cualquier proveedor que soporte IMAP/SMTP.
 
-:::info No External Dependencies
-The Email adapter uses Python's built-in `imaplib`, `smtplib`, and `email` modules. No additional packages or external services are required.
+:::info Sin Dependencias Externas
+El adaptador de Email usa módulos integrados de Python: `imaplib`, `smtplib`, y `email`. No se requieren paquetes adicionales ni servicios externos.
 :::
 
 ---
 
 ## Requisitos Previos
 
-- **A dedicated email account** for your Hermes agent (don't use your personal email)
-- **IMAP enabled** on the email account
-- **An app password** if using Gmail or another provider with 2FA
+- **Una cuenta de correo dedicada** para tu agente Hermes (no uses tu correo personal)
+- **IMAP habilitado** en la cuenta de email
+- **Una contraseña de aplicación** si usas Gmail u otro proveedor con 2FA
 
-### Gmail Configuración
+### Configuración de Gmail
 
-1. Enable 2-Factor Authentication on your Google Account
-2. Go to [App Passwords](https://myaccount.google.com/apppasswords)
-3. Create a new App Password (select "Mail" or "Other")
-4. Copy the 16-character password — you'll use this instead of your regular password
+1. Habilita Autenticación de dos Factores en tu Cuenta de Google
+2. Ve a [App Passwords](https://myaccount.google.com/apppasswords)
+3. Crea una nueva App Password (selecciona "Mail" u "Other")
+4. Copia la contraseña de 16 caracteres — la usarás en lugar de tu contraseña regular
 
 ### Outlook / Microsoft 365
 
-1. Go to [Security Settings](https://account.microsoft.com/security)
-2. Enable 2FA if not already active
-3. Create an App Password under "Additional security options"
-4. IMAP host: `outlook.office365.com`, SMTP host: `smtp.office365.com`
+1. Ve a [Configuración de Seguridad](https://account.microsoft.com/security)
+2. Habilita 2FA si no está activo
+3. Crea una App Password en "Additional security options"
+4. Host IMAP: `outlook.office365.com`, Host SMTP: `smtp.office365.com`
 
-### Other Providers
+### Otros Proveedores
 
-Most email providers support IMAP/SMTP. Check your provider's documentation for:
-- IMAP host and port (usually port 993 with SSL)
-- SMTP host and port (usually port 587 with STARTTLS)
-- Whether app passwords are required
+La mayoría de proveedores de email soportan IMAP/SMTP. Consulta la documentación de tu proveedor para:
+- Host y puerto IMAP (usualmente puerto 993 con SSL)
+- Host y puerto SMTP (usualmente puerto 587 con STARTTLS)
+- Si se requieren contraseñas de aplicación
 
 ---
 
-## Step 1: Configure Hermes
+## Paso 1: Configurar Hermes
 
-The easiest way:
+La forma más fácil:
 
 ```bash
 hermes gateway setup
 ```
 
-Select **Email** from the platform menu. The wizard prompts for your email address, password, IMAP/SMTP hosts, and allowed enviarers.
+Selecciona **Email** del menú de plataformas. El asistente te pide tu dirección de correo, contraseña, hosts IMAP/SMTP, y remitentes autorizados.
 
-### Manual Configuración
+### Configuración Manual
 
-Add to `~/.hermes/.env`:
+Añade a `~/.hermes/.env`:
 
 ```bash
-# Required
+# Requerido
 EMAIL_ADDRESS=hermes@gmail.com
-EMAIL_PASSWORD=abcd efgh ijkl mnop    # App password (not your regular password)
+EMAIL_PASSWORD=abcd efgh ijkl mnop    # App password (no tu contraseña regular)
 EMAIL_IMAP_HOST=imap.gmail.com
 EMAIL_SMTP_HOST=smtp.gmail.com
 
-# Security (recommended)
+# Seguridad (recomendado)
 EMAIL_ALLOWED_USERS=your@email.com,colleague@work.com
 
-# Optional
+# Opcional
 EMAIL_IMAP_PORT=993                    # Default: 993 (IMAP SSL)
 EMAIL_SMTP_PORT=587                    # Default: 587 (SMTP STARTTLS)
-EMAIL_POLL_INTERVAL=15                 # Seconds between inbox checks (default: 15)
-EMAIL_HOME_ADDRESS=your@email.com      # Default delivery target for cron jobs
+EMAIL_POLL_INTERVAL=15                 # Segundos entre verificaciones de bandeja (default: 15)
+EMAIL_HOME_ADDRESS=your@email.com      # Destino de entrega predeterminado para trabajos cron
 ```
 
 ---
 
-## Step 2: Start the Gateway
+## Paso 2: Iniciar la Puerta de Enlace
 
 ```bash
-hermes gateway              # Run in foreground
-hermes gateway install      # Install as a system service
+hermes gateway              # Ejecutar en primer plano
+hermes gateway install      # Instalar como servicio del sistema
 ```
 
-On startup, the adapter:
-1. Tests IMAP and SMTP connections
-2. Marks all existing inbox mensajes as "seen" (only processes new emails)
-3. Starts polling for new mensajes
+Al iniciar, el adaptador:
+1. Prueba conexiones IMAP y SMTP
+2. Marca todos los correos existentes en la bandeja como "vistos" (solo procesa correos nuevos)
+3. Comienza a sondear nuevos correos
 
 ---
 
-## How It Works
+## Cómo Funciona
 
-### Receiving Messages
+### Recibiendo Mensajes
 
-The adapter polls the IMAP inbox for UNSEEN mensajes at a configuraciónurable interval (default: 15 seconds). For each new email:
+El adaptador sondea la bandeja IMAP para mensajes NO VISTOS en un intervalo configurable (default: 15 segundos). Para cada correo nuevo:
 
-- **Subject line** is included as context (e.g., `[Subject: Deploy to production]`)
-- **Reply emails** (subject starting with `Re:`) skip the subject prefix — the thread context is already established
-- **Attachments** are cached locally:
-  - Images (JPEG, PNG, GIF, WebP) → available to the vision tool
-  - Documents (PDF, ZIP, etc.) → available for file access
-- **HTML-only emails** have tags stripped for plain text extraction
-- **Self-mensajes** are filtered out to prevent reply loops
+- **Línea de asunto** se incluye como contexto (ej. `[Subject: Deploy to production]`)
+- **Correos de respuesta** (asunto comenzando con `Re:`) omiten el prefijo de asunto — el contexto del hilo ya está establecido
+- **Archivos adjuntos** se almacenan en caché localmente:
+  - Imágenes (JPEG, PNG, GIF, WebP) → disponibles para la herramienta de visión
+  - Documentos (PDF, ZIP, etc.) → disponibles para acceso de archivos
+- **Correos solo HTML** tienen etiquetas eliminadas para extracción de texto plano
+- **Automensajes** se filtran para prevenir bucles de respuesta
 
-### Sending Replies
+### Enviando Respuestas
 
-Replies are sent via SMTP with proper email threading:
+Las respuestas se envían a través de SMTP con encabezados de threading de correo adecuados:
 
-- **In-Reply-To** and **References** headers maintain the thread
-- **Subject line** preserved with `Re:` prefix (no double `Re: Re:`)
-- **Message-ID** generated with the agent's domain
-- Responses are sent as plain text (UTF-8)
+- **In-Reply-To** y **References** mantienen el hilo
+- **Línea de asunto** conservada con prefijo `Re:` (sin `Re: Re:` duplicado)
+- **Message-ID** generada con el dominio del agente
+- Las respuestas se envían como texto plano (UTF-8)
 
-### File Attachments
+### Archivos Adjuntos
 
-The agent can enviar file attachments in replies. Include `MEDIA:/path/to/file` in the response and the file is attached to the outgoing email.
+El agente puede enviar archivos adjuntos en respuestas. Incluye `MEDIA:/path/to/file` en la respuesta y el archivo se adjunta al correo saliente.
 
 ---
 
-## Access Control
+## Control de Acceso
 
-Email access follows the same pattern as all other Hermes platforms:
+El acceso a correo electrónico sigue el mismo patrón que todas las otras plataformas de Hermes:
 
-1. **`EMAIL_ALLOWED_USERS` set** → only emails from those addresses are processed
-2. **No allowlist set** → unknown enviarers get a pairing code
-3. **`EMAIL_ALLOW_ALL_USERS=true`** → any enviarer is accepted (use with caution)
+1. **`EMAIL_ALLOWED_USERS` establecida** → solo se procesan correos de esas direcciones
+2. **Sin lista blanca establecida** → remitentes desconocidos reciben un código de emparejamiento
+3. **`EMAIL_ALLOW_ALL_USERS=true`** → se aceptan todos los remitentes (usar con cuidado)
 
 :::warning
-**Always configuraciónure `EMAIL_ALLOWED_USERS`.** Without it, anyone who knows the agent's email address could enviar commands. The agent has terminal access by default.
+**Siempre configura `EMAIL_ALLOWED_USERS`.** Sin ella, cualquiera que conozca la dirección de correo del agente podría enviar comandos. El agente tiene acceso a terminal de forma predeterminada.
 :::
 
 ---
 
 ## Solución de Problemas
 
-| Problem | Solution |
+| Problema | Solución |
 |---------|----------|
-| **"IMAP connection failed"** at startup | Verify `EMAIL_IMAP_HOST` and `EMAIL_IMAP_PORT`. Ensure IMAP is enabled on the account. For Gmail, enable it in Settings → Forwarding and POP/IMAP. |
-| **"SMTP connection failed"** at startup | Verify `EMAIL_SMTP_HOST` and `EMAIL_SMTP_PORT`. Check that your password is correct (use App Password for Gmail). |
-| **Messages not recibird** | Check `EMAIL_ALLOWED_USERS` includes the enviarer's email. Check spam folder — some providers flag automated replies. |
-| **"Authentication failed"** | For Gmail, you must use an App Password, not your regular password. Ensure 2FA is enabled first. |
-| **Duplicate replies** | Ensure only one gateway instance is running. Check `hermes gateway status`. |
-| **Slow response** | The default poll interval is 15 seconds. Reduce with `EMAIL_POLL_INTERVAL=5` for faster response (but more IMAP connections). |
-| **Replies not threading** | The adapter uses In-Reply-To headers. Some email clients (especially web-based) may not thread correctly with automated mensajes. |
+| **"IMAP connection failed"** al inicio | Verifica `EMAIL_IMAP_HOST` y `EMAIL_IMAP_PORT`. Asegúrate de que IMAP está habilitado en la cuenta. Para Gmail, habilítalo en Configuración → Reenvío y POP/IMAP. |
+| **"SMTP connection failed"** al inicio | Verifica `EMAIL_SMTP_HOST` y `EMAIL_SMTP_PORT`. Comprueba que tu contraseña sea correcta (usa App Password para Gmail). |
+| **Los mensajes no se reciben** | Comprueba que `EMAIL_ALLOWED_USERS` incluya el correo del remitente. Verifica la carpeta de spam — algunos proveedores marcan respuestas automatizadas. |
+| **"Authentication failed"** | Para Gmail, debes usar una App Password, no tu contraseña regular. Asegúrate de que 2FA esté habilitado primero. |
+| **Respuestas duplicadas** | Asegúrate de que solo una instancia de gateway esté ejecutándose. Comprueba `hermes gateway status`. |
+| **Respuesta lenta** | El intervalo de sondeo predeterminado es 15 segundos. Reduce con `EMAIL_POLL_INTERVAL=5` para respuesta más rápida (pero más conexiones IMAP). |
+| **Las respuestas no están enhebrando** | El adaptador usa encabezados In-Reply-To. Algunos clientes de correo (especialmente basados en web) pueden no enhebrar correctamente con mensajes automatizados. |
 
 ---
 
-## Security
+## Seguridad
 
 :::warning
-**Use a dedicated email account.** Don't use your personal email — the agent stores the password in `.env` and has full inbox access via IMAP.
+**Usa una cuenta de correo dedicada.** No uses tu correo personal — el agente almacena la contraseña en `.env` y tiene acceso completo a la bandeja a través de IMAP.
 :::
 
-- Use **App Passwords** instead of your main password (required for Gmail with 2FA)
-- Set `EMAIL_ALLOWED_USERS` to restrict who can interact with the agent
-- The password is stored in `~/.hermes/.env` — protect this file (`chmod 600`)
-- IMAP uses SSL (port 993) and SMTP uses STARTTLS (port 587) by default — connections are encrypted
+- Usa **App Passwords** en lugar de tu contraseña principal (requerido para Gmail con 2FA)
+- Establece `EMAIL_ALLOWED_USERS` para restringir quién puede interactuar con el agente
+- La contraseña se almacena en `~/.hermes/.env` — protege este archivo (`chmod 600`)
+- IMAP usa SSL (puerto 993) y SMTP usa STARTTLS (puerto 587) de forma predeterminada — las conexiones están encriptadas
 
 ---
 
-## Environment Variables Reference
+## Referencia de Variables de Entorno
 
-| Variable | Required | Default | Description |
+| Variable | Requerida | Default | Descripción |
 |----------|----------|---------|-------------|
-| `EMAIL_ADDRESS` | Yes | — | Agent's email address |
-| `EMAIL_PASSWORD` | Yes | — | Email password or app password |
-| `EMAIL_IMAP_HOST` | Yes | — | IMAP server host (e.g., `imap.gmail.com`) |
-| `EMAIL_SMTP_HOST` | Yes | — | SMTP server host (e.g., `smtp.gmail.com`) |
-| `EMAIL_IMAP_PORT` | No | `993` | IMAP server port |
-| `EMAIL_SMTP_PORT` | No | `587` | SMTP server port |
-| `EMAIL_POLL_INTERVAL` | No | `15` | Seconds between inbox checks |
-| `EMAIL_ALLOWED_USERS` | No | — | Comma-separated allowed enviarer addresses |
-| `EMAIL_HOME_ADDRESS` | No | — | Default delivery target for cron jobs |
-| `EMAIL_ALLOW_ALL_USERS` | No | `false` | Allow all enviarers (not recommended) |
+| `EMAIL_ADDRESS` | Sí | — | Dirección de correo del agente |
+| `EMAIL_PASSWORD` | Sí | — | Contraseña de correo o app password |
+| `EMAIL_IMAP_HOST` | Sí | — | Host del servidor IMAP (ej. `imap.gmail.com`) |
+| `EMAIL_SMTP_HOST` | Sí | — | Host del servidor SMTP (ej. `smtp.gmail.com`) |
+| `EMAIL_IMAP_PORT` | No | `993` | Puerto del servidor IMAP |
+| `EMAIL_SMTP_PORT` | No | `587` | Puerto del servidor SMTP |
+| `EMAIL_POLL_INTERVAL` | No | `15` | Segundos entre verificaciones de bandeja |
+| `EMAIL_ALLOWED_USERS` | No | — | Direcciones de remitentes autorizadas separadas por comas |
+| `EMAIL_HOME_ADDRESS` | No | — | Destino de entrega predeterminado para trabajos cron |
+| `EMAIL_ALLOW_ALL_USERS` | No | `false` | Permitir todos los remitentes (no recomendado) |

@@ -1,135 +1,135 @@
 ---
 title: Home Assistant
-description: Control your smart home with Hermes Agent via Home Assistant integration.
+description: Controla tu hogar inteligente con Hermes Agent a través de la integración de Home Assistant.
 sidebar_label: Home Assistant
 sidebar_position: 5
 ---
 
-# Home Assistant Integration
+# Integración de Home Assistant
 
-Hermes Agent integrates with [Home Assistant](https://www.home-assistant.io/) in two ways:
+Hermes Agent se integra con [Home Assistant](https://www.home-assistant.io/) de dos formas:
 
-1. **Gateway platform** — subscribes to real-time state changes via WebSocket and responds to events
-2. **Smart home tools** — four LLM-callable tools for querying and controlling devices via the REST API
+1. **Plataforma de puerta de enlace** — Se suscribe a cambios de estado en tiempo real a través de WebSocket y responde a eventos
+2. **Herramientas de hogar inteligente** — Cuatro herramientas invocables por LLM para consultar y controlar dispositivos a través de la API REST
 
 ## Configuración
 
-### 1. Create a Long-Lived Token de Acceso
+### 1. Crear un Token de Acceso de Larga Duración
 
-1. Open your Home Assistant instance
-2. Go to your **Profile** (click your name in the sidebar)
-3. Scroll to **Long-Lived Token de Accesos**
-4. Click **Create Token**, give it a name like "Hermes Agent"
-5. Copy the token
+1. Abre tu instancia de Home Assistant
+2. Ve a tu **Perfil** (haz clic en tu nombre en la barra lateral)
+3. Desplázate hasta **Tokens de Acceso de Larga Duración**
+4. Haz clic en **Crear Token**, dale un nombre como "Agente Hermes"
+5. Copia el token
 
-### 2. Configure Environment Variables
+### 2. Configurar Variables de Entorno
 
 ```bash
-# Add to ~/.hermes/.env
+# Añade a ~/.hermes/.env
 
-# Required: your Long-Lived Token de Acceso
+# Requerido: tu Token de Acceso de Larga Duración
 HASS_TOKEN=your-long-lived-access-token
 
-# Optional: HA URL (default: http://homeassistant.local:8123)
+# Opcional: URL de HA (default: http://homeassistant.local:8123)
 HASS_URL=http://192.168.1.100:8123
 ```
 
 :::info
-The `homeassistant` toolset is automatically enabled when `HASS_TOKEN` is set. Both the gateway platform and the device control tools activate from this single token.
+El conjunto de herramientas `homeassistant` se habilita automáticamente cuando se establece `HASS_TOKEN`. Tanto la plataforma de puerta de enlace como las herramientas de control de dispositivos se activan desde este único token.
 :::
 
-### 3. Start the Gateway
+### 3. Iniciar la Puerta de Enlace
 
 ```bash
 hermes gateway
 ```
 
-Home Assistant will appear as a connected platform alongside any other messaging platforms (Telegram, Discord, etc.).
+Home Assistant aparecerá como una plataforma conectada junto con cualquier otra plataforma de mensajería (Telegram, Discord, etc.).
 
-## Available Tools
+## Herramientas Disponibles
 
-Hermes Agent registers four tools for smart home control:
+Hermes Agent registra cuatro herramientas para el control del hogar inteligente:
 
 ### `ha_list_entities`
 
-List Home Assistant entities, optionally filtered by domain or area.
+Lista entidades de Home Assistant, opcionalmente filtradas por dominio o área.
 
-**Parameters:**
-- `domain` *(optional)* — Filter by entity domain: `light`, `switch`, `climate`, `sensor`, `binary_sensor`, `cover`, `fan`, `media_player`, etc.
-- `area` *(optional)* — Filter by area/room name (matches against friendly names): `living room`, `kitchen`, `bedroom`, etc.
+**Parámetros:**
+- `domain` *(opcional)* — Filtrar por dominio de entidad: `light`, `switch`, `climate`, `sensor`, `binary_sensor`, `cover`, `fan`, `media_player`, etc.
+- `area` *(opcional)* — Filtrar por nombre de área/sala (coincide con nombres amigables): `living room`, `kitchen`, `bedroom`, etc.
 
 **Ejemplo:**
 ```
-List all lights in the living room
+Listar todas las luces en la sala de estar
 ```
 
-Returns entity IDs, states, and friendly names.
+Devuelve: IDs de entidad, estados y nombres amigables.
 
 ### `ha_get_state`
 
-Get detailed state of a single entity, including all attributes (brightness, color, temperature setpoint, sensor readings, etc.).
+Obtiene el estado detallado de una entidad única, incluidos todos los atributos (brillo, color, punto de ajuste de temperatura, lecturas de sensores, etc.).
 
-**Parameters:**
-- `entity_id` *(required)* — The entity to query, e.g., `light.living_room`, `climate.thermostat`, `sensor.temperature`
+**Parámetros:**
+- `entity_id` *(requerido)* — La entidad a consultar, ej. `light.living_room`, `climate.thermostat`, `sensor.temperature`
 
 **Ejemplo:**
 ```
-What's the current state of climate.thermostat?
+¿Cuál es el estado actual del climate.thermostat?
 ```
 
-Returns: state, all attributes, last changed/updated timestamps.
+Devuelve: estado, todos los atributos, timestamps de último cambio/actualización.
 
 ### `ha_list_services`
 
-List available services (actions) for device control. Shows what actions can be performed on each device type and what parameters they accept.
+Lista servicios disponibles (acciones) para el control de dispositivos. Muestra qué acciones se pueden realizar en cada tipo de dispositivo y qué parámetros aceptan.
 
-**Parameters:**
-- `domain` *(optional)* — Filter by domain, e.g., `light`, `climate`, `switch`
+**Parámetros:**
+- `domain` *(opcional)* — Filtrar por dominio, ej. `light`, `climate`, `switch`
 
 **Ejemplo:**
 ```
-What services are available for climate devices?
+¿Qué servicios están disponibles para dispositivos de clima?
 ```
 
 ### `ha_call_service`
 
-Call a Home Assistant service to control a device.
+Llamar a un servicio de Home Assistant para controlar un dispositivo.
 
-**Parameters:**
-- `domain` *(required)* — Service domain: `light`, `switch`, `climate`, `cover`, `media_player`, `fan`, `scene`, `script`
-- `service` *(required)* — Service name: `turn_on`, `turn_off`, `toggle`, `set_temperature`, `set_hvac_mode`, `open_cover`, `close_cover`, `set_volume_level`
-- `entity_id` *(optional)* — Target entity, e.g., `light.living_room`
-- `data` *(optional)* — Additional parameters as a JSON object
+**Parámetros:**
+- `domain` *(requerido)* — Dominio del servicio: `light`, `switch`, `climate`, `cover`, `media_player`, `fan`, `scene`, `script`
+- `service` *(requerido)* — Nombre del servicio: `turn_on`, `turn_off`, `toggle`, `set_temperature`, `set_hvac_mode`, `open_cover`, `close_cover`, `set_volume_level`
+- `entity_id` *(opcional)* — Entidad objetivo, ej. `light.living_room`
+- `data` *(opcional)* — Parámetros adicionales como objeto JSON
 
 **Ejemplos:**
 
 ```
-Turn on the living room lights
+Encender las luces de la sala de estar
 → ha_call_service(domain="light", service="turn_on", entity_id="light.living_room")
 ```
 
 ```
-Set the thermostat to 22 degrees in heat mode
+Establecer el termostato a 22 grados en modo calefacción
 → ha_call_service(domain="climate", service="set_temperature",
     entity_id="climate.thermostat", data={"temperature": 22, "hvac_mode": "heat"})
 ```
 
 ```
-Set living room lights to blue at 50% brightness
+Establecer las luces de la sala de estar en azul al 50% de brillo
 → ha_call_service(domain="light", service="turn_on",
     entity_id="light.living_room", data={"brightness": 128, "color_name": "blue"})
 ```
 
-## Gateway Platform: Real-Time Events
+## Plataforma de Puerta de Enlace: Eventos en Tiempo Real
 
-The Home Assistant gateway adapter connects via WebSocket and subscribes to `state_changed` events. When a device state changes, it's forwarded to the agent as a mensaje.
+El adaptador de puerta de enlace de Home Assistant se conecta a través de WebSocket y se suscribe a eventos `state_changed`. Cuando cambia el estado de un dispositivo, se reenvía al agente como un mensaje.
 
-### Event Filtering
+### Filtrado de Eventos
 
-Configure which events the agent sees via platform configuración in the gateway:
+Configura qué eventos ve el agente a través de la configuración de plataforma en la puerta de enlace:
 
 ```python
-# In platform extra configuración
+# En configuración extra de plataforma
 {
     "watch_domains": ["climate", "binary_sensor", "alarm_control_panel"],
     "watch_entities": ["sensor.front_door"],
@@ -138,68 +138,68 @@ Configure which events the agent sees via platform configuración in the gateway
 }
 ```
 
-| Setting | Default | Description |
+| Configuración | Default | Descripción |
 |---------|---------|-------------|
-| `watch_domains` | *(all)* | Only watch these entity domains |
-| `watch_entities` | *(all)* | Only watch these specific entities |
-| `ignore_entities` | *(none)* | Always ignore these entities |
-| `cooldown_seconds` | `30` | Minimum seconds between events for the same entity |
+| `watch_domains` | *(todas)* | Solo monitorea estos dominios de entidad |
+| `watch_entities` | *(todas)* | Solo monitorea estas entidades específicas |
+| `ignore_entities` | *(ninguna)* | Siempre ignora estas entidades |
+| `cooldown_seconds` | `30` | Segundos mínimos entre eventos para la misma entidad |
 
 :::tip
-Without any filters, the agent recibirs **all** state changes, which can be noisy. For practical use, set `watch_domains` to the domains you care about (e.g., `climate`, `binary_sensor`, `alarm_control_panel`).
+Sin ningún filtro, el agente recibe **todos** los cambios de estado, que pueden ser ruidosos. Para uso práctico, establece `watch_domains` en los dominios que te importan (ej. `climate`, `binary_sensor`, `alarm_control_panel`).
 :::
 
-### Event Formatting
+### Formato de Eventos
 
-State changes are formatted as human-readable mensajes based on domain:
+Los cambios de estado se formatean como mensajes legibles para humanos basados en dominio:
 
-| Domain | Format |
+| Dominio | Formato |
 |--------|--------|
 | `climate` | "HVAC mode changed from 'off' to 'heat' (current: 21, target: 23)" |
-| `sensor` | "changed from 21°C to 22°C" |
-| `binary_sensor` | "triggered" / "cleared" |
-| `light`, `switch`, `fan` | "turned on" / "turned off" |
-| `alarm_control_panel` | "alarm state changed from 'armed_away' to 'triggered'" |
-| *(other)* | "changed from 'old' to 'new'" |
+| `sensor` | "Cambió de 21°C a 22°C" |
+| `binary_sensor` | "desencadenado" / "borrado" |
+| `light`, `switch`, `fan` | "encendido" / "apagado" |
+| `alarm_control_panel` | "Estado de alarma cambió de 'armed_away' a 'triggered'" |
+| *(otro)* | "Cambió de 'viejo' a 'nuevo'" |
 
-### Agent Responses
+### Respuestas del Agente
 
-Outbound mensajes from the agent are delivered as **Home Assistant persistent notifications** (via `persistent_notification.create`). These appear in the HA notification panel with the title "Hermes Agent".
+Los mensajes salientes del agente se entregan como **notificaciones persistentes de Home Assistant** (a través de `persistent_notification.create`). Estos aparecen en el panel de notificaciones de HA con el título "Hermes Agent".
 
-### Connection Management
+### Gestión de Conexión
 
-- **WebSocket** with 30-second heartbeat for real-time events
-- **Automatic reconnection** with backoff: 5s → 10s → 30s → 60s
-- **REST API** for outbound notifications (separate session to avoid WebSocket conflicts)
-- **Authorization** — HA events are always authorized (no usuario allowlist needed, since the `HASS_TOKEN` authenticates the connection)
+- **WebSocket** con latido de 30 segundos para eventos en tiempo real
+- **Reconexión automática** con backoff: 5s → 10s → 30s → 60s
+- **API REST** para notificaciones salientes (sesión separada para evitar conflictos de WebSocket)
+- **Autorización** — Los eventos de HA siempre están autorizados (no se necesita allowlist de usuario, ya que `HASS_TOKEN` autentica la conexión)
 
-## Security
+## Seguridad
 
-The Home Assistant tools enforce security restrictions:
+Las herramientas de Home Assistant aplican restricciones de seguridad:
 
-:::warning Blocked Domains
-The following service domains are **blocked** to prevent arbitrary code execution on the HA host:
+:::warning Dominios Bloqueados
+Los siguientes dominios de servicio están **bloqueados** para prevenir ejecución de código arbitrario en el host de HA:
 
-- `shell_command` — arbitrary shell commands
-- `command_line` — sensors/switches that execute commands
-- `python_script` — scripted Python execution
-- `pyscript` — broader scripting integration
-- `hassio` — addon control, host shutdown/reboot
-- `rest_command` — HTTP requests from HA server (SSRF vector)
+- `shell_command` — Comandos shell arbitrarios
+- `command_line` — Sensores/switches que ejecutan comandos
+- `python_script` — Ejecución de Python con script
+- `pyscript` — Integración de scripting más amplia
+- `hassio` — Control de addon, apagado/reinicio del host
+- `rest_command` — Solicitudes HTTP desde servidor HA (vector SSRF)
 
-Attempting to call services in these domains returns an error.
+Intentar llamar a servicios en estos dominios devuelve un error.
 :::
 
-Entity IDs are validated against the pattern `^[a-z_][a-z0-9_]*\.[a-z0-9_]+$` to prevent injection attacks.
+Los IDs de entidad se validan contra el patrón `^[a-z_][a-z0-9_]*\.[a-z0-9_]+$` para prevenir ataques de inyección.
 
-## Ejemplo Automations
+## Automaciones Ejemplos
 
-### Morning Routine
+### Rutina Matutina
 
 ```
-User: Start my morning routine
+Usuario: Inicia mi rutina matutina
 
-Agent:
+Agente:
 1. ha_call_service(domain="light", service="turn_on",
      entity_id="light.bedroom", data={"brightness": 128})
 2. ha_call_service(domain="climate", service="set_temperature",
@@ -208,31 +208,31 @@ Agent:
      entity_id="media_player.kitchen_speaker")
 ```
 
-### Security Check
+### Verificación de Seguridad
 
 ```
-User: Is the house secure?
+Usuario: ¿Está la casa segura?
 
-Agent:
+Agente:
 1. ha_list_entities(domain="binary_sensor")
-     → checks door/window sensors
+     → comprueba sensores de puerta/ventana
 2. ha_get_state(entity_id="alarm_control_panel.home")
-     → checks alarm status
+     → comprueba estado de alarma
 3. ha_list_entities(domain="lock")
-     → checks lock states
-4. Reports: "All doors closed, alarm is armed_away, all locks engaged."
+     → comprueba estados de cerraduras
+4. Reporta: "Todas las puertas cerradas, alarma armed_away, todas las cerraduras activadas."
 ```
 
-### Reactive Automation (via Gateway Events)
+### Automatización Reactiva (a través de Eventos de Puerta de Enlace)
 
-When connected as a gateway platform, the agent can react to events:
+Cuando está conectado como plataforma de puerta de enlace, el agente puede reaccionar a eventos:
 
 ```
-[Home Assistant] Front Door: triggered (was cleared)
+[Home Assistant] Puerta Principal: desencadenada (fue borrada)
 
-Agent automatically:
+Agente automáticamente:
 1. ha_get_state(entity_id="binary_sensor.front_door")
 2. ha_call_service(domain="light", service="turn_on",
      entity_id="light.hallway")
-3. Sends notification: "Front door opened. Hallway lights turned on."
+3. Envía notificación: "Puerta principal abierta. Luces del pasillo encendidas."
 ```
