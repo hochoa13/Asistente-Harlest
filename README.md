@@ -8,10 +8,10 @@
   <a href="https://hermes-agent.nousres__earch.com/docs/"><img src="https://img.shields.io/badge/Docs-hermes--agent.nousresearch.com-FFD700?style=for-the-badge" alt="Documentación"></a>
   <a href="https://discord.gg/NousResearch"><img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord"></a>
   <a href="https://github.com/NousResearch/hermes-agent/blob/main/LICENSE"><img src="https://img.shields.io/badge/Licencia-MIT-green?style=for-the-badge" alt="Licencia: MIT"></a>
-  <a href="https://nousresearch.com"><img src="https://img.shields.io/badge/Creado%20por-Nous%20Research-blueviolet?style=for-the-badge" alt="Creado por Nous Research"></a>
+  <a href="https://nousresearch.com"><img src="https://img.shields.io/badge/Creado%20por-Harlest-blueviolet?style=for-the-badge" alt="Creado por Harlest"></a>
 </p>
 
-**El agente de IA auto-mejorable creado por [Nous Research](https://nousresearch.com).** Es el único agente con un ciclo de aprendizaje integrado — crea habilidades a partir de la experiencia, las mejora durante el uso, se impulsa a sí mismo a persistir conocimiento, busca en sus propias conversaciones anteriores, y construye un modelo cada vez más profundo de quién eres entre sesiones. Ejecútalo en una VPS de $5, un clúster de GPU, o infraestructura sin servidor que cuesta casi nada cuando está inactiva. No está vinculado a tu laptop — habla con él desde Telegram mientras funciona en una máquina virtual en la nube.
+**El agente de IA auto-mejorable creado por [Harlest](https://www.facebook.com/haroldandres.hernandezochoa/).** Es el único agente con un ciclo de aprendizaje integrado — crea habilidades a partir de la experiencia, las mejora durante el uso, se impulsa a sí mismo a persistir conocimiento, busca en sus propias conversaciones anteriores, y construye un modelo cada vez más profundo de quién eres entre sesiones. Ejecútalo en una VPS de $5, un clúster de GPU, o infraestructura sin servidor que cuesta casi nada cuando está inactiva. No está vinculado a tu laptop — habla con él desde Telegram mientras funciona en una máquina virtual en la nube.
 
 Usa cualquier modelo que desees — [Nous Portal](https://portal.nousresearch.com), [OpenRouter](https://openrouter.ai) (200+ modelos), [z.ai/GLM](https://z.ai), [Kimi/Moonshot](https://platform.moonshot.ai), [MiniMax](https://www.minimax.io), OpenAI, o tu propio endpoint. Cambia con `hermes model` — sin cambios de código, sin bloqueo de proveedor.
 
@@ -149,4 +149,4 @@ python -m pytest tests/ -q
 
 MIT — ver [LICENSE](LICENSE).
 
-Creado por [Nous Research](https://nousresearch.com).
+Creado por [Harlest](https://www.facebook.com/haroldandres.hernandezochoa/).
