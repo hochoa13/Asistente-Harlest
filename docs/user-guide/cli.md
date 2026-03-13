@@ -1,140 +1,140 @@
 ---
 sidebar_position: 1
-title: "CLI Interface"
-description: "Master the Hermes Agent terminal interface — commands, keybindings, personalities, and more"
+title: "Interfaz CLI"
+description: "Domina la interfaz de terminal de Hermes Agent — comandos, atajos, personalidades y más"
 ---
 
-# CLI Interface
+# Interfaz CLI
 
-Hermes Agent's CLI is a full terminal user interface (TUI) — not a web UI. It features multiline editing, slash-command autocomplete, conversation history, interrupt-and-redirect, and streaming tool output. Built for people who live in the terminal.
+La CLI de Hermes Agent es una interfaz de usuario de terminal completa (TUI) — no una UI web. Presenta edición multilínea, autocompletar de comandos slash, historial de conversaciones, interrupción-redirección y salida de herramientas en streaming. Construida para personas que viven en la terminal.
 
-## Running the CLI
+## Ejecutando la CLI
 
 ```bash
-# Start an interactive session (default)
+# Inicia una sesión interactiva (por defecto)
 hermes
 
-# Single query mode (non-interactive)
-hermes chat -q "Hello"
+# Modo de consulta única (no interactivo)
+hermes chat -q "Hola"
 
-# With a specific model
+# Con un modelo específico
 hermes chat --model "anthropic/claude-sonnet-4"
 
-# With a specific provider
-hermes chat --provider nous        # Use Nous Portal
-hermes chat --provider openrouter  # Force OpenRouter
+# Con un proveedor específico
+hermes chat --provider nous        # Usa Portal de Nous
+hermes chat --provider openrouter  # Fuerza OpenRouter
 
-# With specific toolsets
+# Con conjuntos de herramientas específicos
 hermes chat --toolsets "web,terminal,skills"
 
-# Resume previous sessions
-hermes --continue             # Resume the most recent CLI session (-c)
-hermes --resume <session_id>  # Resume a specific session by ID (-r)
+# Reanuda sesiones anteriores
+hermes --continue             # Reanuda la sesión CLI más reciente (-c)
+hermes --resume <session_id>  # Reanuda una sesión específica por ID (-r)
 
-# Verbose mode (debug output)
+# Modo verbose (salida de depuración)
 hermes chat --verbose
 
-# Isolated git worktree (for running multiple agents in parallel)
-hermes -w                         # Interactive mode in worktree
-hermes -w -q "Fix issue #123"     # Single query in worktree
+# Git worktree aislado (para ejecutar múltiples agentes en paralelo)
+hermes -w                         # Modo interactivo en worktree
+hermes -w -q "Arregla issue #123" # Consulta única en worktree
 ```
 
-## Interface Layout
+## Disposición de la Interfaz
 
 ```text
 ┌─────────────────────────────────────────────────┐
-│  HERMES-AGENT ASCII Logo                        │
+│  Logo ASCII de HERMES-AGENT                     │
 │  ┌─────────────┐ ┌────────────────────────────┐ │
-│  │  Caduceus   │ │ Model: claude-sonnet-4     │ │
-│  │  ASCII Art  │ │ Terminal: local            │ │
-│  │             │ │ Working Dir: /home/user    │ │
-│  │             │ │ Available Tools: 19        │ │
-│  │             │ │ Available Skills: 12       │ │
+│  │  Caduceus   │ │ Modelo: claude-sonnet-4    │ │
+│  │  Arte ASCII │ │ Terminal: local            │ │
+│  │             │ │ Dir Trabajo: /home/usuario │ │
+│  │             │ │ Herramientas Disponibles: 19 │
+│  │             │ │ Habilidades Disponibles: 12  │
 │  └─────────────┘ └────────────────────────────┘ │
 ├─────────────────────────────────────────────────┤
-│ Conversation output scrolls here...             │
+│ La salida de conversación se desplaza aquí...   │
 │                                                 │
-│   (◕‿◕✿) 🧠 pondering... (2.3s)                │
-│   ✧٩(ˊᗜˋ*)و✧ got it! (2.3s)                    │
+│   (◕‿◕✿) 🧠 pensando... (2.3s)                 │
+│   ✧٩(ˊᗜˋ*)و✧ ¡lo tengo! (2.3s)                │
 │                                                 │
-│ Assistant: Hello! How can I help you today?     │
+│ Asistente: ¡Hola! ¿Cómo puedo ayudarte hoy?   │
 ├─────────────────────────────────────────────────┤
-│ ❯ [Fixed input area at bottom]                  │
+│ ❯ [Área de entrada fija en la parte inferior]   │
 └─────────────────────────────────────────────────┘
 ```
 
-The welcome banner shows your model, terminal backend, working directory, available tools, and installed skills at a glance.
+El banner de bienvenida muestra tu modelo, el backend de terminal, el directorio de trabajo, las herramientas disponibles y las habilidades instaladas de un vistazo.
 
-### Session Resume Display
+### Pantalla de Reanudación de Sesión
 
-When resuming a previous session (`hermes -c` or `hermes --resume <id>`), a "Previous Conversation" panel appears between the banner and the input prompt, showing a compact recap of the conversation history. See [Sessions — Conversation Recap on Resume](sessions.md#conversation-recap-on-resume) for details and configuration.
+Al reanudar una sesión anterior (`hermes -c` o `hermes --resume <id>`), aparece un panel "Conversación Anterior" entre el banner y el prompt de entrada, mostrando un resumen compacto del historial de conversación. Ver [Sesiones — Recapitulación de Conversación al Reanudar](sessions.md#conversation-recap-on-resume) para detalles y configuración.
 
-## Keybindings
+## Atajos de Teclado
 
-| Key | Action |
-|-----|--------|
-| `Enter` | Send message |
-| `Alt+Enter` or `Ctrl+J` | New line (multi-line input) |
-| `Ctrl+C` | Interrupt agent (double-press within 2s to force exit) |
-| `Ctrl+D` | Exit |
-| `Tab` | Autocomplete slash commands |
+| Tecla | Acción |
+|-------|--------|
+| `Enter` | Enviar mensaje |
+| `Alt+Enter` o `Ctrl+J` | Nueva línea (entrada multilínea) |
+| `Ctrl+C` | Interrumpe agente (pulsa dos veces en 2s para forzar salida) |
+| `Ctrl+D` | Salir |
+| `Tab` | Autocompletar comandos slash |
 
-## Slash Commands
+## Comandos Slash
 
-Type `/` to see an autocomplete dropdown of all available commands.
+Escribe `/` para ver un menú desplegable de autocompletar con todos los comandos disponibles.
 
-### Navigation & Control
+### Navegación y Control
 
-| Command | Description |
+| Comando | Descripción |
 |---------|-------------|
-| `/help` | Show available commands |
-| `/quit` | Exit the CLI (also: `/exit`, `/q`) |
-| `/clear` | Clear screen and reset conversation |
-| `/new` | Start a new conversation |
-| `/reset` | Reset conversation only (keep screen) |
+| `/help` | Muestra comandos disponibles |
+| `/quit` | Salir de la CLI (también: `/exit`, `/q`) |
+| `/clear` | Borra pantalla y reinicia conversación |
+| `/new` | Inicia una nueva conversación |
+| `/reset` | Reinicia solo la conversación (mantiene pantalla) |
 
-### Tools & Configuration
+### Herramientas y Configuración
 
-| Command | Description |
+| Comando | Descripción |
 |---------|-------------|
-| `/tools` | List all available tools grouped by toolset |
-| `/toolsets` | List available toolsets with descriptions |
-| `/model [provider:model]` | Show or change the current model (supports `provider:model` syntax) |
-| `/provider` | Show available providers with auth status |
-| `/config` | Show current configuration |
-| `/prompt [text]` | View/set/clear custom system prompt |
-| `/personality [name]` | Set a predefined personality |
-| `/reasoning [arg]` | Manage reasoning effort (`none`/`low`/`medium`/`high`/`xhigh`) and display (`show`/`hide`) |
+| `/tools` | Lista todas las herramientas disponibles agrupadas por conjunto |
+| `/toolsets` | Lista conjuntos disponibles con descripciones |
+| `/model [proveedor:modelo]` | Muestra o cambia el modelo actual (soporta sintaxis `proveedor:modelo`) |
+| `/provider` | Muestra proveedores disponibles con estado de autenticación |
+| `/config` | Muestra configuración actual |
+| `/prompt [texto]` | Ver/establecer/borrar prompt del sistema personalizado |
+| `/personality [nombre]` | Establece una personalidad predefinida |
+| `/reasoning [arg]` | Gestiona esfuerzo de razonamiento (`none`/`low`/`medium`/`high`/`xhigh`) y visualización (`show`/`hide`) |
 
-### Conversation Management
+### Gestión de Conversación
 
-| Command | Description |
+| Comando | Descripción |
 |---------|-------------|
-| `/history` | Show conversation history |
-| `/retry` | Retry the last message |
-| `/undo` | Remove the last user/assistant exchange |
-| `/save` | Save the current conversation |
-| `/compress` | Manually compress conversation context |
-| `/usage` | Show token usage for this session |
-| `/insights [--days N]` | Show usage insights and analytics (last 30 days) |
+| `/history` | Muestra historial de conversación |
+| `/retry` | Reintenta el último mensaje |
+| `/undo` | Elimina el último intercambio usuario/asistente |
+| `/save` | Guarda la conversación actual |
+| `/compress` | Comprime manualmente contexto de conversación |
+| `/usage` | Muestra uso de tokens para esta sesión |
+| `/insights [--days N]` | Muestra insights de uso y análisis (últimos 30 días) |
 
-### Skills & Scheduling
+### Habilidades y Programación
 
-| Command | Description |
+| Comando | Descripción |
 |---------|-------------|
-| `/cron` | Manage scheduled tasks |
-| `/skills` | Browse, search, install, inspect, or manage skills |
-| `/platforms` | Show gateway/messaging platform status |
-| `/verbose` | Cycle tool progress display: off → new → all → verbose |
-| `/<skill-name>` | Invoke any installed skill (e.g., `/axolotl`, `/gif-search`) |
+| `/cron` | Gestiona tareas programadas |
+| `/skills` | Explora, busca, instala, inspecciona o gestiona habilidades |
+| `/platforms` | Muestra estado de plataforma gateway/mensajería |
+| `/verbose` | Ciclo de visualización de progreso: apagado → nuevo → todo → verbose |
+| `/<nombre-habilidad>` | Invoca cualquier habilidad instalada (ej: `/axolotl`, `/gif-search`) |
 
 :::tip
-Commands are case-insensitive — `/HELP` works the same as `/help`. Most commands work mid-conversation.
+Los comandos son insensibles a mayúsculas — `/HELP` funciona igual que `/help`. La mayoría de comandos funcionan en medio de una conversación.
 :::
 
-## Quick Commands
+## Comandos Rápidos
 
-You can define custom commands that run shell commands instantly without invoking the LLM. These work in both the CLI and messaging platforms (Telegram, Discord, etc.).
+Puedes definir comandos personalizados que ejecuten comandos shell al instante sin invocar el LLM. Estos funcionan en la CLI y plataformas de mensajería (Telegram, Discord, etc.).
 
 ```yaml
 # ~/.hermes/config.yaml
@@ -147,24 +147,24 @@ quick_commands:
     command: nvidia-smi --query-gpu=utilization.gpu,memory.used --format=csv,noheader
 ```
 
-Then type `/status` or `/gpu` in any chat. See the [Configuration guide](/docs/user-guide/configuration#quick-commands) for more examples.
+Luego escribe `/status` o `/gpu` en cualquier chat. Ver la [guía de Configuración](/docs/user-guide/configuration#quick-commands) para más ejemplos.
 
-## Skill Slash Commands
+## Comandos Slash de Habilidades
 
-Every installed skill in `~/.hermes/skills/` is automatically registered as a slash command. The skill name becomes the command:
+Cada habilidad instalada en `~/.hermes/skills/` se registra automáticamente como comando slash. El nombre de la habilidad se convierte en el comando:
 
 ```
-/gif-search funny cats
-/axolotl help me fine-tune Llama 3 on my dataset
-/github-pr-workflow create a PR for the auth refactor
+/gif-search gatos divertidos
+/axolotl ayúdame a ajustar Llama 3 en mi conjunto de datos
+/github-pr-workflow crear un PR para el refactor de autenticación
 
-# Just the skill name loads it and lets the agent ask what you need:
+# Solo el nombre de la habilidad la carga y le permite al agente preguntar qué necesitas:
 /excalidraw
 ```
 
-## Personalities
+## Personalidades
 
-Set a predefined personality to change the agent's tone:
+Establece una personalidad predefinida para cambiar el tono del agente:
 
 ```
 /personality pirate
@@ -172,98 +172,98 @@ Set a predefined personality to change the agent's tone:
 /personality concise
 ```
 
-Built-in personalities include: `helpful`, `concise`, `technical`, `creative`, `teacher`, `kawaii`, `catgirl`, `pirate`, `shakespeare`, `surfer`, `noir`, `uwu`, `philosopher`, `hype`.
+Las personalidades integradas incluyen: `helpful`, `concise`, `technical`, `creative`, `teacher`, `kawaii`, `catgirl`, `pirate`, `shakespeare`, `surfer`, `noir`, `uwu`, `philosopher`, `hype`.
 
-You can also define custom personalities in `~/.hermes/config.yaml`:
+También puedes definir personalidades personalizadas en `~/.hermes/config.yaml`:
 
 ```yaml
 agent:
   personalities:
-    helpful: "You are a helpful, friendly AI assistant."
-    kawaii: "You are a kawaii assistant! Use cute expressions..."
-    pirate: "Arrr! Ye be talkin' to Captain Hermes..."
-    # Add your own!
+    helpful: "Eres un asistente de IA útil y amigable."
+    kawaii: "¡Eres un asistente kawaii! Usa expresiones lindas..."
+    pirate: "¡Arr! Estás hablando con el Capitán Hermes..."
+    # ¡Añade las tuyas!
 ```
 
-## Multi-line Input
+## Entrada Multilínea
 
-There are two ways to enter multi-line messages:
+Hay dos formas de ingresar mensajes multilínea:
 
-1. **`Alt+Enter` or `Ctrl+J`** — inserts a new line
-2. **Backslash continuation** — end a line with `\` to continue:
+1. **`Alt+Enter` o `Ctrl+J`** — inserta una nueva línea
+2. **Continuación con barra invertida** — termina una línea con `\` para continuar:
 
 ```
-❯ Write a function that:\
-  1. Takes a list of numbers\
-  2. Returns the sum
+❯ Escribe una función que:\
+  1. Tome una lista de números\
+  2. Devuelva la suma
 ```
 
 :::info
-Pasting multi-line text is supported — use `Alt+Enter` or `Ctrl+J` to insert newlines, or simply paste content directly.
+Se admite pegar texto multilínea — usa `Alt+Enter` o `Ctrl+J` para insertar saltos de línea, o simplemente pega contenido directamente.
 :::
 
-## Interrupting the Agent
+## Interrumpiendo el Agente
 
-You can interrupt the agent at any point:
+Puedes interrumpir el agente en cualquier momento:
 
-- **Type a new message + Enter** while the agent is working — it interrupts and processes your new instructions
-- **`Ctrl+C`** — interrupt the current operation (press twice within 2s to force exit)
-- In-progress terminal commands are killed immediately (SIGTERM, then SIGKILL after 1s)
-- Multiple messages typed during interrupt are combined into one prompt
+- **Escribe un nuevo mensaje + Enter** mientras el agente está trabajando — interrumpe y procesa tus nuevas instrucciones
+- **`Ctrl+C`** — interrumpe la operación actual (pulsa dos veces en 2s para forzar salida)
+- Los comandos de terminal en progreso se matan inmediatamente (SIGTERM, luego SIGKILL después de 1s)
+- Múltiples mensajes escritos durante interrupción se combinan en un prompt
 
-## Tool Progress Display
+## Visualización del Progreso de Herramientas
 
-The CLI shows animated feedback as the agent works:
+La CLI muestra retroalimentación animada mientras el agente trabaja:
 
-**Thinking animation** (during API calls):
+**Animación de pensamiento** (durante llamadas a API):
 ```
-  ◜ (｡•́︿•̀｡) pondering... (1.2s)
-  ◠ (⊙_⊙) contemplating... (2.4s)
-  ✧٩(ˊᗜˋ*)و✧ got it! (3.1s)
+  ◜ (｡•́︿•̀｡) pensando... (1.2s)
+  ◠ (⊙_⊙) contemplando... (2.4s)
+  ✧٩(ˊᗜˋ*)و✧ ¡lo tengo! (3.1s)
 ```
 
-**Tool execution feed:**
+**Feed de ejecución de herramientas:**
 ```
   ┊ 💻 terminal `ls -la` (0.3s)
-  ┊ 🔍 web_search (1.2s)
-  ┊ 📄 web_extract (2.1s)
+  ┊ 🔍 búsqueda_web (1.2s)
+  ┊ 📄 extracción_web (2.1s)
 ```
 
-Cycle through display modes with `/verbose`: `off → new → all → verbose`.
+Cicla entre modos de visualización con `/verbose`: `apagado → nuevo → todo → verbose`.
 
-## Session Management
+## Gestión de Sesiones
 
-### Resuming Sessions
+### Reanudando Sesiones
 
-When you exit a CLI session, a resume command is printed:
+Cuando salgas de una sesión CLI, se imprime un comando de reanudación:
 
 ```
-Resume this session with:
+Reanuda esta sesión con:
   hermes --resume 20260225_143052_a1b2c3
 
-Session:        20260225_143052_a1b2c3
-Duration:       12m 34s
-Messages:       28 (5 user, 18 tool calls)
+Sesión:         20260225_143052_a1b2c3
+Duración:       12m 34s
+Mensajes:       28 (5 usuario, 18 llamadas de herramientas)
 ```
 
-Resume options:
+Opciones de reanudación:
 
 ```bash
-hermes --continue                          # Resume the most recent CLI session
-hermes -c                                  # Short form
-hermes -c "my project"                     # Resume a named session (latest in lineage)
-hermes --resume 20260225_143052_a1b2c3     # Resume a specific session by ID
-hermes --resume "refactoring auth"         # Resume by title
-hermes -r 20260225_143052_a1b2c3           # Short form
+hermes --continue                          # Reanuda la sesión CLI más reciente
+hermes -c                                  # Forma abreviada
+hermes -c "mi proyecto"                    # Reanuda una sesión nombrada (última en linaje)
+hermes --resume 20260225_143052_a1b2c3     # Reanuda una sesión específica por ID
+hermes --resume "refactorización auth"     # Reanuda por título
+hermes -r 20260225_143052_a1b2c3           # Forma abreviada
 ```
 
-Resuming restores the full conversation history from SQLite. The agent sees all previous messages, tool calls, and responses — just as if you never left.
+Reanudar restaura el historial de conversación completo desde SQLite. El agente ve todos los mensajes anteriores, llamadas de herramientas y respuestas — como si nunca te hubieras ido.
 
-Use `/title My Session Name` inside a chat to name the current session, or `hermes sessions rename <id> <title>` from the command line. Use `hermes sessions list` to browse past sessions.
+Usa `/title My Session Name` dentro de un chat para nombrar la sesión actual, o `hermes sessions rename <id> <title>` desde la línea de comandos. Usa `hermes sessions list` para examinar sesiones pasadas.
 
-### Session Logging
+### Registro de Sesiones
 
-Sessions are automatically logged to `~/.hermes/sessions/`:
+Las sesiones se registran automáticamente en `~/.hermes/sessions/`:
 
 ```
 sessions/
@@ -272,28 +272,28 @@ sessions/
 └── ...
 ```
 
-### Context Compression
+### Compresión de Contexto
 
-Long conversations are automatically summarized when approaching context limits:
+Las conversaciones largas se resumen automáticamente al aproximarse a los límites de contexto:
 
 ```yaml
-# In ~/.hermes/config.yaml
+# En ~/.hermes/config.yaml
 compression:
   enabled: true
-  threshold: 0.85    # Compress at 85% of context limit
-  summary_model: "google/gemini-3-flash-preview"  # Model used for summarization
+  threshold: 0.85    # Comprime al 85% del límite de contexto
+  summary_model: "google/gemini-3-flash-preview"  # Modelo usado para resumen
 ```
 
-When compression triggers, middle turns are summarized while the first 3 and last 4 turns are always preserved.
+Cuando se activa compresión, los turnos intermedios se resumen mientras que los primeros 3 y últimos 4 turnos siempre se preservan.
 
-## Quiet Mode
+## Modo Silencioso
 
-By default, the CLI runs in quiet mode which:
-- Suppresses verbose logging from tools
-- Enables kawaii-style animated feedback
-- Keeps output clean and user-friendly
+Por defecto, la CLI se ejecuta en modo silencioso que:
+- Suprime registro verbose de herramientas
+- Habilita retroalimentación animada estilo kawaii
+- Mantiene la salida limpia y amigable
 
-For debug output:
+Para salida de depuración:
 ```bash
 hermes chat --verbose
 ```
