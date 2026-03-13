@@ -1,16 +1,16 @@
 ---
 sidebar_position: 1
-title: "CLI Commands Reference"
-description: "Comprehensive reference for all hermes CLI commands and slash commands"
+title: "Referencia de Comandos CLI"
+description: "Referencia completa de todos los comandos CLI y comandos slash de hermes"
 ---
 
-# CLI Commands Reference
+# Referencia de Comandos CLI
 
-## Terminal Commands
+## Comandos de Terminal
 
 These are commands you run from your shell.
 
-### Core Commands
+### Comandos Principales
 
 | Command | Description |
 |---------|-------------|
@@ -26,7 +26,7 @@ These are commands you run from your shell.
 | `hermes --worktree` / `-w` | Start in an isolated git worktree (for parallel agents) |
 | `hermes --checkpoints` | Enable filesystem checkpoints before destructive file operations |
 
-### Provider & Model Management
+### Gestión de Proveedor y Modelo
 
 | Command | Description |
 |---------|-------------|
@@ -34,7 +34,7 @@ These are commands you run from your shell.
 | `hermes login` | OAuth login to a provider (use `--provider` to specify) |
 | `hermes logout` | Clear provider authentication |
 
-### Configuration
+### Configuración
 
 | Command | Description |
 |---------|-------------|
@@ -48,7 +48,7 @@ These are commands you run from your shell.
 | `hermes status` | Show configuration status (including auth) |
 | `hermes doctor` | Diagnose issues |
 
-### Maintenance
+### Mantenimiento
 
 | Command | Description |
 |---------|-------------|
@@ -56,7 +56,7 @@ These are commands you run from your shell.
 | `hermes uninstall` | Uninstall (can keep configs for later reinstall) |
 | `hermes version` | Show version info |
 
-### Gateway (Messaging + Cron)
+### Puerta de Enlace (Mensajería + Cron)
 
 | Command | Description |
 |---------|-------------|
@@ -70,7 +70,7 @@ These are commands you run from your shell.
 | `hermes gateway uninstall` | Uninstall the system service |
 | `hermes whatsapp` | Pair WhatsApp via QR code |
 
-### Skills
+### Habilidades
 
 | Command | Description |
 |---------|-------------|
@@ -89,7 +89,7 @@ These are commands you run from your shell.
 | `hermes skills tap remove <repo>` | Remove a source |
 | `hermes skills tap list` | List custom sources |
 
-### Cron & Pairing
+### Cron y Emparejamiento
 
 | Command | Description |
 |---------|-------------|
@@ -101,7 +101,7 @@ These are commands you run from your shell.
 | `hermes pairing revoke <platform> <user_id>` | Remove user access |
 | `hermes pairing clear-pending` | Clear all pending pairing requests |
 
-### Sessions
+### Sesiones
 
 | Command | Description |
 |---------|-------------|
@@ -122,11 +122,11 @@ These are commands you run from your shell.
 
 ---
 
-## Slash Commands (Inside Chat)
+## Comandos Slash (Dentro del Chat)
 
 Type `/` in the interactive CLI to see an autocomplete dropdown.
 
-### Navigation & Control
+### Navegación y Control
 
 | Command | Description |
 |---------|-------------|
@@ -136,7 +136,7 @@ Type `/` in the interactive CLI to see an autocomplete dropdown.
 | `/new` | Start a new conversation |
 | `/reset` | Reset conversation only (keep screen) |
 
-### Tools & Configuration
+### Tools & Configuración
 
 | Command | Description |
 |---------|-------------|
@@ -149,7 +149,7 @@ Type `/` in the interactive CLI to see an autocomplete dropdown.
 | `/personality [name]` | Set a predefined personality |
 | `/reasoning [arg]` | Manage reasoning effort and display. Args: effort level (`none`, `low`, `medium`, `high`, `xhigh`) or display toggle (`show`, `hide`). No args shows current state. |
 
-### Conversation
+### Conversación
 
 | Command | Description |
 |---------|-------------|
@@ -178,13 +178,13 @@ Reports the result as: `Compressed: X → Y messages, ~N → ~M tokens`.
 Compression also happens automatically when approaching context limits (configurable via `compression.threshold` in `config.yaml`). Use `/compress` when you want to trigger it early.
 :::
 
-### Media & Input
+### Medios y Entrada
 
 | Command | Description |
 |---------|-------------|
 | `/paste` | Check clipboard for an image and attach it (see [Vision & Image Paste](/docs/user-guide/features/vision)) |
 
-### Skills & Scheduling
+### Habilidades & Scheduling
 
 | Command | Description |
 |---------|-------------|
@@ -194,7 +194,7 @@ Compression also happens automatically when approaching context limits (configur
 | `/verbose` | Cycle tool progress: off → new → all → verbose |
 | `/<skill-name>` | Invoke any installed skill |
 
-### Gateway-Only Commands
+### Comandos Solo para Puerta de Enlace
 
 These work in messaging platforms (Telegram, Discord, Slack, WhatsApp) but not the interactive CLI:
 
@@ -210,7 +210,7 @@ These work in messaging platforms (Telegram, Discord, Slack, WhatsApp) but not t
 
 ---
 
-## Keybindings
+## Atajos de Teclado
 
 | Key | Action |
 |-----|--------|

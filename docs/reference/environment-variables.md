@@ -1,14 +1,14 @@
 ---
 sidebar_position: 2
-title: "Environment Variables"
-description: "Complete reference of all environment variables used by Hermes Agent"
+title: "Variables de Entorno"
+description: "Referencia completa de todas las variables de entorno utilizadas por Hermes Agent"
 ---
 
-# Environment Variables Reference
+# Variables de Entorno Reference
 
 All variables go in `~/.hermes/.env`. You can also set them with `hermes config set VAR value`.
 
-## LLM Providers
+## Proveedores LLM
 
 | Variable | Description |
 |----------|-------------|
@@ -31,7 +31,7 @@ All variables go in `~/.hermes/.env`. You can also set them with `hermes config 
 | `VOICE_TOOLS_OPENAI_KEY` | OpenAI key for TTS and voice transcription (separate from custom endpoint) |
 | `HERMES_HOME` | Override Hermes config directory (default: `~/.hermes`) |
 
-## Provider Auth (OAuth)
+## Autenticación de Proveedor (OAuth)
 
 | Variable | Description |
 |----------|-------------|
@@ -41,7 +41,7 @@ All variables go in `~/.hermes/.env`. You can also set them with `hermes config 
 | `HERMES_NOUS_MIN_KEY_TTL_SECONDS` | Min agent key TTL before re-mint (default: 1800 = 30min) |
 | `HERMES_DUMP_REQUESTS` | Dump API request payloads to log files (`true`/`false`) |
 
-## Tool APIs
+## APIs de Herramientas
 
 | Variable | Description |
 |----------|-------------|
@@ -57,7 +57,7 @@ All variables go in `~/.hermes/.env`. You can also set them with `hermes config 
 | `WANDB_API_KEY` | RL training metrics ([wandb.ai](https://wandb.ai/)) |
 | `DAYTONA_API_KEY` | Daytona cloud sandboxes ([daytona.io](https://daytona.io/)) |
 
-## Terminal Backend
+## Backend de Terminal
 
 | Variable | Description |
 |----------|-------------|
@@ -72,7 +72,7 @@ All variables go in `~/.hermes/.env`. You can also set them with `hermes config 
 | `TERMINAL_CWD` | Working directory for all terminal sessions |
 | `SUDO_PASSWORD` | Enable sudo without interactive prompt |
 
-## SSH Backend
+## Backend SSH
 
 | Variable | Description |
 |----------|-------------|
@@ -81,7 +81,7 @@ All variables go in `~/.hermes/.env`. You can also set them with `hermes config 
 | `TERMINAL_SSH_PORT` | SSH port (default: 22) |
 | `TERMINAL_SSH_KEY` | Path to private key |
 
-## Container Resources (Docker, Singularity, Modal, Daytona)
+## Recursos de Contenedor (Docker, Singularity, Modal, Daytona)
 
 | Variable | Description |
 |----------|-------------|
@@ -91,7 +91,7 @@ All variables go in `~/.hermes/.env`. You can also set them with `hermes config 
 | `TERMINAL_CONTAINER_PERSISTENT` | Persist container filesystem across sessions (default: `true`) |
 | `TERMINAL_SANDBOX_DIR` | Host directory for workspaces and overlays (default: `~/.hermes/sandboxes/`) |
 
-## Messaging
+## Mensajería
 
 | Variable | Description |
 |----------|-------------|
@@ -118,7 +118,7 @@ All variables go in `~/.hermes/.env`. You can also set them with `hermes config 
 | `GATEWAY_ALLOWED_USERS` | Comma-separated user IDs allowed across all platforms |
 | `GATEWAY_ALLOW_ALL_USERS` | Allow all users without allowlist (`true`/`false`, default: `false`) |
 
-## Agent Behavior
+## Comportamiento del Agente
 
 | Variable | Description |
 |----------|-------------|
@@ -131,14 +131,14 @@ All variables go in `~/.hermes/.env`. You can also set them with `hermes config 
 | `HERMES_QUIET` | Suppress non-essential output (`true`/`false`) |
 | `HERMES_EXEC_ASK` | Enable execution approval prompts in gateway mode (`true`/`false`) |
 
-## Session Settings
+## Configuración de Sesión
 
 | Variable | Description |
 |----------|-------------|
 | `SESSION_IDLE_MINUTES` | Reset sessions after N minutes of inactivity (default: 120) |
 | `SESSION_RESET_HOUR` | Daily reset hour in 24h format (default: 4 = 4am) |
 
-## Context Compression
+## Compresión de Contexto
 
 | Variable | Description |
 |----------|-------------|
@@ -146,7 +146,7 @@ All variables go in `~/.hermes/.env`. You can also set them with `hermes config 
 | `CONTEXT_COMPRESSION_THRESHOLD` | Trigger at this % of limit (default: 0.85) |
 | `CONTEXT_COMPRESSION_MODEL` | Model for summaries |
 
-## Provider Routing (config.yaml only)
+## Enrutamiento de Proveedor (solo config.yaml)
 
 These go in `~/.hermes/config.yaml` under the `provider_routing` section:
 

@@ -1,18 +1,18 @@
 ---
 sidebar_position: 3
-title: "FAQ & Troubleshooting"
-description: "Frequently asked questions and solutions to common issues with Hermes Agent"
+title: "Preguntas Frecuentes y Solución de Problemas"
+description: "Preguntas frecuentes y soluciones a problemas comunes con Hermes Agent"
 ---
 
-# FAQ & Troubleshooting
+# Preguntas Frecuentes y Solución de Problemas
 
 Quick answers and fixes for the most common questions and issues.
 
 ---
 
-## Frequently Asked Questions
+## Preguntas Frecuentes
 
-### What LLM providers work with Hermes?
+### ¿Qué proveedores LLM funcionan con Hermes?
 
 Hermes Agent works with any OpenAI-compatible API. Supported providers include:
 
@@ -26,9 +26,9 @@ Hermes Agent works with any OpenAI-compatible API. Supported providers include:
 - **MiniMax** — global and China endpoints
 - **Local models** — via [Ollama](https://ollama.com/), [vLLM](https://docs.vllm.ai/), [llama.cpp](https://github.com/ggerganov/llama.cpp), [SGLang](https://github.com/sgl-project/sglang), or any OpenAI-compatible server
 
-Set your provider with `hermes model` or by editing `~/.hermes/.env`. See the [Environment Variables](./environment-variables.md) reference for all provider keys.
+Set your provider with `hermes model` or by editing `~/.hermes/.env`. See the [Variables de Entorno](./environment-variables.md) reference for all provider keys.
 
-### Does it work on Windows?
+### ¿Funciona en Windows?
 
 **Not natively.** Hermes Agent requires a Unix-like environment. On Windows, install [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) and run Hermes from inside it. The standard install command works perfectly in WSL2:
 
@@ -36,11 +36,11 @@ Set your provider with `hermes model` or by editing `~/.hermes/.env`. See the [E
 curl -fsSL https://raw.githubusercontent.com/hochoa13/Asistente-Harlest/main/scripts/install.sh | bash
 ```
 
-### Is my data sent anywhere?
+### ¿Se envían mis datos a algún lugar?
 
 API calls go **only to the LLM provider you configure** (e.g., OpenRouter, your local Ollama instance). Hermes Agent does not collect telemetry, usage data, or analytics. Your conversations, memory, and skills are stored locally in `~/.hermes/`.
 
-### Can I use it offline / with local models?
+### ¿Puedo usarlo sin conexión / con modelos locales?
 
 Yes. Point Hermes at any local OpenAI-compatible server:
 
@@ -50,24 +50,24 @@ hermes config set OPENAI_API_KEY ollama                       # Any non-empty va
 hermes config set HERMES_MODEL llama3.1
 ```
 
-This works with Ollama, vLLM, llama.cpp server, SGLang, LocalAI, and others. See the [Configuration guide](../user-guide/configuration.md) for details.
+This works with Ollama, vLLM, llama.cpp server, SGLang, LocalAI, and others. See the [Configuración guide](../user-guide/configuration.md) for details.
 
-### How much does it cost?
+### ¿Cuánto cuesta?
 
 Hermes Agent itself is **free and open-source** (MIT license). You pay only for the LLM API usage from your chosen provider. Local models are completely free to run.
 
-### Can multiple people use one instance?
+### ¿Pueden múltiples personas usar una sola instancia?
 
 Yes. The [messaging gateway](../user-guide/messaging/index.md) lets multiple users interact with the same Hermes Agent instance via Telegram, Discord, Slack, WhatsApp, or Home Assistant. Access is controlled through allowlists (specific user IDs) and DM pairing (first user to message claims access).
 
-### What's the difference between memory and skills?
+### ¿Cuál es la diferencia entre memoria y habilidades?
 
 - **Memory** stores **facts** — things the agent knows about you, your projects, and preferences. Memories are retrieved automatically based on relevance.
-- **Skills** store **procedures** — step-by-step instructions for how to do things. Skills are recalled when the agent encounters a similar task.
+- **Habilidades** store **procedures** — step-by-step instructions for how to do things. Habilidades are recalled when the agent encounters a similar task.
 
-Both persist across sessions. See [Memory](../user-guide/features/memory.md) and [Skills](../user-guide/features/skills.md) for details.
+Both persist across sessions. See [Memory](../user-guide/features/memory.md) and [Habilidades](../user-guide/features/skills.md) for details.
 
-### Can I use it in my own Python project?
+### ¿Puedo usarlo en mi propio proyecto de Python?
 
 Yes. Import the `AIAgent` class and use Hermes programmatically:
 
@@ -82,11 +82,11 @@ See the [Python Library guide](../user-guide/features/code-execution.md) for ful
 
 ---
 
-## Troubleshooting
+## Solución de Problemas
 
-### Installation Issues
+### Problemas de Instalación
 
-#### `hermes: command not found` after installation
+#### `hermes: comando no encontrado` after installation
 
 **Cause:** Your shell hasn't reloaded the updated PATH.
 
@@ -109,7 +109,7 @@ ls ~/.local/bin/hermes
 The installer adds `~/.local/bin` to your PATH. If you use a non-standard shell config, add `export PATH="$HOME/.local/bin:$PATH"` manually.
 :::
 
-#### Python version too old
+#### Versión de Python muy antigua
 
 **Cause:** Hermes requires Python 3.11 or newer.
 
@@ -124,7 +124,7 @@ brew install python@3.12      # macOS
 
 The installer handles this automatically — if you see this error during manual installation, upgrade Python first.
 
-#### `uv: command not found`
+#### `uv: comando no encontrado`
 
 **Cause:** The `uv` package manager isn't installed or not in PATH.
 
@@ -134,7 +134,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 source ~/.bashrc
 ```
 
-#### Permission denied errors during install
+#### Errores de permiso denegado durante la instalación
 
 **Cause:** Insufficient permissions to write to the install directory.
 
@@ -149,9 +149,9 @@ curl -fsSL https://raw.githubusercontent.com/hochoa13/Asistente-Harlest/main/scr
 
 ---
 
-### Provider & Model Issues
+### Problemas de Proveedor y Modelo
 
-#### API key not working
+#### La clave API no funciona
 
 **Cause:** Key is missing, expired, incorrectly set, or for the wrong provider.
 
@@ -171,7 +171,7 @@ hermes config set OPENROUTER_API_KEY sk-or-v1-xxxxxxxxxxxx
 Make sure the key matches the provider. An OpenAI key won't work with OpenRouter and vice versa. Check `~/.hermes/.env` for conflicting entries.
 :::
 
-#### Model not available / model not found
+#### Modelo no disponible / modelo no encontrado
 
 **Cause:** The model identifier is incorrect or not available on your provider.
 
@@ -187,7 +187,7 @@ hermes config set HERMES_MODEL openrouter/nous/hermes-3-llama-3.1-70b
 hermes chat --model openrouter/meta-llama/llama-3.1-70b-instruct
 ```
 
-#### Rate limiting (429 errors)
+#### Limitación de velocidad (errores 429)
 
 **Cause:** You've exceeded your provider's rate limits.
 
@@ -196,7 +196,7 @@ hermes chat --model openrouter/meta-llama/llama-3.1-70b-instruct
 - Switching to a different model or provider
 - Using `hermes chat --provider <alternative>` to route to a different backend
 
-#### Context length exceeded
+#### Longitud de contexto excedida
 
 **Cause:** The conversation has grown too long for the model's context window.
 
@@ -214,9 +214,9 @@ hermes chat --model openrouter/google/gemini-2.0-flash-001
 
 ---
 
-### Terminal Issues
+### Problemas de Terminal
 
-#### Command blocked as dangerous
+#### Comando bloqueado como peligroso
 
 **Cause:** Hermes detected a potentially destructive command (e.g., `rm -rf`, `DROP TABLE`). This is a safety feature.
 
@@ -237,7 +237,7 @@ This is working as intended — Hermes never silently runs destructive commands.
 - If you must use `sudo`, configure passwordless sudo for specific commands in `/etc/sudoers`
 - Or switch to the terminal interface for administrative tasks: `hermes chat`
 
-#### Docker backend not connecting
+#### El backend de Docker no se conecta
 
 **Cause:** Docker daemon isn't running or the user lacks permissions.
 
@@ -256,9 +256,9 @@ docker run hello-world
 
 ---
 
-### Messaging Issues
+### Mensajería Issues
 
-#### Bot not responding to messages
+#### El bot no responde a los mensajes
 
 **Cause:** The bot isn't running, isn't authorized, or your user isn't in the allowlist.
 
@@ -274,7 +274,7 @@ hermes gateway start
 hermes gateway logs
 ```
 
-#### Messages not delivering
+#### Los mensajes no se entregan
 
 **Cause:** Network issues, bot token expired, or platform webhook misconfiguration.
 
@@ -283,7 +283,7 @@ hermes gateway logs
 - Check gateway logs: `hermes gateway logs`
 - For webhook-based platforms (Slack, WhatsApp), ensure your server is publicly accessible
 
-#### Allowlist confusion — who can talk to the bot?
+#### Confusión de lista blanca — ¿quién puede hablar con el bot?
 
 **Cause:** Authorization mode determines who gets access.
 
@@ -295,9 +295,9 @@ hermes gateway logs
 | **DM pairing** | First user to message in DM claims exclusive access |
 | **Open** | Anyone can interact (not recommended for production) |
 
-Configure in `~/.hermes/config.yaml` under your gateway's settings. See the [Messaging docs](../user-guide/messaging/index.md).
+Configure in `~/.hermes/config.yaml` under your gateway's settings. See the [Mensajería docs](../user-guide/messaging/index.md).
 
-#### Gateway won't start
+#### La puerta de enlace no se inicia
 
 **Cause:** Missing dependencies, port conflicts, or misconfigured tokens.
 
@@ -315,9 +315,9 @@ hermes config show
 
 ---
 
-### Performance Issues
+### Problemas de Rendimiento
 
-#### Slow responses
+#### Respuestas lentas
 
 **Cause:** Large model, distant API server, or heavy system prompt with many tools.
 
@@ -327,7 +327,7 @@ hermes config show
 - Check your network latency to the provider
 - For local models, ensure you have enough GPU VRAM
 
-#### High token usage
+#### Uso alto de tokens
 
 **Cause:** Long conversations, verbose system prompts, or many tool calls accumulating context.
 
@@ -344,7 +344,7 @@ hermes config show
 Use `/compress` regularly during long sessions. It summarizes the conversation history and reduces token usage significantly while preserving context.
 :::
 
-#### Session getting too long
+#### La sesión se está volviendo demasiado larga
 
 **Cause:** Extended conversations accumulate messages and tool outputs, approaching context limits.
 
@@ -362,9 +362,9 @@ hermes chat --continue
 
 ---
 
-### MCP Issues
+### Problemas de MCP
 
-#### MCP server not connecting
+#### El servidor MCP no se conecta
 
 **Cause:** Server binary not found, wrong command path, or missing runtime.
 
@@ -389,7 +389,7 @@ mcp_servers:
     args: ["-y", "@modelcontextprotocol/server-filesystem", "/home/user/docs"]
 ```
 
-#### Tools not showing up from MCP server
+#### Las herramientas no aparecen desde el servidor MCP
 
 **Cause:** Server started but tool discovery failed, or tools are filtered out.
 
@@ -406,7 +406,7 @@ hermes config show | grep -A 5 mcp_servers
 hermes chat
 ```
 
-#### MCP timeout errors
+#### Errores de tiempo de espera de MCP
 
 **Cause:** The MCP server is taking too long to respond, or it crashed during execution.
 
@@ -421,7 +421,7 @@ If an MCP server crashes mid-request, Hermes will report a timeout. Check the se
 
 ---
 
-## Still Stuck?
+## ¿Aún atrapado?
 
 If your issue isn't covered here:
 
