@@ -60,31 +60,31 @@ hermes update       # Actualiza a la última versión
 hermes doctor       # Diagnostica cualquier problema
 ```
 
-📖 **[Documentación completa →](DOCS/index.md)**
+📖 **[Documentación completa →](docs/index.md)**
 
 ---
 
 ## Documentación
 
-Toda la documentación se encuentra localmente en la carpeta **[`DOCS`](DOCS/)**:
+Toda la documentación se encuentra localmente en la carpeta **[`docs`](docs/)**:
 
 | Sección | Qué se Cubre |
 |---------|-------------|
-| [Inicio Rápido](DOCS/getting-started/quickstart.md) | Instalar → configurar → primera conversación en 2 minutos |
-| [Uso de CLI](DOCS/user-guide/cli.md) | Comandos, atajos de teclado, personalidades, sesiones |
-| [Configuración](DOCS/user-guide/configuration.md) | Archivo de configuración, proveedores, modelos, todas las opciones |
-| [Puerta de Enlace de Mensajería](DOCS/user-guide/messaging/index.md) | Telegram, Discord, Slack, WhatsApp, Signal, Home Assistant |
-| [Seguridad](DOCS/user-guide/security.md) | Aprobación de comandos, emparejamiento de DM, aislamiento de contenedor |
-| [Herramientas y Conjuntos de Herramientas](DOCS/user-guide/features/tools.md) | 40+ herramientas, sistema de conjuntos de herramientas, backends de terminal |
-| [Sistema de Habilidades](DOCS/user-guide/features/tools.md) | Memoria procedimental, Centro de Habilidades, creación de habilidades |
-| [Memoria](DOCS/user-guide/features/memory.md) | Memoria persistente, perfiles de usuario, mejores prácticas |
-| [Integración MCP](DOCS/user-guide/features/tools.md) | Conecta cualquier servidor MCP para capacidades extendidas |
-| [Programación Cron](DOCS/user-guide/features/tools.md) | Tareas programadas con entrega de plataforma |
-| [Archivos de Contexto](DOCS/user-guide/features/context-files.md) | Contexto del proyecto que moldea cada conversación |
-| [Arquitectura](DOCS/developer-guide/architecture.md) | Estructura del proyecto, ciclo del agente, clases clave |
-| [Contribuyendo](DOCS/developer-guide/contributing.md) | Configuración de desarrollo, proceso de PR, estilo de código |
-| [Referencia CLI](DOCS/reference/cli-commands.md) | Todos los comandos y banderas |
-| [Variables de Entorno](DOCS/reference/environment-variables.md) | Referencia completa de variables de entorno |
+| [Inicio Rápido](docs/getting-started/quickstart.md) | Instalar → configurar → primera conversación en 2 minutos |
+| [Uso de CLI](docs/user-guide/cli.md) | Comandos, atajos de teclado, personalidades, sesiones |
+| [Configuración](docs/user-guide/configuration.md) | Archivo de configuración, proveedores, modelos, todas las opciones |
+| [Puerta de Enlace de Mensajería](docs/user-guide/messaging/index.md) | Telegram, Discord, Slack, WhatsApp, Signal, Home Assistant |
+| [Seguridad](docs/user-guide/security.md) | Aprobación de comandos, emparejamiento de DM, aislamiento de contenedor |
+| [Herramientas y Conjuntos de Herramientas](docs/user-guide/features/tools.md) | 40+ herramientas, sistema de conjuntos de herramientas, backends de terminal |
+| [Sistema de Habilidades](docs/user-guide/features/skills.md) | Memoria procedimental, Centro de Habilidades, creación de habilidades |
+| [Memoria](docs/user-guide/features/memory.md) | Memoria persistente, perfiles de usuario, mejores prácticas |
+| [Integración MCP](docs/user-guide/features/mcp.md) | Conecta cualquier servidor MCP para capacidades extendidas |
+| [Programación Cron](docs/user-guide/features/cron.md) | Tareas programadas con entrega de plataforma |
+| [Archivos de Contexto](docs/user-guide/features/context-files.md) | Contexto del proyecto que moldea cada conversación |
+| [Arquitectura](docs/developer-guide/architecture.md) | Estructura del proyecto, ciclo del agente, clases clave |
+| [Contribuyendo](docs/developer-guide/contributing.md) | Configuración de desarrollo, proceso de PR, estilo de código |
+| [Referencia CLI](docs/reference/cli-commands.md) | Todos los comandos y banderas |
+| [Variables de Entorno](docs/reference/environment-variables.md) | Referencia completa de variables de entorno |
 
 ---
 
