@@ -114,7 +114,7 @@ Integrate Hermes Agent into your own Python applications programmatically.
 5. [Tools](/docs/user-guide/features/tools)
 6. [Sessions](/docs/user-guide/sessions)
 
-## Key Features at a Glance
+## Características Clave at a Glance
 
 Not sure what's available? Here's a quick directory of major features:
 

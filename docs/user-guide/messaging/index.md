@@ -1,6 +1,6 @@
 ---
 sidebar_position: 1
-title: "Messaging Gateway"
+title: "Puerta de Enlace de Mensajería"
 description: "Chat with Hermes from Telegram, Discord, Slack, WhatsApp, Signal, or Email — architecture and setup overview"
 ---
 

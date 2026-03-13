@@ -1,33 +1,33 @@
 ---
 sidebar_position: 1
-title: "Quickstart"
-description: "Your first conversation with Hermes Agent — from install to chatting in 2 minutes"
+title: "Inicio Rápido"
+description: "Tu primera conversación con Hermes Agent — from install to chatting in 2 minutes"
 ---
 
 # Quickstart
 
 This guide walks you through installing Hermes Agent, setting up a provider, and having your first conversation. By the end, you'll know the key features and how to explore further.
 
-## 1. Install Hermes Agent
+## 1. Instala Hermes Agent
 
-Run the one-line installer:
+Ejecuta el instalador de una línea:
 
 ```bash
 # Linux / macOS / WSL2
-curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/hochoa13/Asistente-Harlest/main/scripts/install.sh | bash
 ```
 
-:::tip Windows Users
+:::tip Usuarios de Windows
 Install [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) first, then run the command above inside your WSL2 terminal.
 :::
 
-After it finishes, reload your shell:
+Después de que termine, recarga tu shell:
 
 ```bash
 source ~/.bashrc   # or source ~/.zshrc
 ```
 
-## 2. Set Up a Provider
+## 2. Configura un Proveedor
 
 The installer configures your LLM provider automatically. To change it later, use one of these commands:
 
@@ -44,7 +44,7 @@ hermes setup       # Or configure everything at once
 | **Nous Portal** | Subscription-based, zero-config | OAuth login via `hermes model` |
 | **OpenAI Codex** | ChatGPT OAuth, uses Codex models | Device code auth via `hermes model` |
 | **Anthropic** | Claude models directly (Pro/Max or API key) | API key or Claude Code setup-token |
-| **OpenRouter** | 200+ models, pay-per-use | Enter your API key |
+| **OpenRouter** | 200+ models, pay-per-use | Ingresa tu clave API |
 | **Custom Endpoint** | VLLM, SGLang, any OpenAI-compatible API | Set base URL + API key |
 
 :::tip
