@@ -5,7 +5,7 @@
 # Hermes Agent ⚕
 
 <p align="center">
-  <a href="https://hermes-agent.nousres__earch.com/docs/"><img src="https://img.shields.io/badge/Docs-hermes--agent.nousresearch.com-FFD700?style=for-the-badge" alt="Documentación"></a>
+  <a href="docs/index.md"><img src="https://img.shields.io/badge/Docs-Documentación-FFD700?style=for-the-badge" alt="Documentación"></a>
   <a href="https://discord.gg/NousResearch"><img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord"></a>
   <a href="https://github.com/NousResearch/hermes-agent/blob/main/LICENSE"><img src="https://img.shields.io/badge/Licencia-MIT-green?style=for-the-badge" alt="Licencia: MIT"></a>
   <a href="https://nousresearch.com"><img src="https://img.shields.io/badge/Creado%20por-Harlest-blueviolet?style=for-the-badge" alt="Creado por Harlest"></a>
@@ -119,7 +119,7 @@ Ver `hermes claw migrate --help` para todas las opciones, o usa la habilidad `op
 
 ## Contribuyendo
 
-¡Aceptamos contribuciones! Ver la [Guía de Contribución](https://hermes-agent.nousresearch.com/docs/developer-guide/contributing) para configuración de desarrollo, estilo de código y proceso de PR.
+¡Aceptamos contribuciones! Ver la [Guía de Contribución](docs/developer-guide/contributing.md) para configuración de desarrollo, estilo de código y proceso de PR.
 
 Inicio rápido para contribuyentes:
 
