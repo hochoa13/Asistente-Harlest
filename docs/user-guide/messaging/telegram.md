@@ -4,141 +4,141 @@ title: "Telegram"
 description: "Configura Hermes Agent como un bot de Telegram"
 ---
 
-# Telegram Configuración
+# Configuración de Telegram
 
-Hermes Agent integrates with Telegram as a full-featured conversational bot. Once connected, you can chat with your agent from any device, enviar voice memos that get auto-transcribed, recibir scheduled task results, and use the agent in grupo chats. The integration is built on [python-telegram-bot](https://python-telegram-bot.org/) and supports text, voice, images, and file attachments.
+Hermes Agent se integra con Telegram como un bot conversacional completo. Una vez conectado, puedes chatear con tu agente desde cualquier dispositivo, enviar notas de voz que se transcriben automáticamente, recibir resultados de tareas programadas y usar el agente en chats grupales. La integración está construida sobre [python-telegram-bot](https://python-telegram-bot.org/) y admite texto, voz, imágenes y adjuntos de archivos.
 
-## Step 1: Create a Bot via BotFather
+## Paso 1: Crear un Bot con BotFather
 
-Every Telegram bot requires an API token issued by [@BotFather](https://t.me/BotFather), Telegram's official bot management tool.
+Todo bot de Telegram requiere un token de API emitido por [@BotFather](https://t.me/BotFather), la herramienta oficial de gestión de bots de Telegram.
 
-1. Open Telegram and search for **@BotFather**, or visit [t.me/BotFather](https://t.me/BotFather)
-2. Send `/newbot`
-3. Choose a **display name** (e.g., "Hermes Agent") — this can be anything
-4. Choose a **usuarioname** — this must be unique and end in `bot` (e.g., `my_hermes_bot`)
-5. BotFather replies with your **API token**. It looks like this:
+1. Abre Telegram y busca **@BotFather**, o visita [t.me/BotFather](https://t.me/BotFather)
+2. Envía `/newbot`
+3. Elige un **nombre para mostrar** (p. ej., "Hermes Agent") — puede ser cualquier cosa
+4. Elige un **nombre de usuario** — debe ser único y terminar en `bot` (p. ej., `mi_hermes_bot`)
+5. BotFather responde con tu **token de API**. Se ve así:
 
 ```
 123456789:ABCdefGHIjklMNOpqrSTUvwxYZ
 ```
 
 :::warning
-Keep your bot token secret. Anyone with this token can control your bot. If it leaks, revoke it immediately via `/revoke` in BotFather.
+Mantén tu token de bot en secreto. Cualquiera con este token puede controlar tu bot. Si se filtra, revócalo inmediatamente con `/revoke` en BotFather.
 :::
 
-## Step 2: Customize Your Bot (Optional)
+## Paso 2: Personalizar tu Bot (Opcional)
 
-These BotFather commands improve the usuario experience. Message @BotFather and use:
+Estos comandos de BotFather mejoran la experiencia del usuario. Envía un mensaje a @BotFather y utiliza:
 
-| Command | Purpose |
-|---------|---------|
-| `/setdescription` | The "What can this bot do?" text shown before a usuario starts chatting |
-| `/setabouttext` | Short text on the bot's profile page |
-| `/setusuariopic` | Upload an avatar for your bot |
-| `/setcommands` | Define the command menu (the `/` button in chat) |
-| `/setprivacy` | Control whether the bot sees all grupo mensajes (see Step 3) |
+| Comando | Propósito |
+|---------|-----------|
+| `/setdescription` | El texto "¿Qué puede hacer este bot?" mostrado antes de que un usuario comience a chatear |
+| `/setabouttext` | Texto corto en la página de perfil del bot |
+| `/setuserpic` | Carga un avatar para tu bot |
+| `/setcommands` | Define el menú de comandos (el botón `/` en el chat) |
+| `/setprivacy` | Controla si el bot ve todos los mensajes grupales (ver Paso 3) |
 
 :::tip
-For `/setcommands`, a useful starting set:
+Para `/setcommands`, un conjunto útil de inicio:
 
 ```
-help - Show help information
-new - Start a new conversation
-sethome - Set this chat as the home canal
+help - Mostrar información de ayuda
+new - Iniciar una nueva conversación
+sethome - Establecer este chat como canal principal
 ```
 :::
 
-## Step 3: Privacy Mode (Critical for Groups)
+## Paso 3: Modo Privado (Crítico para Grupos)
 
-Telegram bots have a **privacy mode** that is **enabled by default**. This is the single most common source of confusion when using bots in grupos.
+Los bots de Telegram tienen un **modo privado** que está **habilitado por defecto**. Esta es la fuente más común de confusión al usar bots en grupos.
 
-**With privacy mode ON**, your bot can only see:
-- Messages that start with a `/` command
-- Replies directly to the bot's own mensajes
-- Service mensajes (member joins/leaves, pinned mensajes, etc.)
-- Messages in canals where the bot is an admin
+**Con modo privado ACTIVADO**, tu bot solo puede ver:
+- Mensajes que comienzan con un comando `/`
+- Respuestas directas a los propios mensajes del bot
+- Mensajes de servicio (miembros que se unen/salen, mensajes fijados, etc.)
+- Mensajes de canales donde el bot es administrador
 
-**With privacy mode OFF**, the bot recibirs every mensaje in the grupo.
+**Con modo privado DESACTIVADO**, el bot recibe todos los mensajes del grupo.
 
-### How to disable privacy mode
+### Cómo desactivar el modo privado
 
-1. Message **@BotFather**
-2. Send `/mybots`
-3. Select your bot
-4. Go to **Bot Settings → Group Privacy → Turn off**
+1. Envía un mensaje a **@BotFather**
+2. Envía `/mybots`
+3. Selecciona tu bot
+4. Ve a **Configuración del Bot → Privacidad del Grupo → Desactivar**
 
 :::warning
-**You must remove and re-add the bot to any grupo** after changing the privacy setting. Telegram caches the privacy state when a bot joins a grupo, and it will not update until the bot is removed and re-added.
+**Debes remover y volver a añadir el bot a cualquier grupo** después de cambiar la configuración de privacidad. Telegram cachea el estado de privacidad cuando un bot se une a un grupo, y no se actualizará hasta que el bot se remueva y se vuelva a añadir.
 :::
 
 :::tip
-An alternative to disabling privacy mode: promote the bot to **grupo admin**. Admin bots always recibir all mensajes regardless of the privacy setting, and this avoids needing to toggle the global privacy mode.
+Una alternativa a desactivar el modo privado: promover el bot a **administrador del grupo**. Los bots administrador siempre reciben todos los mensajes independientemente de la configuración de privacidad, y esto evita la necesidad de alternar el modo privado global.
 :::
 
-## Step 4: Find Your User ID
+## Paso 4: Encontrar tu ID de Usuario
 
-Hermes Agent uses numeric Telegram usuario IDs to control access. Your usuario ID is **not** your usuarioname — it's a number like `123456789`.
+Hermes Agent utiliza IDs numéricos de usuario de Telegram para controlar el acceso. Tu ID de usuario **no** es tu nombre de usuario — es un número como `123456789`.
 
-**Method 1 (recommended):** Message [@usuarioinfobot](https://t.me/usuarioinfobot) — it instantly replies with your usuario ID.
+**Método 1 (recomendado):** Envía un mensaje a [@userinfobot](https://t.me/userinfobot) — responde instantáneamente con tu ID de usuario.
 
-**Method 2:** Message [@get_id_bot](https://t.me/get_id_bot) — another reliable option.
+**Método 2:** Envía un mensaje a [@get_id_bot](https://t.me/get_id_bot) — otra opción confiable.
 
-Save this number; you'll need it for the next step.
+Guarda este número; lo necesitarás para el siguiente paso.
 
-## Step 5: Configure Hermes
+## Paso 5: Configurar Hermes
 
-### Option A: Interactive Configuración (Recommended)
+### Opción A: Configuración Interactiva (Recomendado)
 
 ```bash
 hermes gateway setup
 ```
 
-Select **Telegram** when prompted. The wizard asks for your bot token and allowed usuario IDs, then writes the configuraciónuration for you.
+Selecciona **Telegram** cuando se te solicite. El asistente te pide tu token de bot e IDs de usuario permitidos, luego escribe la configuración por ti.
 
-### Option B: Manual Configuración
+### Opción B: Configuración Manual
 
-Add the following to `~/.hermes/.env`:
+Añade lo siguiente a `~/.hermes/.env`:
 
 ```bash
 TELEGRAM_BOT_TOKEN=123456789:ABCdefGHIjklMNOpqrSTUvwxYZ
-TELEGRAM_ALLOWED_USERS=123456789    # Comma-separated for multiple usuarios
+TELEGRAM_ALLOWED_USERS=123456789    # Separados por comas para múltiples usuarios
 ```
 
-### Start the Gateway
+### Iniciar la Puerta de Enlace
 
 ```bash
 hermes gateway
 ```
 
-The bot should come online within seconds. Send it a mensaje on Telegram to verify.
+El bot debe estar en línea en cuestión de segundos. Envíale un mensaje en Telegram para verificar.
 
-## Home Channel
+## Canal Principal
 
-Use the `/sethome` command in any Telegram chat (DM or grupo) to designate it as the **home canal**. Scheduled tasks (cron jobs) deliver their results to this canal.
+Usa el comando `/sethome` en cualquier chat de Telegram (DM o grupo) para designarlo como **canal principal**. Las tareas programadas (trabajos cron) entregan sus resultados a este canal.
 
-You can also set it manually in `~/.hermes/.env`:
+También puedes configurarlo manualmente en `~/.hermes/.env`:
 
 ```bash
 TELEGRAM_HOME_CHANNEL=-1001234567890
-TELEGRAM_HOME_CHANNEL_NAME="My Notes"
+TELEGRAM_HOME_CHANNEL_NAME="Mis Notas"
 ```
 
 :::tip
-Group chat IDs are negative numbers (e.g., `-1001234567890`). Your personal DM chat ID is the same as your usuario ID.
+Los IDs de chat de grupo son números negativos (p. ej., `-1001234567890`). Tu ID de chat DM personal es el mismo que tu ID de usuario.
 :::
 
-## Voice Messages
+## Mensajes de Voz
 
-### Incoming Voice (Speech-to-Text)
+### Voz Entrante (Voz a Texto)
 
-Voice mensajes you enviar on Telegram are automatically transcribed using OpenAI's Whisper API and injected as text into the conversation. This requires `VOICE_TOOLS_OPENAI_KEY` in `~/.hermes/.env`.
+Los mensajes de voz que envías en Telegram se transcriben automáticamente usando la API Whisper de OpenAI e se inyectan como texto en la conversación. Esto requiere `VOICE_TOOLS_OPENAI_KEY` en `~/.hermes/.env`.
 
-### Outgoing Voice (Text-to-Speech)
+### Voz Saliente (Texto a Voz)
 
-When the agent generates audio via TTS, it's delivered as native Telegram **voice bubbles** — the round, inline-playable kind.
+Cuando el agente genera audio mediante TTS, se entrega como **burbujas de voz** nativas de Telegram — el tipo redondo, reproducible en línea.
 
-- **OpenAI and ElevenLabs** produce Opus natively — no extra setup needed
-- **Edge TTS** (the default free provider) outputs MP3 and requires **ffmpeg** to convert to Opus:
+- **OpenAI y ElevenLabs** producen Opus nativamente — no se necesita configuración adicional
+- **Edge TTS** (el proveedor predeterminado gratuito) genera MP3 y requiere **ffmpeg** para convertir a Opus:
 
 ```bash
 # Ubuntu/Debian
@@ -148,49 +148,47 @@ sudo apt install ffmpeg
 brew install ffmpeg
 ```
 
-Without ffmpeg, Edge TTS audio is sent as a regular audio file (still playable, but uses the rectangular player instead of a voice bubble).
+Sin ffmpeg, el audio de Edge TTS se envía como un archivo de audio regular (aún reproducible, pero usa el reproductor rectangular en lugar de una burbuja de voz).
 
-Configure the TTS provider in your `configuración.yaml` under the `tts.provider` key.
+Configura el proveedor de TTS en tu `config.yaml` bajo la clave `tts.provider`.
 
-## Group Chat Usage
+## Uso en Chats Grupales
 
-Hermes Agent works in Telegram grupo chats with a few considerations:
+Hermes Agent funciona en chats grupales de Telegram con algunas consideraciones:
 
-- **Privacy mode** determines what mensajes the bot can see (see [Step 3](#step-3-privacy-mode-critical-for-grupos))
-- When privacy mode is on, **@mention the bot** (e.g., `@my_hermes_bot what's the weather?`) or **reply to its mensajes** to interact
-- When privacy mode is off (or bot is admin), the bot sees all mensajes and can participate naturally
-- `TELEGRAM_ALLOWED_USERS` still applies — only authorized usuarios can trigger the bot, even in grupos
+- **Modo privado** determina qué mensajes puede ver el bot (ver [Paso 3](#paso-3-modo-privado-crítico-para-grupos))
+- Cuando el modo privado está activado, **menciona el bot** (p. ej., `@mi_hermes_bot ¿cuál es el clima?`) o **responde a sus mensajes** para interactuar
+- Cuando el modo privado está desactivado (o el bot es administrador), el bot ve todos los mensajes y puede participar naturalmente
+- `TELEGRAM_ALLOWED_USERS` sigue siendo aplicable — solo los usuarios autorizados pueden activar el bot, incluso en grupos
 
-## Recent Bot API Features (2024–2025)
+## Características Recientes de la API de Bot (2024–2025)
 
-- **Privacy policy:** Telegram now requires bots to have a privacy policy. Set one via BotFather with `/setprivacy_policy`, or Telegram may auto-generate a placeholder. This is particularly important if your bot is public-facing.
-- **Message streaming:** Bot API 9.x added support for streaming long responses, which can improve perceived latency for lengthy agent replies.
+- **Política de privacidad:** Telegram ahora requiere que los bots tengan una política de privacidad. Establece una vía BotFather con `/setprivacy_policy`, o Telegram puede generar automáticamente un marcador de posición. Esto es particularmente importante si tu bot es público.
+- **Transmisión de mensajes:** La API de Bot 9.x añadió soporte para transmitir respuestas largas, lo que puede mejorar la latencia percibida para respuestas largas del agente.
 
 ## Solución de Problemas
 
-| Problem | Solution |
-|---------|----------|
-| Bot not responding at all | Verify `TELEGRAM_BOT_TOKEN` is correct. Check `hermes gateway` logs for errors. |
-| Bot responds with "unauthorized" | Your usuario ID is not in `TELEGRAM_ALLOWED_USERS`. Double-check with @usuarioinfobot. |
-| Bot ignores grupo mensajes | Privacy mode is likely on. Disable it (Step 3) or make the bot a grupo admin. **Remember to remove and re-add the bot after changing privacy.** |
-| Voice mensajes not transcribed | Check that `VOICE_TOOLS_OPENAI_KEY` is set and valid in `~/.hermes/.env`. |
-| Voice replies are files, not bubbles | Install `ffmpeg` (needed for Edge TTS Opus conversion). |
-| Bot token revoked/invalid | Generate a new token via `/revoke` then `/newbot` or `/token` in BotFather. Update your `.env` file. |
+| Problema | Solución |
+|----------|----------|
+| El bot no responde en absoluto | Verifica que `TELEGRAM_BOT_TOKEN` sea correcto. Revisa los registros de `hermes gateway` en busca de errores. |
+| El bot responde con "no autorizado" | Tu ID de usuario no está en `TELEGRAM_ALLOWED_USERS`. Verifica nuevamente con @userinfobot. |
+| El bot ignora los mensajes del grupo | El modo privado probablemente está activado. Desactívalo (Paso 3) o haz que el bot sea administrador del grupo. **Recuerda remover y volver a añadir el bot después de cambiar la privacidad.** |
+| Los mensajes de voz no se transcriben | Comprueba que `VOICE_TOOLS_OPENAI_KEY` esté configurado y sea válido en `~/.hermes/.env`. |
+| Las respuestas de voz son archivos, no burbujas | Instala `ffmpeg` (necesario para la conversión de Opus de Edge TTS). |
+| Token de bot revocado/inválido | Genera un nuevo token vía `/revoke` luego `/newbot` o `/token` en BotFather. Actualiza tu archivo `.env`. |
 
-## Exec Approval
+## Aprobación de Ejecución
 
-When the agent tries to run a potentially dangerous command, it asks you for approval in the chat:
+Cuando el agente intenta ejecutar un comando potencialmente peligroso, te pide aprobación en el chat:
 
-> ⚠️ This command is potentially dangerous (recursive delete). Reply "yes" to approve.
+> ⚠️ Este comando es potencialmente peligroso (eliminación recursiva). Responde "sí" para aprobar.
 
-Reply "yes"/"y" to approve or "no"/"n" to deny.
+Responde "sí"/"s" para aprobar o "no"/"n" para denegar.
 
-## Security
+## Seguridad
 
 :::warning
-Always set `TELEGRAM_ALLOWED_USERS` to restrict who can interact with your bot. Without it, the gateway denies all usuarios by default as a safety measure.
+Siempre establece `TELEGRAM_ALLOWED_USERS` para restringir quién puede interactuar con tu bot. Sin esto, la puerta de enlace deniega a todos los usuarios por defecto como medida de seguridad.
 :::
 
-Never share your bot token publicly. If compromised, revoke it immediately via BotFather's `/revoke` command.
-
-Para más detalles, ver the [Security documentation](/usuario-guía/security). You can also use [DM pairing](/usuario-guía/messaging#dm-pairing-alternative-to-allowlists) for a more dynamic approach to usuario authorization.
+Nunca compartas tu token de bot públicamente. Si se compromete, revócalo inmediatamente vía el comando `/revoke` de BotFather.
