@@ -6,39 +6,39 @@ description: "Integra AIAgent en tus propios scripts de Python, web apps, or aut
 
 # Usando Hermes como una Librería Python
 
-Hermes isn't just a CLI tool. You can import `AIAgent` directly and use it programmatically in your own Python scripts, web applications, or automation pipelines. This guide shows you how.
+Hermes no es solo una herramienta CLI. Puedes importar `AIAgent` directamente y usarlo programáticamente en tus propios scripts de Python, aplicaciones web o tuberías de automatización. Esta guía te muestra cómo.
 
 ---
 
-## Installation
+## Instalación
 
-Install Hermes directly from the repository:
+Instala Hermes directamente desde el repositorio:
 
 ```bash
 pip install git+https://github.com/hochoa13/Asistente-Harlest.git
 ```
 
-Or with [uv](https://docs.astral.sh/uv/):
+O con [uv](https://docs.astral.sh/uv/):
 
 ```bash
 uv pip install git+https://github.com/hochoa13/Asistente-Harlest.git
 ```
 
-You can also pin it in your `requirements.txt`:
+También puedes fijarlo en tu `requirements.txt`:
 
 ```text
 hermes-agent @ git+https://github.com/hochoa13/Asistente-Harlest.git
 ```
 
 :::tip
-The same environment variables used by the CLI are required when using Hermes as a library. At minimum, set `OPENROUTER_API_KEY` (or `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` if using direct provider access).
+Las mismas variables de entorno utilizadas por la CLI se requieren al usar Hermes como una librería. Como mínimo, establece `OPENROUTER_API_KEY` (o `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` si usas acceso directo al proveedor).
 :::
 
 ---
 
-## Basic Usage
+## Uso Básico
 
-The simplest way to use Hermes is the `chat()` method — pass a message, get a string back:
+La forma más simple de usar Hermes es el método `chat()` — pasa un mensaje, obtén una cadena de regreso:
 
 ```python
 from run_agent import AIAgent
@@ -47,21 +47,21 @@ agent = AIAgent(
     model="anthropic/claude-sonnet-4",
     quiet_mode=True,
 )
-response = agent.chat("What is the capital of France?")
+response = agent.chat("¿Cuál es la capital de Francia?")
 print(response)
 ```
 
-`chat()` handles the full conversation loop internally — tool calls, retries, everything — and returns just the final text response.
+`chat()` maneja el bucle de conversación completo internamente — llamadas a herramientas, reintentos, todo — y devuelve solo la respuesta de texto final.
 
 :::warning
-Always set `quiet_mode=True` when embedding Hermes in your own code. Without it, the agent prints CLI spinners, progress indicators, and other terminal output that will clutter your application's output.
+Siempre establece `quiet_mode=True` cuando incrustas Hermes en tu propio código. Sin él, el agente imprime giroscopios de CLI, indicadores de progreso y otra salida de terminal que ensuciará la salida de tu aplicación.
 :::
 
 ---
 
-## Full Conversation Control
+## Control Completo de Conversación
 
-For more control over the conversation, use `run_conversation()` directly. It returns a dictionary with the full response, message history, and metadata:
+Para mayor control sobre la conversación, usa `run_conversation()` directamente. Devuelve un diccionario con la respuesta completa, historial de mensajes y metadatos:
 
 ```python
 agent = AIAgent(
@@ -70,33 +70,33 @@ agent = AIAgent(
 )
 
 result = agent.run_conversation(
-    user_message="Search for recent Python 3.13 features",
-    task_id="my-task-1",
+    user_message="Busca características recientes de Python 3.13",
+    task_id="mi-tarea-1",
 )
 
 print(result["final_response"])
-print(f"Messages exchanged: {len(result['messages'])}")
+print(f"Mensajes intercambiados: {len(result['messages'])}")
 ```
 
-The returned dictionary contains:
-- **`final_response`** — The agent's final text reply
-- **`messages`** — The complete message history (system, user, assistant, tool calls)
-- **`task_id`** — The task identifier used for VM isolation
+El diccionario devuelto contiene:
+- **`final_response`** — La respuesta de texto final del agente
+- **`messages`** — El historial completo de mensajes (sistema, usuario, asistente, llamadas a herramientas)
+- **`task_id`** — El identificador de tarea utilizado para aislamiento de VM
 
-You can also pass a custom system message that overrides the ephemeral system prompt for that call:
+También puedes pasar un mensaje de sistema personalizado que anule el prompt de sistema efímero para esa llamada:
 
 ```python
 result = agent.run_conversation(
-    user_message="Explain quicksort",
-    system_message="You are a computer science tutor. Use simple analogies.",
+    user_message="Explica quicksort",
+    system_message="Eres un tutor de informática. Usa analogías simples.",
 )
 ```
 
 ---
 
-## Configuring Tools
+## Configurando Herramientas
 
-Control which toolsets the agent has access to using `enabled_toolsets` or `disabled_toolsets`:
+Controla qué conjuntos de herramientas tiene acceso el agente usando `enabled_toolsets` o `disabled_toolsets`:
 
 ```python
 # Only enable web tools (browsing, search)

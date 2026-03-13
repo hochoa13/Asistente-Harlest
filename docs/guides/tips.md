@@ -10,202 +10,96 @@ A quick-wins collection of practical tips that make you immediately more effecti
 
 ---
 
-## Getting the Best Results
+## Obteniendo los Mejores Resultados
 
-### Be Specific About What You Want
+### Sé Específico Sobre Lo Que Quieres
 
-Vague prompts produce vague results. Instead of "fix the code," say "fix the TypeError in `api/handlers.py` on line 47 — the `process_request()` function receives `None` from `parse_body()`." The more context you give, the fewer iterations you need.
+Los prompts vagos producen resultados vagos. En lugar de "arregla el código," di "arregla el TypeError en `api/handlers.py` en la línea 47 — la función `process_request()` recibe `None` de `parse_body()`."
+Cuanto más contexto des, menos iteraciones necesitarás.
 
-### Provide Context Up Front
+### Proporciona Contexto Por Adelantado
 
-Front-load your request with the relevant details: file paths, error messages, expected behavior. One well-crafted message beats three rounds of clarification. Paste error tracebacks directly — the agent can parse them.
+Carga por adelantado tu solicitud con los detalles relevantes: rutas de archivo, mensajes de error, comportamiento esperado. Un mensaje bien elaborado vence tres rondas de aclaraciones. Pega trazas de error directamente — el agente puede analizarlas.
 
-### Use Context Files for Recurring Instructions
+### Usa Archivos de Contexto para Instrucciones Recurrentes
 
-If you find yourself repeating the same instructions ("use tabs not spaces," "we use pytest," "the API is at `/api/v2`"), put them in an `AGENTS.md` file. The agent reads it automatically every session — zero effort after setup.
+Si te encuentras repitiendo las mismas instrucciones ("usa tabulaciones no espacios," "usamos pytest," "la API está en `/api/v2`"), colócalas en un archivo `AGENTS.md`. El agente lo lee automáticamente cada sesión — cero esfuerzo después de la configuración.
 
-### Let the Agent Use Its Tools
+### Deja que el Agente Use Sus Herramientas
 
-Don't try to hand-hold every step. Say "find and fix the failing test" rather than "open `tests/test_foo.py`, look at line 42, then..." The agent has file search, terminal access, and code execution — let it explore and iterate.
+No intentes guiar cada paso. Di "busca y arregla la prueba fallida" en lugar de "abre `tests/test_foo.py`, mira la línea 42, luego..." El agente tiene búsqueda de archivos, acceso de terminal y ejecución de código — déjalo explorar e iterar.
 
-### Use Skills for Complex Workflows
+### Usa Habilidades para Flujos de Trabajo Complejos
 
-Before writing a long prompt explaining how to do something, check if there's already a skill for it. Type `/skills` to browse available skills, or just invoke one directly like `/axolotl` or `/github-pr-workflow`.
+Antes de escribir un prompt largo explicando cómo hacer algo, verifica si ya hay una habilidad para ello. Escribe `/skills` para explorar habilidades disponibles, o simplemente invoca una directamente como `/axolotl` o `/github-pr-workflow`.
 
-## Tips del Usuario Avanzado de CLI
+## Consejos del Usuario Avanzado de CLI
 
-### Multi-Line Input
+### Entrada Multilínea
 
-Press **Alt+Enter** (or **Ctrl+J**) to insert a newline without sending. This lets you compose multi-line prompts, paste code blocks, or structure complex requests before hitting Enter to send.
+Presiona **Alt+Enter** (o **Ctrl+J**) para insertar una nueva línea sin enviar. Esto te permite componer prompts multilínea, pegar bloques de código o estructurar solicitudes complejas antes de presionar Intro para enviar.
 
-### Paste Detection
+### Detección de Pegado
 
-The CLI auto-detects multi-line pastes. Just paste a code block or error traceback directly — it won't send each line as a separate message. The paste is buffered and sent as one message.
+La CLI detecta automáticamente pegados multilínea. Solo pega un bloque de código o una traza de error directamente — no enviará cada línea como un mensaje separado. El pegado se almacena en búfer y se envía como un mensaje.
 
-### Interrupt and Redirect
+### Interrumpir y Redirigir
 
-Press **Ctrl+C** once to interrupt the agent mid-response. You can then type a new message to redirect it. Double-press Ctrl+C within 2 seconds to force exit. This is invaluable when the agent starts going down the wrong path.
+Presiona **Ctrl+C** una vez para interrumpir la respuesta del agente a mitad de camino. Luego puedes escribir un nuevo mensaje para redirigirlo. Presiona Ctrl+C dos veces en 2 segundos para forzar la salida. Esto es invaluable cuando el agente comienza a ir por el camino equivocado.
 
-### Resume Sessions with `-c`
+### Reanudar Sesiones con `-c`
 
-Forgot something from your last session? Run `hermes -c` to resume exactly where you left off, with full conversation history restored. You can also resume by title: `hermes -r "my research project"`.
+¿Olvidaste algo de tu última sesión? Ejecuta `hermes -c` para reanudar exactamente donde lo dejaste, con el historial de conversación completo restaurado. También puedes reanudar por título: `hermes -r "mi proyecto de investigación"`.
 
-### Clipboard Image Paste
+### Pegado de Imagen del Portapapeles
 
-Press **Ctrl+V** to paste an image from your clipboard directly into the chat. The agent uses vision to analyze screenshots, diagrams, error popups, or UI mockups — no need to save to a file first.
+Presiona **Ctrl+V** para pegar una imagen de tu portapapeles directamente en el chat. El agente usa visión para analizar capturas de pantalla, diagramas, ventanas de error o mockups de UI — no necesitas guardar en un archivo primero.
 
-### Slash Command Autocomplete
+### Autocompletado de Comando de Barra Inclinada
 
-Type `/` and press **Tab** to see all available commands. This includes built-in commands (`/compress`, `/model`, `/title`) and every installed skill. You don't need to memorize anything — Tab completion has you covered.
+Escribe `/` y presiona **Tab** para ver todos los comandos disponibles. Esto incluye comandos incorporados (`/compress`, `/model`, `/title`) y cada habilidad instalada. No necesitas memorizar nada — la finalización Tab te tiene cubierto.
 
 :::tip
-Use `/verbose` to cycle through tool output display modes: **off → new → all → verbose**. The "all" mode is great for watching what the agent does; "off" is cleanest for simple Q&A.
+Usa `/verbose` para ciclar a través de modos de visualización de salida de herramientas: **off → new → all → verbose**. El modo "all" es excelente para ver qué hace el agente; "off" es más limpio para Q&A simple.
 :::
 
-## Context Files
+## Archivos de Contexto
 
-### AGENTS.md: Your Project's Brain
+### AGENTS.md: El Cerebro de Tu Proyecto
 
-Create an `AGENTS.md` in your project root with architecture decisions, coding conventions, and project-specific instructions. This is automatically injected into every session, so the agent always knows your project's rules.
+Crea un `AGENTS.md` en la raíz de tu proyecto con decisiones de arquitectura, convenciones de codificación e instrucciones específicas del proyecto. Esto se inyecta automáticamente en cada sesión, por lo que el agente siempre conoce las reglas de tu proyecto.
 
 ```markdown
-# Project Context
-- This is a FastAPI backend with SQLAlchemy ORM
-- Always use async/await for database operations
-- Tests go in tests/ and use pytest-asyncio
-- Never commit .env files
+# Contexto del Proyecto
+- Este es un backend FastAPI con SQLAlchemy ORM
+- Siempre usa async/await para operaciones de base de datos
+- Las pruebas van en tests/ y usan pytest-asyncio
+- Nunca confirmes archivos .env
 ```
 
-### SOUL.md: Customize Personality
+### SOUL.md: Personaliza la Personalidad
 
-Want the agent to be more concise? More technical? Place a `SOUL.md` in your project root or `~/.hermes/SOUL.md` for global personality customization. This shapes the agent's tone and communication style.
+¿Quieres que el agente sea más conciso? ¿Más técnico? Coloca un `SOUL.md` en la raíz de tu proyecto o `~/.hermes/SOUL.md` para personalización de personalidad global. Esto da forma al tono y estilo de comunicación del agente.
 
 ```markdown
-# Soul
-You are a senior backend engineer. Be terse and direct.
-Skip explanations unless asked. Prefer one-liners over verbose solutions.
-Always consider error handling and edge cases.
+# Alma
+Eres un ingeniero de backend senior. Sé terse y directo.
+Omite explicaciones a menos que se soliciten. Prefiere soluciones de una línea sobre verbosas.
+Siempre considera el manejo de errores y casos extremos.
 ```
 
-### .cursorrules Compatibility
+### Compatibilidad con .cursorrules
 
-Already have a `.cursorrules` or `.cursor/rules/*.mdc` file? Hermes reads those too. No need to duplicate your coding conventions — they're loaded automatically from the working directory.
+¿Ya tienes un archivo `.cursorrules` o `.cursor/rules/*.mdc`? Hermes también los lee. No necesitas duplicar tus convenciones de codificación — se cargan automáticamente desde el directorio de trabajo.
 
-### Hierarchical Discovery
+### Descubrimiento Jerárquico
 
-Hermes walks the directory tree and discovers **all** `AGENTS.md` files at every level. In a monorepo, put project-wide conventions at the root and team-specific ones in subdirectories — they're all concatenated together with path headers.
-
-:::tip
-Keep context files focused and concise. Every character counts against your token budget since they're injected into every single message.
-:::
-
-## Memory & Skills
-
-### Memory vs. Skills: What Goes Where
-
-**Memory** is for facts: your environment, preferences, project locations, and things the agent has learned about you. **Skills** are for procedures: multi-step workflows, tool-specific instructions, and reusable recipes. Use memory for "what," skills for "how."
-
-### When to Create Skills
-
-If you find a task that takes 5+ steps and you'll do it again, ask the agent to create a skill for it. Say "save what you just did as a skill called `deploy-staging`." Next time, just type `/deploy-staging` and the agent loads the full procedure.
-
-### Managing Memory Capacity
-
-Memory is intentionally bounded (~2,200 chars for MEMORY.md, ~1,375 chars for USER.md). When it fills up, the agent consolidates entries. You can help by saying "clean up your memory" or "replace the old Python 3.9 note — we're on 3.12 now."
-
-### Let the Agent Remember
-
-After a productive session, say "remember this for next time" and the agent will save the key takeaways. You can also be specific: "save to memory that our CI uses GitHub Actions with the `deploy.yml` workflow."
-
-:::warning
-Memory is a frozen snapshot — changes made during a session don't appear in the system prompt until the next session starts. The agent writes to disk immediately, but the prompt cache isn't invalidated mid-session.
-:::
-
-## Rendimiento & Cost
-
-### Don't Break the Prompt Cache
-
-Most LLM providers cache the system prompt prefix. If you keep your system prompt stable (same context files, same memory), subsequent messages in a session get **cache hits** that are significantly cheaper. Avoid changing the model or system prompt mid-session.
-
-### Use /compress Before Hitting Limits
-
-Long sessions accumulate tokens. When you notice responses slowing down or getting truncated, run `/compress`. This summarizes the conversation history, preserving key context while dramatically reducing token count. Use `/usage` to check where you stand.
-
-### Delegate for Parallel Work
-
-Need to research three topics at once? Ask the agent to use `delegate_task` with parallel subtasks. Each subagent runs independently with its own context, and only the final summaries come back — massively reducing your main conversation's token usage.
-
-### Use execute_code for Batch Operations
-
-Instead of running terminal commands one at a time, ask the agent to write a script that does everything at once. "Write a Python script to rename all `.jpeg` files to `.jpg` and run it" is cheaper and faster than renaming files individually.
-
-### Choose the Right Model
-
-Use `/model` to switch models mid-session. Use a frontier model (Claude Sonnet/Opus, GPT-4o) for complex reasoning and architecture decisions. Switch to a faster model for simple tasks like formatting, renaming, or boilerplate generation.
+Hermes recorre el árbol de directorios y descubre **todos** los archivos `AGENTS.md` en cada nivel. En un monorepo, coloca convenciones en toda la empresa en la raíz y convenciones específicas del equipo en subdirectorios — todos se concatenan juntos con encabezados de ruta.
 
 :::tip
-Run `/usage` periodically to see your token consumption. Run `/insights` for a broader view of usage patterns over the last 30 days.
+Mantén los archivos de contexto enfocados y concisos. Cada carácter cuenta contra tu presupuesto de tokens ya que se inyectan en cada mensaje.
 :::
-
-## Messaging Tips
-
-### Set a Home Channel
-
-Use `/sethome` in your preferred Telegram or Discord chat to designate it as the home channel. Cron job results and scheduled task outputs are delivered here. Without it, the agent has nowhere to send proactive messages.
-
-### Use /title to Organize Sessions
-
-Name your sessions with `/title auth-refactor` or `/title research-llm-quantization`. Named sessions are easy to find with `hermes sessions list` and resume with `hermes -r "auth-refactor"`. Unnamed sessions pile up and become impossible to distinguish.
-
-### DM Pairing for Team Access
-
-Instead of manually collecting user IDs for allowlists, enable DM pairing. When a teammate DMs the bot, they get a one-time pairing code. You approve it with `hermes pairing approve telegram XKGH5N7P` — simple and secure.
-
-### Tool Progress Display Modes
-
-Use `/verbose` to control how much tool activity you see. In messaging platforms, less is usually more — keep it on "new" to see just new tool calls. In the CLI, "all" gives you a satisfying live view of everything the agent does.
-
-:::tip
-On messaging platforms, sessions auto-reset after idle time (default: 120 min) or daily at 4 AM. Adjust per-platform in `~/.hermes/gateway.json` if you need longer sessions.
-:::
-
-## Seguridad
-
-### Use Docker for Untrusted Code
-
-When working with untrusted repositories or running unfamiliar code, use Docker or Daytona as your terminal backend. Set `TERMINAL_BACKEND=docker` in your `.env`. Destructive commands inside a container can't harm your host system.
-
-```bash
-# In your .env:
-TERMINAL_BACKEND=docker
-TERMINAL_DOCKER_IMAGE=hermes-sandbox:latest
-```
-
-### Review Before Choosing "Always"
-
-When the agent triggers a dangerous command approval (`rm -rf`, `DROP TABLE`, etc.), you get four options: **once**, **session**, **always**, **deny**. Think carefully before choosing "always" — it permanently allowlists that pattern. Start with "session" until you're comfortable.
-
-### Command Approval Is Your Safety Net
-
-Hermes checks every command against a curated list of dangerous patterns before execution. This includes recursive deletes, SQL drops, piping curl to shell, and more. Don't disable this in production — it exists for good reasons.
-
-:::warning
-When running in a container backend (Docker, Singularity, Modal, Daytona), dangerous command checks are **skipped** because the container is the security boundary. Make sure your container images are properly locked down.
-:::
-
-### Use Allowlists for Messaging Bots
-
-Never set `GATEWAY_ALLOW_ALL_USERS=true` on a bot with terminal access. Always use platform-specific allowlists (`TELEGRAM_ALLOWED_USERS`, `DISCORD_ALLOWED_USERS`) or DM pairing to control who can interact with your agent.
-
-```bash
-# Recommended: explicit allowlists per platform
-TELEGRAM_ALLOWED_USERS=123456789,987654321
-DISCORD_ALLOWED_USERS=123456789012345678
-
-# Or use cross-platform allowlist
-GATEWAY_ALLOWED_USERS=123456789,987654321
-```
 
 ---
 
-*Have a tip that should be on this page? Open an issue or PR — community contributions are welcome.*
+*¿Preguntas o problemas? Abre un problema en GitHub — las contribuciones son bienvenidas.*

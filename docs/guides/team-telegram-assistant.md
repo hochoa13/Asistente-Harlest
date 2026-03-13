@@ -4,99 +4,99 @@ title: "Tutorial: Asistente de Equipo Telegram"
 description: "Guía paso a paso para configurar un bot Telegram que todo tu equipo pueda usar for code help, research, system admin, and more"
 ---
 
-# Set Up a Team Telegram Assistant
+# Configura un Asistente de Equipo Telegram
 
-This tutorial walks you through setting up a Telegram bot powered by Hermes Agent that multiple team members can use. By the end, your team will have a shared AI assistant they can message for help with code, research, system administration, and anything else — secured with per-user authorization.
+Este tutorial te guía a través de la configuración de un bot de Telegram impulsado por Hermes Agent que múltiples miembros del equipo pueden usar. Al final, tu equipo tendrá un asistente de IA compartido al que pueden enviar mensajes para obtener ayuda con código, investigación, administración de sistemas y cualquier otra cosa — asegurado con autorización por usuario.
 
-## What We're Building
+## Qué Estamos Construyendo
 
-A Telegram bot that:
+Un bot de Telegram que:
 
-- **Any authorized team member** can DM for help — code reviews, research, shell commands, debugging
-- **Runs on your server** with full tool access — terminal, file editing, web search, code execution
-- **Per-user sessions** — each person gets their own conversation context
-- **Secure by default** — only approved users can interact, with two authorization methods
-- **Scheduled tasks** — daily standups, health checks, and reminders delivered to a team channel
+- **Cualquier miembro del equipo autorizado** puede DM para obtener ayuda — revisiones de código, investigación, comandos de shell, depuración
+- **Se ejecuta en tu servidor** con acceso completo a herramientas — terminal, edición de archivos, búsqueda web, ejecución de código
+- **Sesiones por usuario** — cada persona obtiene su propio contexto de conversación
+- **Seguro por defecto** — solo los usuarios aprobados pueden interactuar, con dos métodos de autorización
+- **Tareas programadas** — puestas al día diarias, verificaciones de salud y recordatorios entregados a un canal de equipo
 
 ---
 
 ## Requisitos Previos
 
-Before starting, make sure you have:
+Antes de comenzar, asegúrate de tener:
 
-- **Hermes Agent installed** on a server or VPS (not your laptop — the bot needs to stay running). Follow the [installation guide](/getting-started/learning-path) if you haven't yet.
-- **A Telegram account** for yourself (the bot owner)
-- **An LLM provider configured** — at minimum, an API key for OpenAI, Anthropic, or another supported provider in `~/.hermes/.env`
+- **Hermes Agent instalado** en un servidor o VPS (no tu laptop — el bot necesita estar en ejecución). Sigue la [guía de instalación](/getting-started/learning-path) si aún no lo has hecho.
+- **Una cuenta de Telegram** para ti (el propietario del bot)
+- **Un proveedor de LLM configurado** — como mínimo, una clave API para OpenAI, Anthropic u otro proveedor compatible en `~/.hermes/.env`
 
 :::tip
-A $5/month VPS is plenty for running the gateway. Hermes itself is lightweight — the LLM API calls are what cost money, and those happen remotely.
+Un VPS de $5/mes es suficiente para ejecutar el gateway. Hermes en sí es ligero — las llamadas a la API de LLM son lo que cuesta dinero, y suceden de forma remota.
 :::
 
 ---
 
-## Paso 1: Create a Telegram Bot
+## Paso 1: Crea un Bot de Telegram
 
-Every Telegram bot starts with **@BotFather** — Telegram's official bot for creating bots.
+Cada bot de Telegram comienza con **@BotFather** — el bot oficial de Telegram para crear bots.
 
-1. **Open Telegram** and search for `@BotFather`, or go to [t.me/BotFather](https://t.me/BotFather)
+1. **Abre Telegram** y busca `@BotFather`, o ve a [t.me/BotFather](https://t.me/BotFather)
 
-2. **Send `/newbot`** — BotFather will ask you two things:
-   - **Display name** — what users see (e.g., `Team Hermes Assistant`)
-   - **Username** — must end in `bot` (e.g., `myteam_hermes_bot`)
+2. **Envía `/newbot`** — BotFather te preguntará dos cosas:
+   - **Nombre para mostrar** — lo que ven los usuarios (por ejemplo, `Asistente Team Hermes`)
+   - **Nombre de usuario** — debe terminar en `bot` (por ejemplo, `miequipo_hermes_bot`)
 
-3. **Copy the bot token** — BotFather replies with something like:
+3. **Copia el token del bot** — BotFather responde con algo como:
    ```
-   Use this token to access the HTTP API:
+   Usa este token para acceder a la API HTTP:
    7123456789:AAH1bGciOiJSUzI1NiIsInR5cCI6Ikp...
    ```
-   Save this token — you'll need it in the next step.
+   Guarda este token — lo necesitarás en el próximo paso.
 
-4. **Set a description** (optional but recommended):
+4. **Establece una descripción** (opcional pero recomendado):
    ```
    /setdescription
    ```
-   Choose your bot, then enter something like:
+   Elige tu bot, luego ingresa algo como:
    ```
-   Team AI assistant powered by Hermes Agent. DM me for help with code, research, debugging, and more.
+   Asistente de IA del equipo impulsado por Hermes Agent. Envíame un DM para obtener ayuda con código, investigación, depuración y más.
    ```
 
-5. **Set bot commands** (optional — gives users a command menu):
+5. **Establece comandos del bot** (opcional — da a los usuarios un menú de comando):
    ```
    /setcommands
    ```
-   Choose your bot, then paste:
+   Elige tu bot, luego pega:
    ```
-   new - Start a fresh conversation
-   model - Show or change the AI model
-   status - Show session info
-   help - Show available commands
-   stop - Stop the current task
+   new - Comienza una conversación nueva
+   model - Mostrar o cambiar el modelo de IA
+   status - Mostrar información de sesión
+   help - Mostrar comandos disponibles
+   stop - Detener la tarea actual
    ```
 
 :::warning
-Keep your bot token secret. Anyone with the token can control the bot. If it leaks, use `/revoke` in BotFather to generate a new one.
+Mantén tu token de bot en secreto. Cualquiera con el token puede controlar el bot. Si se filtra, usa `/revoke` en BotFather para generar uno nuevo.
 :::
 
 ---
 
-## Paso 2: Configure the Gateway
+## Paso 2: Configura el Gateway
 
-You have two options: the interactive setup wizard (recommended) or manual configuration.
+Tienes dos opciones: el asistente de configuración interactiva (recomendado) o configuración manual.
 
-### Option A: Interactive Setup (Recommended)
+### Opción A: Configuración Interactiva (Recomendada)
 
 ```bash
 hermes gateway setup
 ```
 
-This walks you through everything with arrow-key selection. Pick **Telegram**, paste your bot token, and enter your user ID when prompted.
+Esto te guía a través de todo con selección de tecla de flecha. Elige **Telegram**, pega tu token de bot e ingresa tu ID de usuario cuando se solicite.
 
-### Option B: Manual Configuration
+### Opción B: Configuración Manual
 
-Add these lines to `~/.hermes/.env`:
+Añade estas líneas a `~/.hermes/.env`:
 
 ```bash
-# Telegram bot token from BotFather
+# Token del bot de Telegram de BotFather
 TELEGRAM_BOT_TOKEN=7123456789:AAH1bGciOiJSUzI1NiIsInR5cCI6Ikp...
 
 # Your Telegram user ID (numeric)
