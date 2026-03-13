@@ -23,20 +23,20 @@ No es un copiloto de codificación atado a un IDE ni un envoltorio de chatbot al
 
 | | |
 |---|---|
-| 🚀 **[Instalación](/docs/getting-started/installation)** | Instala en 60 segundos en Linux, macOS, o WSL2 |
-| 📖 **[Tutorial Rápido](/docs/getting-started/quickstart)** | Tu primera conversación y características clave a probar |
-| 🗺️ **[Ruta de Aprendizaje](/docs/getting-started/learning-path)** | Encuentra los docs correctos para tu nivel de experiencia |
-| ⚙️ **[Configuración](/docs/user-guide/configuration)** | Archivo de configuración, proveedores, modelos y opciones |
-| 💬 **[Puerta de Enlace de Mensajería](/docs/user-guide/messaging)** | Configura Telegram, Discord, Slack o WhatsApp |
-| 🔧 **[Herramientas y Conjuntos](/docs/user-guide/features/tools)** | 40+ herramientas integradas y cómo configurarlas |
-| 🧠 **[Sistema de Memoria](/docs/user-guide/features/memory)** | Memoria persistente que crece entre sesiones |
-| 📚 **[Sistema de Habilidades](/docs/user-guide/features/skills)** | Memoria procedimental que el agente crea y reutiliza |
-| 🔌 **[Integración MCP](/docs/user-guide/features/mcp)** | Conecta a cualquier servidor MCP para capacidades extendidas |
-| 📄 **[Archivos de Contexto](/docs/user-guide/features/context-files)** | Archivos de contexto que moldean cada conversación |
-| 🔒 **[Seguridad](/docs/user-guide/security)** | Aprobación de comandos, autorización, aislamiento de contenedor |
-| 💡 **[Tips y Mejores Prácticas](/docs/guides/tips)** | Ganancias rápidas para sacar el máximo de Hermes |
-| 🏗️ **[Arquitectura](/docs/developer-guide/architecture)** | Cómo funciona bajo el capó |
-| ❓ **[Preguntas Frecuentes](/docs/reference/faq)** | Preguntas comunes y soluciones |
+| 🚀 **[Instalación](getting-started/installation.md)** | Instala en 60 segundos en Linux, macOS, o WSL2 |
+| 📖 **[Tutorial Rápido](getting-started/quickstart.md)** | Tu primera conversación y características clave a probar |
+| 🗺️ **[Ruta de Aprendizaje](getting-started/learning-path.md)** | Encuentra los docs correctos para tu nivel de experiencia |
+| ⚙️ **[Configuración](user-guide/configuration.md)** | Archivo de configuración, proveedores, modelos y opciones |
+| 💬 **[Puerta de Enlace de Mensajería](user-guide/messaging/index.md)** | Configura Telegram, Discord, Slack o WhatsApp |
+| 🔧 **[Herramientas y Conjuntos](user-guide/features/tools.md)** | 40+ herramientas integradas y cómo configurarlas |
+| 🧠 **[Sistema de Memoria](user-guide/features/memory.md)** | Memoria persistente que crece entre sesiones |
+| 📚 **[Sistema de Habilidades](user-guide/features/skills.md)** | Memoria procedimental que el agente crea y reutiliza |
+| 🔌 **[Integración MCP](user-guide/features/mcp.md)** | Conecta a cualquier servidor MCP para capacidades extendidas |
+| 📄 **[Archivos de Contexto](user-guide/features/context-files.md)** | Archivos de contexto que moldean cada conversación |
+| 🔒 **[Seguridad](user-guide/security.md)** | Aprobación de comandos, autorización, aislamiento de contenedor |
+| 💡 **[Tips y Mejores Prácticas](guides/tips.md)** | Ganancias rápidas para sacar el máximo de Hermes |
+| 🏗️ **[Arquitectura](developer-guide/architecture.md)** | Cómo funciona bajo el capó |
+| ❓ **[Preguntas Frecuentes](reference/faq.md)** | Preguntas comunes y soluciones |
 
 ## Características Clave
 
