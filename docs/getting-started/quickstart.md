@@ -1,12 +1,12 @@
 ---
 sidebar_position: 1
 title: "Inicio Rápido"
-description: "Tu primera conversación con Hermes Agent — from install to chatting in 2 minutes"
+description: "Tu primera conversación con Hermes Agent — de instalar a chatear en 2 minutos"
 ---
 
-# Quickstart
+# Inicio Rápido
 
-This guide walks you through installing Hermes Agent, setting up a provider, and having your first conversation. By the end, you'll know the key features and how to explore further.
+Esta guía te camina a través de instalar Hermes Agent, configurar un proveedor y tener tu primera conversación. Al final, conocerás las características clave y cómo explorar más.
 
 ## 1. Instala Hermes Agent
 
@@ -18,7 +18,7 @@ curl -fsSL https://raw.githubusercontent.com/hochoa13/Asistente-Harlest/main/scr
 ```
 
 :::tip Usuarios de Windows
-Install [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) first, then run the command above inside your WSL2 terminal.
+Instala [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) primero, luego ejecuta el comando anterior dentro de tu terminal WSL2.
 :::
 
 Después de que termine, recarga tu shell:
@@ -29,125 +29,125 @@ source ~/.bashrc   # or source ~/.zshrc
 
 ## 2. Configura un Proveedor
 
-The installer configures your LLM provider automatically. To change it later, use one of these commands:
+El instalador configura tu proveedor LLM automáticamente. Para cambiarlo después, usa uno de estos comandos:
 
 ```bash
-hermes model       # Choose your LLM provider and model
-hermes tools       # Configure which tools are enabled
-hermes setup       # Or configure everything at once
+hermes model       # Elige tu proveedor LLM y modelo
+hermes tools       # Configura qué herramientas están habilitadas
+hermes setup       # O configura todo de una vez
 ```
 
-`hermes model` walks you through selecting an inference provider:
+`hermes model` te camina a través de seleccionar un proveedor de inferencia:
 
-| Provider | What it is | How to set up |
-|----------|-----------|---------------|
-| **Nous Portal** | Subscription-based, zero-config | OAuth login via `hermes model` |
-| **OpenAI Codex** | ChatGPT OAuth, uses Codex models | Device code auth via `hermes model` |
-| **Anthropic** | Claude models directly (Pro/Max or API key) | API key or Claude Code setup-token |
-| **OpenRouter** | 200+ models, pay-per-use | Ingresa tu clave API |
-| **Custom Endpoint** | VLLM, SGLang, any OpenAI-compatible API | Set base URL + API key |
+| Proveedor | Qué es | Cómo configurar |
+|----------|--------|----------------|
+| **Portal de Nous** | Basado en suscripción, sin configuración | Inicio de sesión OAuth vía `hermes model` |
+| **OpenAI Codex** | ChatGPT OAuth, usa modelos Codex | Autenticación de código de dispositivo vía `hermes model` |
+| **Anthropic** | Modelos Claude directamente (Pro/Max o clave API) | Clave API o token de configuración Claude Code |
+| **OpenRouter** | Más de 200 modelos, paga por uso | Ingresa tu clave API |
+| **Endpoint Personalizado** | VLLM, SGLang, cualquier API compatible con OpenAI | Establece URL base + clave API |
 
 :::tip
-You can switch providers at any time with `hermes model` — no code changes, no lock-in.
+Puedes cambiar proveedores en cualquier momento con `hermes model` — sin cambios de código, sin bloqueo.
 :::
 
-## 3. Start Chatting
+## 3. Empieza a Chatear
 
 ```bash
 hermes
 ```
 
-That's it! You'll see a welcome banner with your model, available tools, and skills. Type a message and press Enter.
+¡Eso es todo! Verás un banner de bienvenida con tu modelo, herramientas disponibles y habilidades. Escribe un mensaje y presiona Enter.
 
 ```
-❯ What can you help me with?
+❯ ¿Con qué puedo ayudarte?
 ```
 
-The agent has access to tools for web search, file operations, terminal commands, and more — all out of the box.
+El agente tiene acceso a herramientas para búsqueda web, operaciones de archivos, comandos de terminal y más — todo listo para usar.
 
-## 4. Try Key Features
+## 4. Prueba Características Clave
 
-### Ask it to use the terminal
+### Pídele que use la terminal
 
 ```
-❯ What's my disk usage? Show the top 5 largest directories.
+❯ ¿Cuál es mi uso del disco? Muestra los 5 directorios más grandes.
 ```
 
-The agent will run terminal commands on your behalf and show you the results.
+El agente ejecutará comandos de terminal en tu nombre y te mostrará los resultados.
 
-### Use slash commands
+### Usa comandos slash
 
-Type `/` to see an autocomplete dropdown of all commands:
+Escribe `/` para ver un menú desplegable de autocompletar con todos los comandos:
 
-| Command | What it does |
-|---------|-------------|
-| `/help` | Show all available commands |
-| `/tools` | List available tools |
-| `/model` | Switch models interactively |
-| `/personality pirate` | Try a fun personality |
-| `/save` | Save the conversation |
+| Comando | Qué hace |
+|---------|----------|
+| `/help` | Muestra todos los comandos disponibles |
+| `/tools` | Lista las herramientas disponibles |
+| `/model` | Cambia modelos de forma interactiva |
+| `/personality pirate` | Prueba una personalidad divertida |
+| `/save` | Guarda la conversación |
 
-### Multi-line input
+### Entrada multilínea
 
-Press `Alt+Enter` or `Ctrl+J` to add a new line. Great for pasting code or writing detailed prompts.
+Presiona `Alt+Enter` o `Ctrl+J` para añadir una nueva línea. Excelente para pegar código o escribir prompts detallados.
 
-### Interrupt the agent
+### Interrumpe el agente
 
-If the agent is taking too long, just type a new message and press Enter — it interrupts the current task and switches to your new instructions. `Ctrl+C` also works.
+Si el agente está tardando demasiado, simplemente escribe un nuevo mensaje y presiona Enter — interrumpe la tarea actual y cambia a tus nuevas instrucciones. `Ctrl+C` también funciona.
 
-### Resume a session
+### Reanuda una sesión
 
-When you exit, hermes prints a resume command:
+Cuando salgas, hermes imprime un comando de reanudación:
 
 ```bash
-hermes --continue    # Resume the most recent session
-hermes -c            # Short form
+hermes --continue    # Reanuda la sesión más reciente
+hermes -c            # Forma abreviada
 ```
 
-## 5. Explore Further
+## 5. Explora Más
 
-Here are some things to try next:
+Aquí hay algunas cosas que puedes probar a continuación:
 
-### Set up a sandboxed terminal
+### Configura una terminal sandboxed
 
-For safety, run the agent in a Docker container or on a remote server:
+Por seguridad, ejecuta el agente en un contenedor Docker o en un servidor remoto:
 
 ```bash
-hermes config set terminal.backend docker    # Docker isolation
-hermes config set terminal.backend ssh       # Remote server
+hermes config set terminal.backend docker    # Aislamiento Docker
+hermes config set terminal.backend ssh       # Servidor remoto
 ```
 
-### Connect messaging platforms
+### Conecta plataformas de mensajería
 
-Chat with Hermes from your phone via Telegram, Discord, Slack, or WhatsApp:
+Chatea con Hermes desde tu teléfono vía Telegram, Discord, Slack o WhatsApp:
 
 ```bash
-hermes gateway setup    # Interactive platform configuration
+hermes gateway setup    # Configuración interactiva de plataformas
 ```
 
-### Schedule automated tasks
+### Programa tareas automatizadas
 
 ```
-❯ Every morning at 9am, check Hacker News for AI news and send me a summary on Telegram.
+❯ Cada mañana a las 9am, revisa Hacker News para noticias de IA y envíame un resumen en Telegram.
 ```
 
-The agent will set up a cron job that runs automatically via the gateway.
+El agente configurará un trabajo cron que se ejecuta automáticamente a través de la puerta de enlace.
 
-### Browse and install skills
+### Busca e instala habilidades
 
 ```bash
 hermes skills search kubernetes
 hermes skills install openai/skills/k8s
 ```
 
-Or use the `/skills` slash command inside chat.
+O usa el comando slash `/skills` dentro del chat.
 
-### Try MCP servers
+### Prueba servidores MCP
 
-Connect to external tools via the Model Context Protocol:
+Conéctate a herramientas externas a través del Protocolo de Contexto de Modelo:
 
 ```yaml
-# Add to ~/.hermes/config.yaml
+# Añade a ~/.hermes/config.yaml
 mcp_servers:
   github:
     command: npx
@@ -158,22 +158,22 @@ mcp_servers:
 
 ---
 
-## Quick Reference
+## Referencia Rápida
 
-| Command | Description |
+| Comando | Descripción |
 |---------|-------------|
-| `hermes` | Start chatting |
-| `hermes model` | Choose your LLM provider and model |
-| `hermes tools` | Configure which tools are enabled per platform |
-| `hermes setup` | Full setup wizard (configures everything at once) |
-| `hermes doctor` | Diagnose issues |
-| `hermes update` | Update to latest version |
-| `hermes gateway` | Start the messaging gateway |
-| `hermes --continue` | Resume last session |
+| `hermes` | Empieza a chatear |
+| `hermes model` | Elige tu proveedor LLM y modelo |
+| `hermes tools` | Configura qué herramientas están habilitadas por plataforma |
+| `hermes setup` | Asistente de configuración completo (configura todo de una vez) |
+| `hermes doctor` | Diagnostica problemas |
+| `hermes update` | Actualiza a la última versión |
+| `hermes gateway` | Inicia la puerta de enlace de mensajería |
+| `hermes --continue` | Reanuda la última sesión |
 
-## Next Steps
+## Próximos Pasos
 
-- **[CLI Guide](../user-guide/cli.md)** — Master the terminal interface
-- **[Configuration](../user-guide/configuration.md)** — Customize your setup
-- **[Messaging Gateway](../user-guide/messaging/index.md)** — Connect Telegram, Discord, Slack, WhatsApp
-- **[Tools & Toolsets](../user-guide/features/tools.md)** — Explore available capabilities
+- **[Guía CLI](../user-guide/cli.md)** — Domina la interfaz de terminal
+- **[Configuración](../user-guide/configuration.md)** — Personaliza tu configuración
+- **[Puerta de Enlace de Mensajería](../user-guide/messaging/index.md)** — Conecta Telegram, Discord, Slack, WhatsApp
+- **[Herramientas y Conjuntos](../user-guide/features/tools.md)** — Explora capacidades disponibles
