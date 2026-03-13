@@ -1,77 +1,77 @@
 ---
 sidebar_position: 3
 title: "Actualizando y Desinstalando"
-description: "Cómo actualizar Hermes Agent to the última versión or desinstalar it"
+description: "Cómo actualizar Hermes Agent a la última versión o desinstalarlo"
 ---
 
 # Actualizando y Desinstalando
 
-## Updating
+## Actualizando
 
-Update to the última versión with a single command:
+Actualiza a la última versión con un único comando:
 
 ```bash
 hermes update
 ```
 
-This pulls the latest code, updates dependencies, and prompts you to configure any new options that were added since your last update.
+Esto extrae el código más reciente, actualiza las dependencias, y te pide que configures cualquier opción nueva que se haya añadido desde tu última actualización.
 
 :::tip
-`hermes update` automatically detects new configuration options and prompts you to add them. If you skipped that prompt, you can manually run `hermes config check` to see missing options, then `hermes config migrate` to interactively add them.
+`hermes update` detecta automáticamente nuevas opciones de configuración y te pide que las añadas. Si saltaste esa solicitud, puedes ejecutar manualmente `hermes config check` para ver opciones faltantes, luego `hermes config migrate` para añadirlas interactivamente.
 :::
 
-### Updating from Messaging Platforms
+### Actualizando desde Plataformas de Mensajería
 
-You can also update directly from Telegram, Discord, Slack, or WhatsApp by sending:
+También puedes actualizar directamente desde Telegram, Discord, Slack o WhatsApp enviando:
 
 ```
 /update
 ```
 
-This pulls the latest code, updates dependencies, and restarts the gateway.
+Esto extrae el código más reciente, actualiza las dependencias, y reinicia la puerta de enlace.
 
-### Manual Update
+### Actualización Manual
 
-If you installed manually (not via the quick installer):
+Si instalaste manualmente (no vía el instalador rápido):
 
 ```bash
-cd /path/to/hermes-agent
+cd /ruta/a/hermes-agent
 export VIRTUAL_ENV="$(pwd)/venv"
 
-# Pull latest code and submodules
+# Extrae el código más reciente y submódulos
 git pull origin main
 git submodule update --init --recursive
 
-# Reinstall (picks up new dependencies)
+# Reinstala (recoge nuevas dependencias)
 uv pip install -e ".[all]"
 uv pip install -e "./mini-swe-agent"
 uv pip install -e "./tinker-atropos"
 
-# Check for new config options
+# Verifica opciones de configuración nuevas
 hermes config check
-hermes config migrate   # Interactively add any missing options
+hermes config migrate   # Añade interactivamente cualquier opción faltante
 ```
 
 ---
 
-## Uninstalling
+## Desinstalando
 
 ```bash
-hermes desinstalar
+hermes uninstall
 ```
 
-The desinstalarer gives you the option to keep your configuration files (`~/.hermes/`) for a future reinstall.
+El desinstalador te da la opción de mantener tus archivos de configuración (`~/.hermes/`) para una reinstalación futura.
 
-### Manual Uninstall
+### Desinstalación Manual
 
 ```bash
 rm -f ~/.local/bin/hermes
-rm -rf /path/to/hermes-agent
-rm -rf ~/.hermes            # Optional — keep if you plan to reinstall
+rm -rf /ruta/a/hermes-agent
+rm -rf ~/.hermes            # Opcional — mantén si planeas reinstalar
 ```
 
 :::info
-If you installed the gateway as a system service, stop and disable it first:
+Si instalaste la puerta de enlace como un servicio de sistema, deténlo y desactívalo primero:
 ```bash
 hermes gateway stop
 # Linux: systemctl --user disable hermes-gateway

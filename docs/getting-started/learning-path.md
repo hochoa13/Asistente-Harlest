@@ -1,150 +1,150 @@
 ---
 sidebar_position: 3
-title: 'Ruta de Aprendizaje'
-description: 'Elige tu ruta de aprendizaje through the Hermes Agent documentation based on your nivel de experiencia and goals.'
+title: "Ruta de aprendizaje"
+description: "Elige tu ruta de aprendizaje a través de la documentación de Hermes Agent según tu nivel de experiencia y objetivos"
 ---
 
-# Ruta de Aprendizaje
+# Ruta de aprendizaje
 
-Hermes Agent can do a lot — CLI assistant, Telegram/Discord bot, task automation, RL training, and more. This page helps you figure out where to start and what to read based on your nivel de experiencia and what you're trying to accomplish.
+Hermes Agent puede hacer mucho — asistente CLI, bot de Telegram/Discord, automatización de tareas, entrenamiento RL, y más. Esta página te ayuda a determinar por dónde empezar y qué leer según tu nivel de experiencia y lo que estés intentando lograr.
 
-:::tip Start Here
-If you haven't installed Hermes Agent yet, begin with the [Instalación guide](/docs/getting-started/installation) and then run through the [Quickstart](/docs/getting-started/quickstart). Everything below assumes you have a working installation.
+:::tip Comienza aquí
+Si aún no has instalado Hermes Agent, comienza con la guía de [Instalación](/docs/getting-started/installation) y después ejecuta el [Inicio rápido](/docs/getting-started/quickstart). Todo lo siguiente asume que tienes una instalación funcional.
 :::
 
-## How to Use This Page
+## Cómo usar esta página
 
-- **Know your level?** Jump to the [experience-level table](#by-experience-level) and follow the reading order for your tier.
-- **Have a specific goal?** Skip to [By Use Case](#by-use-case) and find the scenario that matches.
-- **Just browsing?** Check the [Key Features](#key-features-at-a-glance) table for a quick overview of everything Hermes Agent can do.
+- **¿Sabes tu nivel?** Ve a la [tabla de nivel de experiencia](#por-nivel-de-experiencia) y sigue el orden de lectura para tu nivel.
+- **¿Tienes un objetivo específico?** Ve a [Por caso de uso](#por-caso-de-uso) y encuentra el escenario que coincida.
+- **¿Solo navegando?** Consulta la tabla de [Características clave](#características-clave-de-un-vistazo) para una descripción general rápida de todo lo que Hermes Agent puede hacer.
 
-## By Experience Level
+## Por nivel de experiencia
 
-| Level | Goal | Recommended Reading | Time Estimate |
+| Nivel | Objetivo | Lectura recomendada | Estimación de tiempo |
 |---|---|---|---|
-| **Beginner** | Get up and running, have basic conversations, use built-in tools | [Instalación](/docs/getting-started/installation) → [Quickstart](/docs/getting-started/quickstart) → [CLI Usage](/docs/user-guide/cli) → [Configuración](/docs/user-guide/configuration) | ~1 hour |
-| **Intermediate** | Set up messaging bots, use advanced features like memory, cron jobs, and skills | [Sessions](/docs/user-guide/sessions) → [Messaging](/docs/user-guide/messaging) → [Tools](/docs/user-guide/features/tools) → [Skills](/docs/user-guide/features/skills) → [Memory](/docs/user-guide/features/memory) → [Cron](/docs/user-guide/features/cron) | ~2–3 hours |
-| **Avanzado** | Build custom tools, create skills, train models with RL, contribute to the project | [Arquitectura](/docs/developer-guide/architecture) → [Agregando Herramientas](/docs/developer-guide/adding-tools) → [Creando Habilidades](/docs/developer-guide/creating-skills) → [RL Training](/docs/user-guide/features/rl-training) → [Contribuyendo](/docs/developer-guide/contributing) | ~4–6 hours |
+| **Principiante** | Levántate y anda, ten conversaciones básicas, usa herramientas integradas | [Instalación](/docs/getting-started/installation) → [Inicio rápido](/docs/getting-started/quickstart) → [Uso de CLI](/docs/user-guide/cli) → [Configuración](/docs/user-guide/configuration) | ~1 hora |
+| **Intermedio** | Configura bots de mensajería, usa características avanzadas como memoria, trabajos cron, y habilidades | [Sesiones](/docs/user-guide/sessions) → [Mensajería](/docs/user-guide/messaging) → [Herramientas](/docs/user-guide/features/tools) → [Habilidades](/docs/user-guide/features/skills) → [Memoria](/docs/user-guide/features/memory) → [Cron](/docs/user-guide/features/cron) | ~2–3 horas |
+| **Avanzado** | Construye herramientas personalizadas, crea habilidades, entrena modelos con RL, contribuye al proyecto | [Arquitectura](/docs/developer-guide/architecture) → [Agregando herramientas](/docs/developer-guide/adding-tools) → [Creando habilidades](/docs/developer-guide/creating-skills) → [Entrenamiento RL](/docs/user-guide/features/rl-training) → [Contribuyendo](/docs/developer-guide/contributing) | ~4–6 horas |
 
-## By Use Case
+## Por caso de uso
 
-Pick the scenario that matches what you want to do. Each one links you to the relevant docs in the order you should read them.
+Elige el escenario que coincida con lo que quieres hacer. Cada uno te vincula a la documentación relevante en el orden que deberías leerla.
 
-### "I want a CLI coding assistant"
+### "Quiero un asistente de codificación de CLI"
 
-Use Hermes Agent as an interactive terminal assistant for writing, reviewing, and running code.
+Usa Hermes Agent como asistente interactivo de terminal para escribir, revisar y ejecutar código.
 
 1. [Instalación](/docs/getting-started/installation)
-2. [Quickstart](/docs/getting-started/quickstart)
-3. [CLI Usage](/docs/user-guide/cli)
-4. [Code Execution](/docs/user-guide/features/code-execution)
-5. [Context Files](/docs/user-guide/features/context-files)
-6. [Tips & Tricks](/docs/guides/tips)
+2. [Inicio rápido](/docs/getting-started/quickstart)
+3. [Uso de CLI](/docs/user-guide/cli)
+4. [Ejecución de código](/docs/user-guide/features/code-execution)
+5. [Archivos de contexto](/docs/user-guide/features/context-files)
+6. [Tips y mejores prácticas](/docs/guides/tips)
 
 :::tip
-Pass files directly into your conversation with context files. Hermes Agent can read, edit, and run code in your projects.
+Pasa archivos directamente a tu conversación con archivos de contexto. Hermes Agent puede leer, editar y ejecutar código en tus proyectos.
 :::
 
-### "I want a Telegram/Discord bot"
+### "Quiero un bot de Telegram/Discord"
 
-Deploy Hermes Agent as a bot on your favorite messaging platform.
+Implementa Hermes Agent como bot en tu plataforma de mensajería favorita.
 
 1. [Instalación](/docs/getting-started/installation)
 2. [Configuración](/docs/user-guide/configuration)
-3. [Messaging Descripción General](/docs/user-guide/messaging)
-4. [Telegram Configuración](/docs/user-guide/messaging/telegram)
-5. [Discord Configuración](/docs/user-guide/messaging/discord)
-6. [Security](/docs/user-guide/security)
+3. [Descripción general de mensajería](/docs/user-guide/messaging)
+4. [Configuración de Telegram](/docs/user-guide/messaging/telegram)
+5. [Configuración de Discord](/docs/user-guide/messaging/discord)
+6. [Seguridad](/docs/user-guide/security)
 
-For full project examples, see:
-- [Daily Briefing Bot](/docs/guides/daily-briefing-bot)
-- [Team Telegram Assistant](/docs/guides/team-telegram-assistant)
+Para ejemplos de proyectos completos, consulta:
+- [Bot de resumen diario](/docs/guides/daily-briefing-bot)
+- [Asistente de equipo de Telegram](/docs/guides/team-telegram-assistant)
 
-### "I want to automate tasks"
+### "Quiero automatizar tareas"
 
-Schedule recurring tasks, run batch jobs, or chain agent actions together.
+Programa tareas recurrentes, ejecuta trabajos por lotes, o encadena acciones de agente juntas.
 
-1. [Quickstart](/docs/getting-started/quickstart)
-2. [Cron Scheduling](/docs/user-guide/features/cron)
-3. [Batch Processing](/docs/user-guide/features/batch-processing)
-4. [Delegation](/docs/user-guide/features/delegation)
+1. [Inicio rápido](/docs/getting-started/quickstart)
+2. [Programación de cron](/docs/user-guide/features/cron)
+3. [Procesamiento por lotes](/docs/user-guide/features/batch-processing)
+4. [Delegación](/docs/user-guide/features/delegation)
 5. [Hooks](/docs/user-guide/features/hooks)
 
 :::tip
-Cron jobs let Hermes Agent run tasks on a schedule — daily summaries, periodic checks, automated reports — without you being present.
+Los trabajos cron permiten que Hermes Agent ejecute tareas en un horario — resúmenes diarios, comprobaciones periódicas, informes automatizados — sin que estés presente.
 :::
 
-### "I want to build custom tools/skills"
+### "Quiero construir herramientas/habilidades personalizadas"
 
-Extend Hermes Agent with your own tools and reusable skill packages.
+Extiende Hermes Agent con tus propias herramientas y paquetes de habilidades reutilizables.
 
-1. [Tools Descripción General](/docs/user-guide/features/tools)
-2. [Skills Descripción General](/docs/user-guide/features/skills)
-3. [MCP (Model Context Protocol)](/docs/user-guide/features/mcp)
+1. [Descripción general de herramientas](/docs/user-guide/features/tools)
+2. [Descripción general de habilidades](/docs/user-guide/features/skills)
+3. [MCP (Protocolo de contexto de modelo)](/docs/user-guide/features/mcp)
 4. [Arquitectura](/docs/developer-guide/architecture)
-5. [Agregando Herramientas](/docs/developer-guide/adding-tools)
-6. [Creando Habilidades](/docs/developer-guide/creating-skills)
+5. [Agregando herramientas](/docs/developer-guide/adding-tools)
+6. [Creando habilidades](/docs/developer-guide/creating-skills)
 
 :::tip
-Tools are individual functions the agent can call. Skills are bundles of tools, prompts, and configuration packaged together. Start with tools, graduate to skills.
+Las herramientas son funciones individuales que el agente puede llamar. Las habilidades son paquetes de herramientas, prompts y configuración empaquetadas juntas. Comienza con herramientas, progresa a habilidades.
 :::
 
-### "I want to train models"
+### "Quiero entrenar modelos"
 
-Use reinforcement learning to fine-tune model behavior with Hermes Agent's built-in RL training pipeline.
+Usa aprendizaje por refuerzo para ajustar el comportamiento del modelo con el pipeline de entrenamiento RL integrado de Hermes Agent.
 
-1. [Quickstart](/docs/getting-started/quickstart)
+1. [Inicio rápido](/docs/getting-started/quickstart)
 2. [Configuración](/docs/user-guide/configuration)
-3. [RL Training](/docs/user-guide/features/rl-training)
-4. [Provider Routing](/docs/user-guide/features/provider-routing)
+3. [Entrenamiento RL](/docs/user-guide/features/rl-training)
+4. [Enrutamiento de proveedores](/docs/user-guide/features/provider-routing)
 5. [Arquitectura](/docs/developer-guide/architecture)
 
 :::tip
-RL training works best when you already understand the basics of how Hermes Agent handles conversations and tool calls. Run through the Beginner path first if you're new.
+El entrenamiento RL funciona mejor cuando ya entiendes los conceptos básicos de cómo Hermes Agent maneja conversaciones y llamadas de herramientas. Si eres nuevo, primero ejecuta la ruta para principiantes.
 :::
 
-### "I want to use it as a Python library"
+### "Quiero usarlo como librería de Python"
 
-Integrate Hermes Agent into your own Python applications programmatically.
+Integra Hermes Agent en tus propias aplicaciones de Python programáticamente.
 
 1. [Instalación](/docs/getting-started/installation)
-2. [Quickstart](/docs/getting-started/quickstart)
-3. [Python Library Guide](/docs/guides/python-library)
+2. [Inicio rápido](/docs/getting-started/quickstart)
+3. [Guía de librería Python](/docs/guides/python-library)
 4. [Arquitectura](/docs/developer-guide/architecture)
-5. [Tools](/docs/user-guide/features/tools)
-6. [Sessions](/docs/user-guide/sessions)
+5. [Herramientas](/docs/user-guide/features/tools)
+6. [Sesiones](/docs/user-guide/sessions)
 
-## Características Clave at a Glance
+## Características clave de un vistazo
 
-Not sure what's available? Here's a quick directory of major features:
+¿No estás seguro de qué está disponible? Aquí hay un directorio rápido de características principales:
 
-| Feature | What It Does | Link |
+| Característica | Qué hace | Enlace |
 |---|---|---|
-| **Tools** | Built-in tools the agent can call (file I/O, search, shell, etc.) | [Tools](/docs/user-guide/features/tools) |
-| **Skills** | Installable plugin packages that add new capabilities | [Skills](/docs/user-guide/features/skills) |
-| **Memory** | Persistent memory across sessions | [Memory](/docs/user-guide/features/memory) |
-| **Context Files** | Feed files and directories into conversations | [Context Files](/docs/user-guide/features/context-files) |
-| **MCP** | Connect to external tool servers via Model Context Protocol | [MCP](/docs/user-guide/features/mcp) |
-| **Cron** | Schedule recurring agent tasks | [Cron](/docs/user-guide/features/cron) |
-| **Delegation** | Spawn sub-agents for parallel work | [Delegation](/docs/user-guide/features/delegation) |
-| **Code Execution** | Run code in sandboxed environments | [Code Execution](/docs/user-guide/features/code-execution) |
-| **Browser** | Web browsing and scraping | [Browser](/docs/user-guide/features/browser) |
-| **Hooks** | Event-driven callbacks and middleware | [Hooks](/docs/user-guide/features/hooks) |
-| **Batch Processing** | Process multiple inputs in bulk | [Batch Processing](/docs/user-guide/features/batch-processing) |
-| **RL Training** | Fine-tune models with reinforcement learning | [RL Training](/docs/user-guide/features/rl-training) |
-| **Provider Routing** | Route requests across multiple LLM providers | [Provider Routing](/docs/user-guide/features/provider-routing) |
+| **Herramientas** | Herramientas integradas que el agente puede llamar (E/S de archivo, búsqueda, shell, etc.) | [Herramientas](/docs/user-guide/features/tools) |
+| **Habilidades** | Paquetes de extensiones instalables que añaden nuevas capacidades | [Habilidades](/docs/user-guide/features/skills) |
+| **Memoria** | Memoria persistente entre sesiones | [Memoria](/docs/user-guide/features/memory) |
+| **Archivos de contexto** | Alimenta archivos y directorios a conversaciones | [Archivos de contexto](/docs/user-guide/features/context-files) |
+| **MCP** | Conecta a servidores de herramientas externos vía Protocolo de contexto de modelo | [MCP](/docs/user-guide/features/mcp) |
+| **Cron** | Programa tareas recurrentes de agente | [Cron](/docs/user-guide/features/cron) |
+| **Delegación** | Genera sub-agentes para trabajo paralelo | [Delegación](/docs/user-guide/features/delegation) |
+| **Ejecución de código** | Ejecuta código en ambientes aislados | [Ejecución de código](/docs/user-guide/features/code-execution) |
+| **Navegador** | Navegación web y scraping | [Navegador](/docs/user-guide/features/browser) |
+| **Hooks** | Callbacks y middleware impulsados por eventos | [Hooks](/docs/user-guide/features/hooks) |
+| **Procesamiento por lotes** | Procesa múltiples entradas en lote | [Procesamiento por lotes](/docs/user-guide/features/batch-processing) |
+| **Entrenamiento RL** | Ajusta modelos con aprendizaje por refuerzo | [Entrenamiento RL](/docs/user-guide/features/rl-training) |
+| **Enrutamiento de proveedores** | Enruta solicitudes a través de múltiples proveedores LLM | [Enrutamiento de proveedores](/docs/user-guide/features/provider-routing) |
 
-## What to Read Next
+## Qué leer a continuación
 
-Based on where you are right now:
+Basándose en dónde estés ahora:
 
-- **Just finished installing?** → Head to the [Quickstart](/docs/getting-started/quickstart) to run your first conversation.
-- **Completed the Quickstart?** → Read [CLI Usage](/docs/user-guide/cli) and [Configuración](/docs/user-guide/configuration) to customize your setup.
-- **Comfortable with the basics?** → Explore [Tools](/docs/user-guide/features/tools), [Skills](/docs/user-guide/features/skills), and [Memory](/docs/user-guide/features/memory) to unlock the full power of the agent.
-- **Setting up for a team?** → Read [Security](/docs/user-guide/security) and [Sessions](/docs/user-guide/sessions) to understand access control and conversation management.
-- **Ready to build?** → Jump into the [Developer Guide](/docs/developer-guide/architecture) to understand the internals and start contributing.
-- **Want practical examples?** → Check out the [Guides](/docs/guides/tips) section for real-world projects and tips.
+- **¿Acabas de terminar la instalación?** → Ve al [Inicio rápido](/docs/getting-started/quickstart) para ejecutar tu primera conversación.
+- **¿Completaste el inicio rápido?** → Lee [Uso de CLI](/docs/user-guide/cli) y [Configuración](/docs/user-guide/configuration) para personalizar tu configuración.
+- **¿Cómodo con los conceptos básicos?** → Explora [Herramientas](/docs/user-guide/features/tools), [Habilidades](/docs/user-guide/features/skills), y [Memoria](/docs/user-guide/features/memory) para desbloquear el poder completo del agente.
+- **¿Configurando para un equipo?** → Lee [Seguridad](/docs/user-guide/security) y [Sesiones](/docs/user-guide/sessions) para entender el control de acceso y la gestión de conversaciones.
+- **¿Listo para construir?** → Salta a la [Guía de desarrollador](/docs/developer-guide/architecture) para entender lo interno y comenzar a contribuir.
+- **¿Quieres ejemplos prácticos?** → Consulta la sección [Guías](/docs/guides/tips) para proyectos de mundo real y consejos.
 
 :::tip
-You don't need to read everything. Pick the path that matches your goal, follow the links in order, and you'll be productive quickly. You can always come back to this page to find your next step.
+No necesitas leerlo todo. Elige la ruta que coincida con tu objetivo, sigue los enlaces en orden, y serás productivo rápidamente. Siempre puedes volver a esta página para encontrar tu próximo paso.
 :::

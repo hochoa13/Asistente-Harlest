@@ -8,7 +8,7 @@ description: "Instala Hermes Agent en Linux, macOS o WSL2"
 
 Obtén Hermes Agent funcionando en menos de dos minutos con el instalador de una línea, o sigue los pasos manuales para tener control total.
 
-## Quick Install
+## Instalación Rápida
 
 ### Linux / macOS / WSL2
 
@@ -17,178 +17,178 @@ curl -fsSL https://raw.githubusercontent.com/hochoa13/Asistente-Harlest/main/scr
 ```
 
 :::warning Windows
-Native Windows is **not supported**. Please install [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) and run Hermes Agent from there. The install command above works inside WSL2.
+Windows nativo **no es compatible**. Por favor instala [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) y ejecuta Hermes Agent desde allí. El comando de instalación anterior funciona dentro de WSL2.
 :::
 
-### What the Installer Does
+### Qué hace el instalador
 
-The installer handles everything automatically — all dependencies (Python, Node.js, ripgrep, ffmpeg), the repo clone, virtual environment, global `hermes` command setup, and LLM provider configuration. By the end, you're ready to chat.
+El instalador maneja todo automáticamente — todas las dependencias (Python, Node.js, ripgrep, ffmpeg), la clonación del repositorio, el ambiente virtual, la configuración del comando global `hermes`, y la configuración del proveedor LLM. Al final, estará listo para chatear.
 
-### After Installation
+### Después de la instalación
 
-Reload your shell and start chatting:
+Recarga tu shell e inicia a chatear:
 
 ```bash
-source ~/.bashrc   # or: source ~/.zshrc
-hermes             # Start chatting!
+source ~/.bashrc   # o: source ~/.zshrc
+hermes             # ¡Comienza a chatear!
 ```
 
-To reconfigure individual settings later, use the dedicated commands:
+Para reconfigurar configuraciones individuales más tarde, usa los comandos dedicados:
 
 ```bash
-hermes model          # Choose your LLM provider and model
-hermes tools          # Configure which tools are enabled
-hermes gateway setup  # Set up messaging platforms
-hermes config set     # Set individual config values
-hermes setup          # Or run the full setup wizard to configure everything at once
+hermes model          # Elige tu proveedor LLM y modelo
+hermes tools          # Configura qué herramientas están habilitadas
+hermes gateway setup  # Configura plataformas de mensajería
+hermes config set     # Define valores de configuración individuales
+hermes setup          # O ejecuta el asistente de configuración completo para configurar todo de una vez
 ```
 
 ---
 
-## Prerequisites
+## Requisitos previos
 
-The only prerequisite is **Git**. The installer automatically handles everything else:
+El único requisito previo es **Git**. El instalador maneja automáticamente todo lo demás:
 
-- **uv** (fast Python package manager)
-- **Python 3.11** (via uv, no sudo needed)
-- **Node.js v22** (for browser automation and WhatsApp bridge)
-- **ripgrep** (fast file search)
-- **ffmpeg** (audio format conversion for TTS)
+- **uv** (gestor de paquetes Python rápido)
+- **Python 3.11** (vía uv, sin necesidad de sudo)
+- **Node.js v22** (para automatización de navegador y puente de WhatsApp)
+- **ripgrep** (búsqueda rápida de archivos)
+- **ffmpeg** (conversión de formato de audio para TTS)
 
 :::info
-You do **not** need to install Python, Node.js, ripgrep, or ffmpeg manually. The installer detects what's missing and installs it for you. Just make sure `git` is available (`git --version`).
+No necesitas instalar Python, Node.js, ripgrep o ffmpeg manualmente. El instalador detecta qué falta e instala por ti. Solo asegúrate de que `git` esté disponible (`git --version`).
 :::
 
 ---
 
-## Manual Installation
+## Instalación manual
 
-If you prefer full control over the installation process, follow these steps.
+Si prefieres tener control total sobre el proceso de instalación, sigue estos pasos.
 
-### Step 1: Clone the Repository
+### Paso 1: Clonar el repositorio
 
-Clone with `--recurse-submodules` to pull the required submodules:
+Clona con `--recurse-submodules` para obtener los submódulos requeridos:
 
 ```bash
 git clone --recurse-submodules https://github.com/hochoa13/Asistente-Harlest.git
 cd hermes-agent
 ```
 
-If you already cloned without `--recurse-submodules`:
+Si ya clonaste sin `--recurse-submodules`:
 ```bash
 git submodule update --init --recursive
 ```
 
-### Step 2: Install uv & Create Virtual Environment
+### Paso 2: Instalar uv y crear el ambiente virtual
 
 ```bash
-# Install uv (if not already installed)
+# Instala uv (si no está instalado)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Create venv with Python 3.11 (uv downloads it if not present — no sudo needed)
+# Crea venv con Python 3.11 (uv lo descarga si no está presente — sin sudo)
 uv venv venv --python 3.11
 ```
 
 :::tip
-You do **not** need to activate the venv to use `hermes`. The entry point has a hardcoded shebang pointing to the venv Python, so it works globally once symlinked.
+No necesitas activar el venv para usar `hermes`. El punto de entrada tiene un shebang hardcodeado que apunta al Python del venv, así que funciona globalmente una vez vinculado simbólicamente.
 :::
 
-### Step 3: Install Python Dependencies
+### Paso 3: Instalar dependencias de Python
 
 ```bash
-# Tell uv which venv to install into
+# Dile a uv cuál venv usar
 export VIRTUAL_ENV="$(pwd)/venv"
 
-# Install with all extras
+# Instala con todos los extras
 uv pip install -e ".[all]"
 ```
 
-If you only want the core agent (no Telegram/Discord/cron support):
+Si solo quieres el agente principal (sin soporte para Telegram/Discord/cron):
 ```bash
 uv pip install -e "."
 ```
 
 <details>
-<summary><strong>Optional extras breakdown</strong></summary>
+<summary><strong>Desglose de extras opcionales</strong></summary>
 
-| Extra | What it adds | Install command |
-|-------|-------------|-----------------|
-| `all` | Everything below | `uv pip install -e ".[all]"` |
-| `messaging` | Telegram & Discord gateway | `uv pip install -e ".[messaging]"` |
-| `cron` | Cron expression parsing for scheduled tasks | `uv pip install -e ".[cron]"` |
-| `cli` | Terminal menu UI for setup wizard | `uv pip install -e ".[cli]"` |
-| `modal` | Modal cloud execution backend | `uv pip install -e ".[modal]"` |
-| `tts-premium` | ElevenLabs premium voices | `uv pip install -e ".[tts-premium]"` |
-| `pty` | PTY terminal support | `uv pip install -e ".[pty]"` |
-| `honcho` | AI-native memory (Honcho integration) | `uv pip install -e ".[honcho]"` |
-| `mcp` | Model Context Protocol support | `uv pip install -e ".[mcp]"` |
-| `homeassistant` | Home Assistant integration | `uv pip install -e ".[homeassistant]"` |
-| `slack` | Slack messaging | `uv pip install -e ".[slack]"` |
-| `dev` | pytest & test utilities | `uv pip install -e ".[dev]"` |
+| Extra | Qué agrega | Comando de instalación |
+|-------|-----------|------------------------|
+| `all` | Todo lo siguiente | `uv pip install -e ".[all]"` |
+| `messaging` | Gateway de Telegram y Discord | `uv pip install -e ".[messaging]"` |
+| `cron` | Análisis de expresiones cron para tareas programadas | `uv pip install -e ".[cron]"` |
+| `cli` | Interfaz de menú de terminal para asistente de configuración | `uv pip install -e ".[cli]"` |
+| `modal` | Backend de ejecución en nube Modal | `uv pip install -e ".[modal]"` |
+| `tts-premium` | Voces premium de ElevenLabs | `uv pip install -e ".[tts-premium]"` |
+| `pty` | Soporte de terminal PTY | `uv pip install -e ".[pty]"` |
+| `honcho` | Memoria nativa de IA (integración Honcho) | `uv pip install -e ".[honcho]"` |
+| `mcp` | Soporte del Protocolo de Contexto de Modelo | `uv pip install -e ".[mcp]"` |
+| `homeassistant` | Integración de Home Assistant | `uv pip install -e ".[homeassistant]"` |
+| `slack` | Mensajería de Slack | `uv pip install -e ".[slack]"` |
+| `dev` | pytest y utilidades de prueba | `uv pip install -e ".[dev]"` |
 
-You can combine extras: `uv pip install -e ".[messaging,cron]"`
+Puedes combinar extras: `uv pip install -e ".[messaging,cron]"`
 
 </details>
 
-### Step 4: Install Submodule Packages
+### Paso 4: Instalar paquetes del submódulo
 
 ```bash
-# Terminal tool backend (required for terminal/command-execution)
+# Backend de herramienta de terminal (requerido para ejecución de terminal/comandos)
 uv pip install -e "./mini-swe-agent"
 
-# RL training backend
+# Backend de entrenamiento RL
 uv pip install -e "./tinker-atropos"
 ```
 
-Both are optional — if you skip them, the corresponding toolsets simply won't be available.
+Ambos son opcionales — si los omites, los conjuntos de herramientas correspondientes simplemente no estarán disponibles.
 
-### Step 5: Install Node.js Dependencies (Optional)
+### Paso 5: Instalar dependencias de Node.js (opcional)
 
-Only needed for **browser automation** (Browserbase-powered) and **WhatsApp bridge**:
+Solo necesaria para **automatización de navegador** (impulsada por Browserbase) y **puente de WhatsApp**:
 
 ```bash
 npm install
 ```
 
-### Step 6: Create the Configuration Directory
+### Paso 6: Crear el directorio de configuración
 
 ```bash
-# Create the directory structure
+# Crea la estructura de directorios
 mkdir -p ~/.hermes/{cron,sessions,logs,memories,skills,pairing,hooks,image_cache,audio_cache,whatsapp/session}
 
-# Copy the example config file
+# Copia el archivo de configuración de ejemplo
 cp cli-config.yaml.example ~/.hermes/config.yaml
 
-# Create an empty .env file for API keys
+# Crea un archivo .env vacío para las claves API
 touch ~/.hermes/.env
 ```
 
-### Step 7: Add Your API Keys
+### Paso 7: Añade tus claves API
 
-Open `~/.hermes/.env` and add at minimum an LLM provider key:
+Abre `~/.hermes/.env` y añade al menos una clave de proveedor LLM:
 
 ```bash
-# Required — at least one LLM provider:
+# Requerido — al menos un proveedor LLM:
 OPENROUTER_API_KEY=sk-or-v1-your-key-here
 
-# Optional — enable additional tools:
-FIRECRAWL_API_KEY=fc-your-key          # Web search & scraping (or self-host, see docs)
-FAL_KEY=your-fal-key                   # Image generation (FLUX)
+# Opcional — habilita herramientas adicionales:
+FIRECRAWL_API_KEY=fc-your-key          # Búsqueda web y scraping (o auto-hosting, ver docs)
+FAL_KEY=your-fal-key                   # Generación de imágenes (FLUX)
 ```
 
-Or set them via the CLI:
+O configúralas vía CLI:
 ```bash
 hermes config set OPENROUTER_API_KEY sk-or-v1-your-key-here
 ```
 
-### Step 8: Add `hermes` to Your PATH
+### Paso 8: Añade `hermes` a tu PATH
 
 ```bash
 mkdir -p ~/.local/bin
 ln -sf "$(pwd)/venv/bin/hermes" ~/.local/bin/hermes
 ```
 
-If `~/.local/bin` isn't on your PATH, add it to your shell config:
+Si `~/.local/bin` no está en tu PATH, añádelo a tu configuración de shell:
 
 ```bash
 # Bash
@@ -201,68 +201,68 @@ echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc
 fish_add_path $HOME/.local/bin
 ```
 
-### Step 9: Configure Your Provider
+### Paso 9: Configura tu proveedor
 
 ```bash
-hermes model       # Select your LLM provider and model
+hermes model       # Selecciona tu proveedor LLM y modelo
 ```
 
-### Step 10: Verify the Installation
+### Paso 10: Verifica la instalación
 
 ```bash
-hermes version    # Check that the command is available
-hermes doctor     # Run diagnostics to verify everything is working
-hermes status     # Check your configuration
-hermes chat -q "Hello! What tools do you have available?"
+hermes version    # Comprueba que el comando está disponible
+hermes doctor     # Ejecuta diagnósticos para verificar que todo funciona
+hermes status     # Comprueba tu configuración
+hermes chat -q "¡Hola! ¿Qué herramientas tienes disponibles?"
 ```
 
 ---
 
-## Quick-Reference: Manual Install (Condensed)
+## Referencia rápida: Instalación manual (Condensada)
 
-For those who just want the commands:
+Para quienes solo quieren los comandos:
 
 ```bash
-# Install uv
+# Instala uv
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Clone & enter
+# Clona y entra
 git clone --recurse-submodules https://github.com/hochoa13/Asistente-Harlest.git
 cd hermes-agent
 
-# Create venv with Python 3.11
+# Crea venv con Python 3.11
 uv venv venv --python 3.11
 export VIRTUAL_ENV="$(pwd)/venv"
 
-# Install everything
+# Instala todo
 uv pip install -e ".[all]"
 uv pip install -e "./mini-swe-agent"
 uv pip install -e "./tinker-atropos"
-npm install  # optional, for browser tools and WhatsApp
+npm install  # opcional, para herramientas de navegador y WhatsApp
 
-# Configure
+# Configura
 mkdir -p ~/.hermes/{cron,sessions,logs,memories,skills,pairing,hooks,image_cache,audio_cache,whatsapp/session}
 cp cli-config.yaml.example ~/.hermes/config.yaml
 touch ~/.hermes/.env
 echo 'OPENROUTER_API_KEY=sk-or-v1-your-key' >> ~/.hermes/.env
 
-# Make hermes available globally
+# Haz hermes disponible globalmente
 mkdir -p ~/.local/bin
 ln -sf "$(pwd)/venv/bin/hermes" ~/.local/bin/hermes
 
-# Verify
+# Verifica
 hermes doctor
 hermes
 ```
 
 ---
 
-## Troubleshooting
+## Solución de problemas
 
-| Problem | Solution |
-|---------|----------|
-| `hermes: command not found` | Reload your shell (`source ~/.bashrc`) or check PATH |
-| `API key not set` | Run `hermes model` to configure your provider, or `hermes config set OPENROUTER_API_KEY your_key` |
-| Missing config after update | Run `hermes config check` then `hermes config migrate` |
+| Problema | Solución |
+|----------|----------|
+| `hermes: command not found` | Recarga tu shell (`source ~/.bashrc`) o comprueba PATH |
+| `API key not set` | Ejecuta `hermes model` para configurar tu proveedor, o `hermes config set OPENROUTER_API_KEY your_key` |
+| Configuración faltante después de actualizar | Ejecuta `hermes config check` después `hermes config migrate` |
 
-For more diagnostics, run `hermes doctor` — it will tell you exactly what's missing and how to fix it.
+Para más diagnósticos, ejecuta `hermes doctor` — te dirá exactamente qué falta y cómo arreglarlo.
