@@ -1,54 +1,54 @@
 ---
 sidebar_position: 8
 title: "Ejecución de Código"
-description: "Sandboxed Python execution with RPC herramienta access — collapse multi-step workflows into a single turn"
+description: "Ejecución de Python en zona de pruebas con acceso a herramientas RPC — colapsa flujos de trabajo de múltiples pasos en un solo turno"
 ---
 
-# Ejecución de Código (Programmatic herramienta Calling)
+# Ejecución de Código (Llamada Programática de Herramientas)
 
-The `execute_code` herramienta lets the agent write Python scripts that call Hermes Herramientas programmatically, collapsing multi-step workflows into a single LLM turn. The script runs in a sandboxed child process on the agent host, communicating via Unix domain socket RPC.
+La herramienta `execute_code` permite que el agente escriba scripts de Python que llamen herramientas de Hermes de forma programática, colapsando flujos de trabajo de múltiples pasos en un solo turno de LLM. El script se ejecuta en un proceso hijo en zona de pruebas en el host del agente, comunicándose a través de RPC de socket de dominio Unix.
 
-## How It Works
+## Cómo Funciona
 
-1. The agent writes a Python script using `from hermes_tools import ...`
-2. Hermes generates a `hermes_tools.py` stub module with RPC functions
-3. Hermes opens a Unix domain socket and starts an RPC listener thread
-4. The script runs in a child process — Llamadas de Herramientas travel over the socket back to Hermes
-5. Only the script's `print()` output is returned to the LLM; intermediate herramienta results never enter the context window
+1. El agente escribe un script de Python usando `from hermes_tools import ...`
+2. Hermes genera un módulo stub `hermes_tools.py` con funciones RPC
+3. Hermes abre un socket de dominio Unix e inicia un thread oyente RPC
+4. El script se ejecuta en un proceso hijo — las llamadas de herramientas viajan sobre el socket de vuelta a Hermes
+5. Solo la salida `print()` del script se devuelve al LLM; los resultados intermedios de herramientas nunca entran en la ventana de contexto
 
 ```python
-# The agent can write scripts like:
-from hermes_tools import web_buscar, web_extract
+# El agente puede escribir scripts como:
+from hermes_tools import web_search, web_extract
 
-results = web_buscar("Python 3.13 features", limit=5)
+results = web_search("Python 3.13 features", limit=5)
 for r in results["data"]["web"]:
     content = web_extract([r["url"]])
-    # ... filter and process ...
+    # ... filtrar y procesar ...
 print(summary)
 ```
 
-**herramientas disponibles in sandbox segura:** `web_buscar`, `web_extract`, `read_file`, `write_file`, `buscar_files`, `patch`, `terminal` (foreground only).
+**Herramientas disponibles en zona de pruebas:** `web_search`, `web_extract`, `read_file`, `write_file`, `search_files`, `patch`, `terminal` (solo primer plano).
 
-## When the Agent Uses This
+## Cuándo el Agente Usa Esto
 
-The agent uses `execute_code` when there are:
+El agente usa `execute_code` cuando hay:
 
-- **3+ Llamadas de Herramientas** with processing logic between them
-- Bulk data filtering or conditional branching
-- Loops over results
+- **3+ llamadas de herramientas** con lógica de procesamiento entre ellas
+- Filtrado masivo de datos o ramificación condicional
+- Bucles sobre resultados
 
-The key benefit: intermediate herramienta results never enter the context window — only the final `print()` output comes back, dramatically reducing token Uso.
+El beneficio clave: los resultados intermedios de herramientas nunca entran en la ventana de contexto — solo la salida final `print()` regresa, reduciendo drásticamente el uso de tokens.
 
-## Practical Ejemplos
+## Ejemplos Prácticos
 
-### Data Processing tubería
+### Tubería de Procesamiento de Datos
 
 ```python
-from hermes_tools import buscar_files, read_file
+from hermes_tools import search_files, read_file
 import json
 
-# Find all config files and extract database settings
-matches = buscar_files("database", path=".", file_glob="*.yaml", limit=20)
+# Encuentra todos los archivos de configuración y extrae configuración de base de datos
+matches = search_files("database", path=".", file_glob="*.yaml", limit=20)
 configs = []
 for match in matches.get("matches", []):
     content = read_file(match["path"])
@@ -57,14 +57,14 @@ for match in matches.get("matches", []):
 print(json.dumps(configs, indent=2))
 ```
 
-### Multi-Step Web Rebuscar
+### Búsqueda Web Multi-Paso
 
 ```python
-from hermes_tools import web_buscar, web_extract
+from hermes_tools import web_search, web_extract
 import json
 
-# Search, extract, and summarize in one turn
-results = web_buscar("Rust async runtime comparison 2025", limit=5)
+# Busca, extrae y resume en un turno
+results = web_search("Rust async runtime comparison 2025", limit=5)
 summaries = []
 for r in results["data"]["web"]:
     page = web_extract([r["url"]])
@@ -79,13 +79,13 @@ for r in results["data"]["web"]:
 print(json.dumps(summaries, indent=2))
 ```
 
-### Bulk archivo Refactoring
+### Refactorización Masiva de Archivos
 
 ```python
-from hermes_tools import buscar_files, read_file, patch
+from hermes_tools import search_files, read_file, patch
 
-# Find all Python files using deprecated API and fix them
-matches = buscar_files("old_api_call", path="src/", file_glob="*.py")
+# Encuentra todos los archivos Python usando API deprecada y corrígelos
+matches = search_files("old_api_call", path="src/", file_glob="*.py")
 fixed = 0
 for match in matches.get("matches", []):
     result = patch(
@@ -100,17 +100,17 @@ for match in matches.get("matches", []):
 print(f"Fixed {fixed} files out of {len(matches.get('matches', []))} matches")
 ```
 
-### Build and Probar tubería
+### Tubería de Compilación y Prueba
 
 ```python
 from hermes_tools import terminal, read_file
 import json
 
-# Run tests, parse results, and report
+# Ejecuta pruebas, analiza resultados y reporta
 result = terminal("cd /project && python -m pytest --tb=short -q 2>&1", timeout=120)
 output = result.get("output", "")
 
-# Parse test output
+# Analiza salida de prueba
 passed = output.count(" passed")
 failed = output.count(" failed")
 errors = output.count(" error")
@@ -126,7 +126,7 @@ report = {
 print(json.dumps(report, indent=2))
 ```
 
-## límites de recursos
+## Límites de Recursos
 
 | Resource | Limit | Notes |
 |----------|-------|-------|
@@ -157,39 +157,39 @@ This means Llamadas de Herramientas inside scripts behave identically to normal 
 
 ## manejo de errores
 
-When a script fails, the agent receives structured error information:
+Cuando un script falla, el agente recibe información de error estructurada:
 
-- **Non-zero exit code**: stderr is included in the output so the agent sees the full traceback
-- **Timeout**: Script is killed and the agent sees `"Script timed out after 300s and was killed."`
-- **Interruption**: If the user sends a new message during execution, the script is terminated and the agent sees `[execution interrupted — user sent a new message]`
-- **herramienta call limit**: When the 50-call limit is hit, subsequent Llamadas de Herramientas return an error message
+- **Código de salida distinto de cero**: stderr se incluye en la salida para que el agente vea el traceback completo
+- **Tiempo de espera**: El script se mata y el agente ve `"Script timed out after 300s and was killed."`
+- **Interrupción**: Si el usuario envía un nuevo mensaje durante la ejecución, el script se termina y el agente ve `[execution interrupted — user sent a new message]`
+- **Límite de llamadas de herramientas**: Cuando se alcanza el límite de 50 llamadas, las llamadas de herramientas posteriores devuelven un mensaje de error
 
-The response always includes `status` (success/error/timeout/interrupted), `output`, `tool_calls_made`, and `duration_seconds`.
+La respuesta siempre incluye `status` (success/error/timeout/interrupted), `output`, `tool_calls_made` y `duration_seconds`.
 
-## Security
+## Seguridad
 
-:::danger Security Model
-The child process runs with a **minimal entorno**. claves API, tokens, and credenciales are stripped entirely. The script accesses Herramientas exclusively via the RPC channel — it cannot read secrets from entorno variables.
+:::danger Modelo de Seguridad
+El proceso hijo se ejecuta con un **entorno mínimo**. Las claves API, tokens y credenciales se eliminan completamente. El script accede a herramientas exclusivamente a través del canal RPC — no puede leer secretos de variables de entorno.
 :::
 
-entorno variables containing `KEY`, `token`, `SECRET`, `PASSWORD`, `CREDENTIAL`, `PASSWD`, or `AUTH` in their names are excluded. Only safe system variables (`ruta`, `HOME`, `LANG`, `SHELL`, `PYTHONPATH`, `VIRTUAL_ENV`, etc.) are passed through.
+Las variables de entorno que contienen `KEY`, `token`, `SECRET`, `PASSWORD`, `CREDENTIAL`, `PASSWD` o `AUTH` en sus nombres se excluyen. Solo se pasan variables de sistema seguras (`PATH`, `HOME`, `LANG`, `SHELL`, `PYTHONPATH`, `VIRTUAL_ENV`, etc.).
 
-The script runs in a temporary directorio that is cleaned up after execution. The child process runs in its own process group so it can be cleanly killed on timeout or interruption.
+El script se ejecuta en un directorio temporal que se limpia después de la ejecución. El proceso hijo se ejecuta en su propio grupo de procesos para que pueda ser eliminado limpiamente en tiempo de espera o interrupción.
 
 ## execute_code vs terminal
 
-| Usar Case | execute_code | terminal |
+| Caso de Uso | execute_code | terminal |
 |----------|-------------|----------|
-| Multi-step workflows with Llamadas de Herramientas between | ✅ | ❌ |
-| Simple shell comando | ❌ | ✅ |
-| Filtering/processing large herramienta outputs | ✅ | ❌ |
-| Running a build or Probar suite | ❌ | ✅ |
-| Looping over buscar results | ✅ | ❌ |
-| Interactive/background processes | ❌ | ✅ |
-| Needs claves API in entorno | ❌ | ✅ |
+| Flujos de trabajo de múltiples pasos con llamadas de herramientas entre | ✅ | ❌ |
+| Comando shell simple | ❌ | ✅ |
+| Filtrado/procesamiento de salidas grandes de herramientas | ✅ | ❌ |
+| Ejecución de una suite de compilación o prueba | ❌ | ✅ |
+| Bucles sobre resultados de búsqueda | ✅ | ❌ |
+| Procesos interactivos/de fondo | ❌ | ✅ |
+| Necesita claves API en el entorno | ❌ | ✅ |
 
-**Rule of thumb:** Usar `execute_code` when you need to call Hermes Herramientas programmatically with logic between calls. Usar `terminal` for running shell commands, builds, and processes.
+**Regla de oro:** Usa `execute_code` cuando necesites llamar herramientas de Hermes de forma programática con lógica entre llamadas. Usa `terminal` para ejecutar comandos shell, compilaciones y procesos.
 
 ## Soporte de Plataforma
 
-Ejecución de Código requires Unix domain sockets and is available on **Linux and macOS only**. It is automatically disabled on Windows — the agent falls back to regular sequential Llamadas de Herramientas.
+La Ejecución de Código requiere sockets de dominio Unix y está disponible **solo en Linux y macOS**. Se desactiva automáticamente en Windows — el agente vuelve a llamadas de herramientas secuenciales regulares.

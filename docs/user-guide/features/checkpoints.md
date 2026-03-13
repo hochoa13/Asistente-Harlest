@@ -1,33 +1,33 @@
-# Filesystem Puntos de control
+# Puntos de Control del Sistema de Archivos
 
-Hermes can automatically snapshot your working directorio before making archivo changes, giving you a safety net to roll back if something goes wrong.
+Hermes puede crear automáticamente una instantánea de tu directorio de trabajo antes de realizar cambios en archivos, dándote una red de seguridad para deshacer si algo sale mal.
 
-## How It Works
+## Cómo Funciona
 
-When enabled, Hermes takes a **one-time snapshot** at the Iniciar of each conversation turn before the first archivo-modifying operation (`write_file` or `patch`). This creates a point-in-time backup you can restore to at any time.
+Cuando está habilitado, Hermes toma una **instantánea única** al inicio de cada turno de conversación antes de la primera operación que modifica archivos (`write_file` o `patch`). Esto crea una copia de seguridad puntual que puedes restaurar en cualquier momento.
 
-Under the hood, Puntos de control Usar a **shadow git repository** stored at `~/.hermes/Puntos de control/`. This is completely separate from your project's git — no `.git` directorio is created in your project, and your own git history is never touched.
+Bajo el capó, los puntos de control usan un **repositorio git sombra** almacenado en `~/.hermes/checkpoints/`. Esto está completamente separado del git de tu proyecto — no se crea directorio `.git` en tu proyecto, y tu propio historial de git nunca se toca.
 
-## Enabling Puntos de control
+## Habilitando Puntos de Control
 
-### Per-session (CLI flag)
+### Por sesión (bandera CLI)
 
 ```bash
 hermes --checkpoints
 ```
 
-### Permanently (config.yaml)
+### De Forma Permanente (config.yaml)
 
 ```yaml
 # ~/.hermes/config.yaml
 checkpoints:
   enabled: true
-  max_snapshots: 50  # max checkpoints per directory (default: 50)
+  max_snapshots: 50  # máximo de puntos de control por directorio (predeterminado: 50)
 ```
 
-## Rolling Back
+## Deshacer
 
-Usar the `/Deshacer` slash comando:
+Usa el comando slash `/rollback`:
 
 ```
 /rollback          # List all available checkpoints
@@ -61,37 +61,37 @@ Puntos de control capture the entire working directorio (the project root), excl
 - `.git/`
 - `.DS_Store`, `*.log`
 
-## Performance
+## Rendimiento
 
-Puntos de control are designed to be lightweight:
+Los puntos de control están diseñados para ser ligeros:
 
-- **Once per turn** — only the first archivo operation triggers a snapshot, not every write
-- **Skips large directories** — directories with >50,000 files are skipped automatically
-- **Skips when nothing changed** — if no files were modified since the last punto de control, no commit is created
-- **Non-blocking** — if a punto de control fails for any reason, the archivo operation proceeds normally
+- **Una vez por turno** — solo la primera operación de archivo desencadena una instantánea, no cada escritura
+- **Omite directorios grandes** — los directorios con más de 50.000 archivos se omiten automáticamente
+- **Omite cuando nada cambió** — si no se modificaron archivos desde el último punto de control, no se crea commit
+- **No bloqueante** — si un punto de control falla por cualquier motivo, la operación de archivo procede normalmente
 
-## How It Determines the Project Root
+## Cómo Se Determina la Raíz del Proyecto
 
-When you write to a archivo like `src/components/Button.tsx`, Hermes walks up the directorio tree looking for project markers (`.git`, `pyproject.toml`, `package.json`, `Cargo.toml`, etc.) to find the project root. This ensures the entire project is checkpointed, not just the archivo's parent directorio.
+Cuando escribes en un archivo como `src/components/Button.tsx`, Hermes camina hacia arriba en el árbol de directorios buscando marcadores de proyecto (`.git`, `pyproject.toml`, `package.json`, `Cargo.toml`, etc.) para encontrar la raíz del proyecto. Esto asegura que se haga punto de control de todo el proyecto, no solo del directorio padre del archivo.
 
-## Platforms
+## Plataformas
 
-Puntos de control work on both:
-- **CLI** — uses your current working directorio
-- **Gateway** (Telegram, Discord, etc.) — uses `MESSAGING_CWD`
+Los puntos de control funcionan en ambos:
+- **CLI** — usa tu directorio de trabajo actual
+- **Gateway** (Telegram, Discord, etc.) — usa `MESSAGING_CWD`
 
-The `/Deshacer` comando is available on all platforms.
+El comando `/rollback` está disponible en todas las plataformas.
 
-## Preguntas frecuentes
+## Preguntas Frecuentes
 
-**Does this conflict with my project's git?**
-No. Puntos de control Usar a completely separate shadow git repository via `GIT_DIR` entorno variables. Your project's `.git/` is never touched.
+**¿Esto entra en conflicto con el git de mi proyecto?**
+No. Los puntos de control usan un repositorio git sombra completamente separado a través de variables de entorno `GIT_DIR`. El `.git/` de tu proyecto nunca se toca.
 
-**How much disk space do Puntos de control Usar?**
-Git is very efficient at storing diffs. For most projects, punto de control data is negligible. Old Puntos de control are pruned when `max_snapshots` is exceeded.
+**¿Cuánto espacio en disco usan los puntos de control?**
+Git es muy eficiente al almacenar diffs. Para la mayoría de proyectos, los datos de punto de control son insignificantes. Los viejos puntos de control se podan cuando se excede `max_snapshots`.
 
-**Can I punto de control without git installed?**
-No — git must be available on your ruta. If it's not installed, Puntos de control silently Deshabilitar.
+**¿Puedo hacer punto de control sin git instalado?**
+No — git debe estar disponible en tu ruta. Si no está instalado, los puntos de control se deshabilitan silenciosamente.
 
-**Can I roll back across sessions?**
-Yes! Puntos de control persist in `~/.hermes/Puntos de control/` and survive across sessions. You can roll back to a punto de control from yesterday.
+**¿Puedo deshacer entre sesiones?**
+Sí. Los puntos de control persisten en `~/.hermes/checkpoints/` y sobreviven entre sesiones. Puedes deshacer a un punto de control de ayer.

@@ -1,193 +1,193 @@
 ---
 sidebar_position: 8
 title: "Archivos de Contexto"
-description: "Project Archivos de Contexto — AGENTS.md, alma.md, and .cursorrules — automatically injected into every conversation"
+description: "Archivos de contexto del proyecto — AGENTS.md, alma.md y .cursorrules — inyectados automáticamente en cada conversación"
 ---
 
 # Archivos de Contexto
 
-Hermes Agent automatically discovers and loads project Archivos de Contexto from your working directorio. These files are injected into the system prompt at the Iniciar of every session, giving the agent persistent knowledge about your project's conventions, architecture, and preferences.
+Hermes Agent descubre y carga automáticamente archivos de contexto del proyecto desde tu directorio de trabajo. Estos archivos se inyectan en el indicador del sistema al inicio de cada sesión, dando al agente conocimiento persistente sobre las convenciones, arquitectura y preferencias de tu proyecto.
 
-## Supported Archivos de Contexto
+## Archivos de Contexto Soportados
 
-| archivo | Purpose | Discovery |
+| Archivo | Propósito | Descubrimiento |
 |------|---------|-----------|
-| **AGENTS.md** | Project instructions, conventions, architecture | Recursive (walks subdirectories) |
-| **alma.md** | Personalidad and tone customization | CWD → `~/.hermes/alma.md` fallback |
-| **.cursorrules** | Cursor IDE coding conventions | CWD only |
-| **.cursor/rules/*.mdc** | Cursor IDE rule modules | CWD only |
+| **AGENTS.md** | Instrucciones del proyecto, convenciones, arquitectura | Recursivo (camina subdirectorios) |
+| **alma.md** | Personalización de personalidad y tono | CWD → `~/.hermes/alma.md` respaldo |
+| **.cursorrules** | Convenciones de codificación de IDE Cursor | Solo CWD |
+| **.cursor/rules/*.mdc** | Módulos de reglas de IDE Cursor | Solo CWD |
 
 ## AGENTS.md
 
-`AGENTS.md` is the primary project context archivo. It tells the agent how your project is structured, what conventions to follow, and any special instructions.
+`AGENTS.md` es el archivo de contexto del proyecto primario. Le dice al agente cómo se estructura tu proyecto, qué convenciones seguir y cualquier instrucción especial.
 
-### descubrimiento jerárquico
+### Descubrimiento Jerárquico
 
-Hermes walks the directorio tree starting from the working directorio and loads **all** `AGENTS.md` files found, sorted by depth. This supports monorepo-style setups:
+Hermes camina el árbol de directorios comenzando desde el directorio de trabajo y carga **todos** los archivos `AGENTS.md` encontrados, ordenados por profundidad. Esto soporta configuraciones de estilo monorepo:
 
 ```
 my-project/
-├── AGENTS.md              ← Top-level project context
+├── AGENTS.md              ← Contexto del proyecto de nivel superior
 ├── frontend/
-│   └── AGENTS.md          ← Frontend-specific instructions
+│   └── AGENTS.md          ← Instrucciones específicas del frontend
 ├── backend/
-│   └── AGENTS.md          ← Backend-specific instructions
+│   └── AGENTS.md          ← Instrucciones específicas del backend
 └── shared/
-    └── AGENTS.md          ← Shared library conventions
+    └── AGENTS.md          ← Convenciones de biblioteca compartida
 ```
 
-All four files are concatenated into a single context block with relative ruta headers.
+Los cuatro archivos se concatenan en un bloque de contexto único con encabezados de ruta relativa.
 
-:::Información
-Directories that are skipped during the walk: `.`-prefixed dirs, `node_modules`, `__pycache__`, `venv`, `.venv`.
+:::información
+Los directorios que se omiten durante la caminata: directorios con prefijo `.`, `node_modules`, `__pycache__`, `venv`, `.venv`.
 :::
 
-### Ejemplo AGENTS.md
+### Ejemplo de AGENTS.md
 
 ```markdown
-# Project Context
+# Contexto del Proyecto
 
-This is a Next.js 14 web application with a Python FastAPI backend.
+Esta es una aplicación web Next.js 14 con un backend FastAPI de Python.
 
-## Architecture
-- Frontend: Next.js 14 with App Router in `/frontend`
-- Backend: FastAPI in `/backend`, uses SQLAlchemy ORM
-- Database: PostgreSQL 16
-- Deployment: Docker Compose on a Hetzner VPS
+## Arquitectura
+- Frontend: Next.js 14 con App Router en `/frontend`
+- Backend: FastAPI en `/backend`, usa ORM SQLAlchemy
+- Base de datos: PostgreSQL 16
+- Implementación: Docker Compose en un VPS de Hetzner
 
-## Conventions
-- Use TypeScript strict mode for all frontend code
-- Python code follows PEP 8, use type hints everywhere
-- All API endpoints return JSON with `{data, error, meta}` shape
-- Tests go in `__tests__/` directories (frontend) or `tests/` (backend)
+## Convenciones
+- Usa modo strict de TypeScript para todo el código frontend
+- Código Python sigue PEP 8, usa type hints en todas partes
+- Todos los endpoints de API devuelven JSON con forma `{data, error, meta}`
+- Las pruebas van en directorios `__tests__/` (frontend) o `tests/` (backend)
 
-## Important Notes
-- Never modify migration files directly — use Alembic commands
-- The `.env.local` file has real API keys, don't commit it
-- Frontend port is 3000, backend is 8000, DB is 5432
+## Notas Importantes
+- Nunca modifiques archivos de migración directamente — usa comandos de Alembic
+- El archivo `.env.local` tiene claves API reales, no lo hagas commit
+- Puerto frontend es 3000, backend es 8000, BD es 5432
 ```
 
 ## alma.md
 
-`alma.md` controls the agent's Personalidad, tone, and communication style. See the [Personalidad](/docs/user-guide/features/Personalidad) page for full details.
+`alma.md` controla la personalidad, tono y estilo de comunicación del agente. Ve la página [Personalidad](/docs/user-guide/features/Personalidad) para detalles completos.
 
-**Discovery order:**
+**Orden de descubrimiento:**
 
-1. `alma.md` or `alma.md` in the current working directorio
-2. `~/.hermes/alma.md` (global fallback)
+1. `alma.md` o `alma.md` en el directorio de trabajo actual
+2. `~/.hermes/alma.md` (respaldo global)
 
-When a alma.md is found, the agent is instructed:
+Cuando se encuentra un alma.md, se instruye al agente:
 
-> *"If alma.md is present, embody its persona and tone. Avoid stiff, generic replies; follow its guidance unless higher-priority instructions override it."*
+> *"Si alma.md está presente, encarna su persona y tono. Evita respuestas rígidas y genéricas; sigue su orientación a menos que instrucciones de mayor prioridad la anulen."
 
 ## .cursorrules
 
-Hermes is compatible with Cursor IDE's `.cursorrules` archivo and `.cursor/rules/*.mdc` rule modules. If these files exist in your project root, they're loaded alongside AGENTS.md.
+Hermes es compatible con el archivo `.cursorrules` de Cursor IDE y módulos de reglas `.cursor/rules/*.mdc`. Si estos archivos existen en la raíz de tu proyecto, se cargan junto con AGENTS.md.
 
-This means your existing Cursor conventions automatically apply when using Hermes.
+Esto significa que tus convenciones de Cursor existentes se aplican automáticamente cuando usas Hermes.
 
-## How Archivos de Contexto Are Loaded
+## Cómo se Cargan los Archivos de Contexto
 
-Archivos de Contexto are loaded by `build_context_files_prompt()` in `agent/prompt_builder.py`:
+Los archivos de contexto se cargan a través de `build_context_files_prompt()` en `agent/prompt_builder.py`:
 
-1. **At session Iniciar** — the function scans the working directorio
-2. **Content is read** — each archivo is read as UTF-8 text
-3. **Security scan** — content is checked for prompt injection patterns
-4. **Truncation** — files exceeding 20,000 characters are head/tail truncated (70% head, 20% tail, with a marker in the middle)
-5. **Assembly** — all sections are combined under a `# Project Context` header
-6. **Injection** — the assembled content is added to the system prompt
+1. **Al inicio de sesión** — la función escanea el directorio de trabajo
+2. **Se lee el contenido** — cada archivo se lee como texto UTF-8
+3. **Escaneo de seguridad** — el contenido se verifica para patrones de inyección de indicador
+4. **Truncamiento** — los archivos que exceden 20.000 caracteres se truncan cabeza/cola (70% cabeza, 20% cola, con un marcador en el medio)
+5. **Asamblea** — todas las secciones se combinan bajo un encabezado `# Contexto del Proyecto`
+6. **Inyección** — el contenido montado se agrega al indicador del sistema
 
-The final prompt Sección looks like:
+La sección de indicador final se ve así:
 
 ```
-# Project Context
+# Contexto del Proyecto
 
-The following project context files have been loaded and should be followed:
+Los siguientes archivos de contexto del proyecto se han cargado y deben seguirse:
 
 ## AGENTS.md
 
-[Your AGENTS.md content here]
+[Tu contenido de AGENTS.md aquí]
 
 ## .cursorrules
 
-[Your .cursorrules content here]
+[Tu contenido de .cursorrules aquí]
 
 ## SOUL.md
 
-If SOUL.md is present, embody its persona and tone...
+Si SOUL.md está presente, encarna su persona y tono...
 
-[Your SOUL.md content here]
+[Tu contenido de SOUL.md aquí]
 ```
 
-## Security: Prompt Injection Protection
+## Seguridad: Protección Contra Inyección de Indicador
 
-All Archivos de Contexto are scanned for potential prompt injection before being included. The scanner checks for:
+Todos los archivos de contexto se escanean en busca de inyección de indicador potencial antes de ser incluidos. El escáner verifica:
 
-- **Instruction override attempts**: "ignorar previous instructions", "disregard your rules"
-- **Deception patterns**: "do not tell the user"
-- **System prompt overrides**: "system prompt override"
-- **Hidden HTML comments**: `<!-- ignorar instructions -->`
-- **Hidden div elements**: `<div style="display:none">`
-- **Credential exfiltration**: `curl ... $API_KEY`
-- **Secret archivo access**: `cat .env`, `cat credenciales`
-- **Invisible characters**: zero-width spaces, bidirectional overrides, word joiners
+- **Intentos de anulación de instrucción**: "ignorar instrucciones anteriores", "descuidar tus reglas"
+- **Patrones de engaño**: "no le digas al usuario"
+- **Anulaciones de indicador del sistema**: "anular indicador del sistema"
+- **Comentarios HTML ocultos**: `<!-- ignorar instrucciones -->`
+- **Elementos div ocultos**: `<div style="display:none">`
+- **Exfiltración de credenciales**: `curl ... $API_KEY`
+- **Acceso a archivo secreto**: `cat .env`, `cat credentials`
+- **Caracteres invisibles**: espacios de ancho cero, anulaciones bidireccionales, unidos de palabras
 
-If any threat pattern is detected, the archivo is blocked:
+Si se detecta algún patrón de amenaza, el archivo se bloquea:
 
 ```
-[BLOCKED: AGENTS.md contained potential prompt injection (prompt_injection). Content not loaded.]
+[BLOQUEADO: AGENTS.md contenía inyección de indicador potencial (prompt_injection). Contenido no cargado.]
 ```
 
-:::Advertencia
-This scanner protects against common injection patterns, but it's not a substitute for reviewing Archivos de Contexto in shared repositories. Always validate AGENTS.md content in projects you didn't author.
+:::advertencia
+Este escáner protege contra patrones comunes de inyección, pero no es un sustituto para revisar el contenido de Archivos de Contexto en repositorios compartidos. Siempre valida el contenido de AGENTS.md en proyectos que no escribiste.
 :::
 
-## Size Limits
+## Límites de Tamaño
 
-| Limit | Value |
+| Límite | Valor |
 |-------|-------|
-| Max chars per archivo | 20,000 (~7,000 tokens) |
-| Head truncation ratio | 70% |
-| Tail truncation ratio | 20% |
-| Truncation marker | 10% (shows char counts and suggests using archivo Herramientas) |
+| Máx caracteres por archivo | 20.000 (~7.000 tokens) |
+| Relación de truncamiento de cabeza | 70% |
+| Relación de truncamiento de cola | 20% |
+| Marcador de truncamiento | 10% (muestra recuentos de caracteres y sugiere usar herramientas de archivo) |
 
-When a archivo exceeds 20,000 characters, the truncation message reads:
+Cuando un archivo excede 20.000 caracteres, el mensaje de truncamiento se lee:
 
 ```
-[...truncated AGENTS.md: kept 14000+4000 of 25000 chars. Use file tools to read the full file.]
+[...truncado AGENTS.md: mantenido 14000+4000 de 25000 caracteres. Usa herramientas de archivo para leer el archivo completo.]
 ```
 
-## Consejos for Effective Archivos de Contexto
+## Consejos para Archivos de Contexto Efectivos
 
-:::Consejo Mejores prácticas for AGENTS.md
-1. **Keep it concise** — stay well under 20K chars; the agent reads it every turn
-2. **Structure with headers** — Usar `##` sections for architecture, conventions, Importante notes
-3. **Include concrete Ejemplos** — show preferred code patterns, API shapes, naming conventions
-4. **Mention what NOT to do** — "never modify migration files directly"
-5. **List key paths and ports** — the agent uses these for terminal commands
-6. **Update as the project evolves** — stale context is worse than no context
+:::consejo Mejores prácticas para AGENTS.md
+1. **Manténlo conciso** — mantén bien por debajo de 20K caracteres; el agente lo lee cada turno
+2. **Estructura con encabezados** — usa secciones `##` para arquitectura, convenciones, notas importantes
+3. **Incluye ejemplos concretos** — muestra patrones de código preferidos, formas de API, convenciones de nombres
+4. **Menciona qué NO hacer** — "nunca modifiques archivos de migración directamente"
+5. **Lista rutas clave y puertos** — el agente los usa para comandos de terminal
+6. **Actualiza conforme el proyecto evoluciona** — el contexto antiguo es peor que ningún contexto
 :::
 
-### Per-Subdirectory Context
+### Contexto Por Subdirectorio
 
-For monorepos, put subdirectory-specific instructions in nested AGENTS.md files:
+Para monorepos, put instrucciones específicas de subdirectorio en archivos AGENTS.md anidados:
 
 ```markdown
 <!-- frontend/AGENTS.md -->
-# Frontend Context
+# Contexto del Frontend
 
-- Use `pnpm` not `npm` for package gestión
-- Components go in `src/components/`, pages in `src/app/`
-- Use Tailwind CSS, never inline styles
-- Run tests with `pnpm test`
+- Usa `pnpm` no `npm` para gestión de paquetes
+- Los componentes van en `src/components/`, páginas en `src/app/`
+- Usa Tailwind CSS, nunca estilos en línea
+- Ejecuta pruebas con `pnpm test`
 ```
 
 ```markdown
 <!-- backend/AGENTS.md -->
-# Backend Context
+# Contexto del Backend
 
-- Use `poetry` for dependency gestión
-- Run the dev server with `poetry run uvicorn main:app --reload`
-- All endpoints need OpenAPI docstrings
-- Database models are in `models/`, schemas in `schemas/`
+- Usa `poetry` para gestión de dependencias
+- Ejecuta el servidor de desarrollo con `poetry run uvicorn main:app --reload`
+- Todos los endpoints necesitan docstrings OpenAPI
+- Los modelos de base de datos están en `models/`, esquemas en `schemas/`
 ```

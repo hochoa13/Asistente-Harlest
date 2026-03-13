@@ -1,36 +1,36 @@
 ---
 sidebar_position: 3
-title: "Persistent Memoria"
-description: "How Hermes Agent remembers across sessions — Memoria.md, USER.md, and session buscar"
+title: "Memoria Persistente"
+description: "Cómo recuerda Hermes Agent entre sesiones — Memoria.md, USER.md, y búsqueda de sesión"
 ---
 
-# Persistent Memoria
+# Memoria Persistente
 
-Hermes Agent has bounded, curated Memoria that persists across sessions. This lets it remember your preferences, your projects, your entorno, and things it has learned.
+Hermes Agent tiene una Memoria limitada y curada que persiste entre sesiones. Esto le permite recordar tus preferencias, tus proyectos, tu entorno y las cosas que ha aprendido.
 
-## How It Works
+## Cómo Funciona
 
-Two files make up the agent's Memoria:
+Dos archivos conforman la Memoria del agente:
 
-| archivo | Purpose | Char Limit |
+| archivo | Propósito | Límite de Caracteres |
 |------|---------|------------|
-| **Memoria.md** | Agent's personal notes — entorno facts, conventions, things learned | 2,200 chars (~800 tokens) |
-| **USER.md** | User profile — your preferences, communication style, expectations | 1,375 chars (~500 tokens) |
+| **Memoria.md** | Notas personales del agente — hechos del entorno, convenciones, cosas aprendidas | 2.200 caracteres (~800 tokens) |
+| **USER.md** | Perfil de usuario — tus preferencias, estilo de comunicación, expectativas | 1.375 caracteres (~500 tokens) |
 
-Both are stored in `~/.hermes/memories/` and are injected into the system prompt as a frozen snapshot at session Iniciar. The agent manages its own Memoria via the `Memoria` herramienta — it can add, replace, or remove entries.
+Ambos se almacenan en `~/.hermes/memories/` e se inyectan en el indicador del sistema como una instantánea congelada al inicio de la sesión. El agente gestiona su propia Memoria a través de la herramienta `memory` — puede agregar, reemplazar o eliminar entradas.
 
-:::Información
-Character limits keep Memoria focused. When Memoria is full, the agent consolidates or replaces entries to make room for new information.
+:::info
+Los límites de caracteres mantienen la Memoria enfocada. Cuando la Memoria está llena, el agente consolida o reemplaza entradas para dejar espacio para información nueva.
 :::
 
-## How Memoria Appears in the System Prompt
+## Cómo Aparece la Memoria en el Indicador del Sistema
 
-At the Iniciar of every session, Memoria entries are loaded from disk and rendered into the system prompt as a frozen block:
+Al inicio de cada sesión, las entradas de Memoria se cargan desde el disco y se procesan en el indicador del sistema como un bloque congelado:
 
 ```
 ══════════════════════════════════════════════
-MEMORY (your personal notes) [67% — 1,474/2,200 chars]
-══════════════════════════════════════════════
+MEMORIA (tus notas personales) [67% — 1.474/2.200 caracteres]
+═════════════════════════════════════════════
 User's project is a Rust web service at ~/code/myapi using Axum + SQLx
 §
 This machine runs Ubuntu 22.04, has Docker and Podman installed
@@ -38,92 +38,92 @@ This machine runs Ubuntu 22.04, has Docker and Podman installed
 User prefers concise responses, dislikes verbose explanations
 ```
 
-The format includes:
-- A header showing which store (Memoria or USER PROFILE)
-- Uso percentage and character counts so the agent knows capacity
-- Individual entries separated by `§` (Sección sign) delimiters
-- Entries can be multiline
+El formato incluye:
+- Un encabezado que muestra cuál tienda (Memoria o PERFIL DE USUARIO)
+- Porcentaje de uso y conteos de caracteres para que el agente conozca la capacidad
+- Entradas individuales separadas por delimitadores `§` (signo de sección)
+- Las entradas pueden ser multilínea
 
-**Frozen snapshot pattern:** The system prompt injection is captured once at session Iniciar and never changes mid-session. This is intentional — it preserves the LLM's prefix cache for performance. When the agent adds/removes Memoria entries during a session, the changes are persisted to disk immediately but won't appear in the system prompt until the next session starts. herramienta responses always show the live state.
+**Patrón de instantánea congelada:** La inyección del indicador del sistema se captura una sola vez al inicio de la sesión y nunca cambia durante la sesión. Esto es intencional — preserva la caché de prefijo del LLM para el rendimiento. Cuando el agente agrega/elimina entradas de Memoria durante una sesión, los cambios se persisten en el disco inmediatamente pero no aparecerán en el indicador del sistema hasta que comience la próxima sesión. Las respuestas de las herramientas siempre muestran el estado actual.
 
-## Memoria herramienta Actions
+## Acciones de la Herramienta Memoria
 
-The agent uses the `Memoria` herramienta with these actions:
+El agente utiliza la herramienta `memory` con estas acciones:
 
-- **add** — Add a new Memoria entry
-- **replace** — Replace an existing entry with updated content (uses coincidencia de subcadena via `old_text`)
-- **remove** — Remove an entry that's no longer relevant (uses coincidencia de subcadena via `old_text`)
+- **add** — Agregar una nueva entrada de Memoria
+- **replace** — Reemplazar una entrada existente con contenido actualizado (utiliza coincidencia de subcadena a través de `old_text`)
+- **remove** — Eliminar una entrada que ya no es relevante (utiliza coincidencia de subcadena a través de `old_text`)
 
-There is no `read` action — Memoria content is automatically injected into the system prompt at session Iniciar. The agent sees its memories as part of its conversation context.
+No hay una acción `read` — el contenido de la Memoria se inyecta automáticamente en el indicador del sistema al inicio de la sesión. El agente ve sus recuerdos como parte de su contexto de conversación.
 
-### coincidencia de subcadena
+### Coincidencia de Subcadena
 
-The `replace` and `remove` actions Usar short unique coincidencia de subcadena — you don't need the full entry text. The `old_text` parameter just needs to be a unique substring that identifies exactly one entry:
+Las acciones `replace` y `remove` utilizan una coincidencia de subcadena única y corta — no necesitas el texto completo de la entrada. El parámetro `old_text` solo necesita ser una subcadena única que identifique exactamente una entrada:
 
 ```python
-# If memory contains "User prefers dark mode in all editors"
+# Si memory contiene "User prefers dark mode in all editors"
 memory(action="replace", target="memory",
        old_text="dark mode",
        content="User prefers light mode in VS Code, dark mode in terminal")
 ```
 
-If the substring matches multiple entries, an error is returned asking for a more specific match.
+Si la subcadena coincide con múltiples entradas, se devuelve un error pidiendo una coincidencia más específica.
 
-## Two Targets Explained
+## Dos Objetivos Explicados
 
-### `Memoria` — Agent's Personal Notes
+### `memory` — Notas Personales del Agente
 
-For information the agent needs to remember about the entorno, workflows, and lessons learned:
+Para información que el agente necesita recordar sobre el entorno, flujos de trabajo y lecciones aprendidas:
 
-- entorno facts (OS, Herramientas, project structure)
-- Project conventions and Configuración
-- herramienta quirks and workarounds discovered
-- Completod task diary entries
-- Habilidades and techniques that worked
+- Hechos del entorno (OS, herramientas, estructura del proyecto)
+- Convenciones del proyecto y configuración
+- Peculiaridades de herramientas y soluciones alternativas descubiertas
+- Entradas de diario de tareas completadas
+- Habilidades y técnicas que funcionaron
 
-### `user` — User Profile
+### `user` — Perfil de Usuario
 
-For information about the user's identity, preferences, and communication style:
+Para información sobre la identidad, preferencias y estilo de comunicación del usuario:
 
-- Name, role, timezone
-- Communication preferences (concise vs detailed, format preferences)
-- Pet peeves and things to avoid
-- Workflow habits
-- Technical habilidad level
+- Nombre, rol, zona horaria
+- Preferencias de comunicación (conciso vs detallado, preferencias de formato)
+- Manías y cosas a evitar
+- Hábitos de flujo de trabajo
+- Nivel de habilidad técnica
 
-## What to Save vs Skip
+## Qué Guardar vs Qué Omitir
 
-### Save These (Proactively)
+### Guardar Esto (Proactivamente)
 
-The agent saves automatically — you don't need to ask. It saves when it learns:
+El agente guarda automáticamente — no necesitas pedirlo. Guarda cuando aprende:
 
-- **User preferences:** "I prefer TypeScript over JavaScript" → save to `user`
-- **entorno facts:** "This server runs Debian 12 with PostgreSQL 16" → save to `Memoria`
-- **Corrections:** "Don't Usar `sudo` for docker commands, user is in docker group" → save to `Memoria`
-- **Conventions:** "Project uses tabs, 120-char line width, Google-style docstrings" → save to `Memoria`
-- **Completod work:** "Migrated base de datos from MySQL to PostgreSQL on 2026-01-15" → save to `Memoria`
-- **Explicit requests:** "Remember that my clave API rotation happens monthly" → save to `Memoria`
+- **Preferencias del usuario:** "Prefiero TypeScript a JavaScript" → guardar en `user`
+- **Hechos del entorno:** "Este servidor ejecuta Debian 12 con PostgreSQL 16" → guardar en `memory`
+- **Correcciones:** "No usar `sudo` para comandos docker, el usuario está en el grupo docker" → guardar en `memory`
+- **Convenciones:** "El proyecto utiliza tabs, ancho de línea de 120 caracteres, docstrings al estilo Google" → guardar en `memory`
+- **Trabajo completado:** "Base de datos migrada de MySQL a PostgreSQL en 2026-01-15" → guardar en `memory`
+- **Solicitudes explícitas:** "Recuerda que mi rotación de clave API ocurre mensualmente" → guardar en `memory`
 
-### Skip These
+### Omitir Esto
 
-- **Trivial/obvious Información:** "User asked about Python" — too vague to be useful
-- **Easily re-discovered facts:** "Python 3.12 supports f-string nesting" — can web buscar this
-- **Raw data dumps:** Large code blocks, log files, data tables — too big for Memoria
-- **Session-specific ephemera:** Temporary archivo paths, one-off debugging context
-- **Information already in Archivos de Contexto:** alma.md and AGENTS.md content
+- **Información trivial/obvia:** "El usuario preguntó sobre Python" — demasiado vago para ser útil
+- **Hechos fácilmente redescubiertos:** "Python 3.12 admite anidamiento de f-strings" — se puede buscar esto en la web
+- **Volcados de datos sin procesar:** Bloques de código grandes, archivos de registro, tablas de datos — demasiado grande para Memoria
+- **Efemérides específicas de sesión:** Rutas de archivo temporales, contexto de depuración de una sola vez
+- **Información ya en Archivos de Contexto:** contenido de alma.md y AGENTS.md
 
-## Capacity Management
+## Gestión de Capacidad
 
-Memoria has strict character limits to keep system prompts bounded:
+Memoria tiene límites estrictos de caracteres para mantener los indicadores del sistema limitados:
 
-| Store | Limit | Typical entries |
+| Tienda | Límite | Entradas Típicas |
 |-------|-------|----------------|
-| Memoria | 2,200 chars | 8-15 entries |
-| user | 1,375 chars | 5-10 entries |
+| memory | 2.200 caracteres | 8-15 entradas |
+| user | 1.375 caracteres | 5-10 entradas |
 
-### What Happens When Memoria is Full
+### Qué Sucede Cuando la Memoria Está Llena
 
-When you try to add an entry that would exceed the limit, the herramienta returns an error:
+Cuando intentas agregar una entrada que excedería el límite, la herramienta devuelve un error:
 
 ```json
 {
@@ -134,67 +134,67 @@ When you try to add an entry that would exceed the limit, the herramienta return
 }
 ```
 
-The agent should then:
-1. Read the current entries (shown in the error response)
-2. Identify entries that can be removed or consolidated
-3. Usar `replace` to merge related entries into shorter versions
-4. Then `add` the new entry
+El agente debería entonces:
+1. Leer las entradas actuales (mostradas en la respuesta de error)
+2. Identificar entradas que se pueden eliminar o consolidar
+3. Usar `replace` para fusionar entradas relacionadas en versiones más cortas
+4. Luego `add` la nueva entrada
 
-**Best practice:** When Memoria is above 80% capacity (visible in the system prompt header), consolidate entries before adding new ones. Por ejemplo, merge three separate "project uses X" entries into one comprehensive project description entry.
+**Mejor práctica:** Cuando la Memoria está por encima de la capacidad del 80% (visible en el encabezado del indicador del sistema), consolida entradas antes de agregar nuevas. Por ejemplo, fusiona tres entradas separadas de "el proyecto usa X" en una sola entrada de descripción de proyecto integral.
 
-### Practical Ejemplos of Good Memoria Entries
+### Ejemplos Prácticos de Buenas Entradas de Memoria
 
-**Compact, information-dense entries work best:**
+**Las entradas compactas y densas en información funcionan mejor:**
 
 ```
-# Good: Packs multiple related facts
+# Bueno: Empaqueta múltiples hechos relacionados
 User runs macOS 14 Sonoma, uses Homebrew, has Docker Desktop and Podman. Shell: zsh with oh-my-zsh. Editor: VS Code with Vim keybindings.
 
-# Good: Specific, actionable convention
+# Bueno: Convención específica y accionable
 Project ~/code/api uses Go 1.22, sqlc for DB queries, chi router. Run tests with 'make test'. CI via GitHub Actions.
 
-# Good: Lesson learned with context
+# Bueno: Lección aprendida con contexto
 The staging server (10.0.1.50) needs SSH port 2222, not 22. Key is at ~/.ssh/staging_ed25519.
 
-# Bad: Too vague
+# Malo: Demasiado vago
 User has a project.
 
-# Bad: Too verbose
+# Malo: Demasiado verboso
 On January 5th, 2026, the user asked me to look at their project which is
 located at ~/code/api. I discovered it uses Go version 1.22 and...
 ```
 
-## Duplicate Prevention
+## Prevención de Duplicados
 
-The Memoria system automatically rejects exact duplicate entries. If you try to add content that already exists, it returns success with a "no duplicate added" message.
+El sistema de Memoria rechaza automáticamente entradas exactamente duplicadas. Si intentas agregar contenido que ya existe, devuelva éxito con un mensaje "no duplicate added".
 
-## escaneo de seguridad
+## Escaneo de Seguridad
 
-Memoria entries are scanned for injection and exfiltration patterns before being accepted, since they're injected into the system prompt. Content matching threat patterns (prompt injection, credential exfiltration, ssh backdoors) or containing invisible Unicode characters is blocked.
+Las entradas de Memoria se escanean en busca de patrones de inyección y exfiltración antes de ser aceptadas, ya que se inyectan en el indicador del sistema. El contenido que coincide con patrones de amenaza (inyección de indicador, exfiltración de credenciales, puertas traseras ssh) o que contiene caracteres Unicode invisibles se bloquea.
 
-## Session Search
+## Búsqueda de Sesión
 
-Beyond Memoria.md and USER.md, the agent can buscar its past conversations using the `session_buscar` herramienta:
+Más allá de Memoria.md y USER.md, el agente puede buscar sus conversaciones pasadas utilizando la herramienta `session_search`:
 
-- All CLI and messaging sessions are stored in SQLite (`~/.hermes/state.db`) with FTS5 full-text buscar
-- Search queries return relevant past conversations with Gemini Flash summarization
-- The agent can find things it discussed weeks ago, even if they're not in its active Memoria
+- Todas las sesiones de CLI y mensajería se almacenan en SQLite (`~/.hermes/state.db`) con búsqueda de texto completo FTS5
+- Las consultas de búsqueda devuelven conversaciones pasadas relevantes con resumen de Gemini Flash
+- El agente puede encontrar cosas que discutió hace semanas, incluso si no están en su Memoria activa
 
 ```bash
 hermes sessions list    # Browse past sessions
 ```
 
-### session_buscar vs Memoria
+### Búsqueda de Sesión vs Memoria
 
-| Feature | Persistent Memoria | Session Search |
-|---------|------------------|----------------|
-| **Capacity** | ~1,300 tokens total | Unlimited (all sessions) |
-| **Speed** | Instant (in system prompt) | Requires buscar + LLM summarization |
-| **Usar case** | Key facts always available | Finding specific past conversations |
-| **Management** | Manually curated by agent | Automatic — all sessions stored |
-| **token cost** | Fixed per session (~1,300 tokens) | On-demand (buscared when needed) |
+| Característica | Memoria Persistente | Búsqueda de Sesión |
+|---------|------------------|----------------
+| **Capacidad** | ~1.300 tokens total | Ilimitado (todas las sesiones) |
+| **Velocidad** | Instantáneo (en indicador del sistema) | Requiere búsqueda + resumen de LLM |
+| **Caso de uso** | Hechos clave siempre disponibles | Encontrar conversaciones pasadas específicas |
+| **Gestión** | Curado manualmente por agente | Automático — todas las sesiones almacenadas |
+| **Costo de token** | Fijo por sesión (~1.300 tokens) | Bajo demanda (buscado cuando es necesario) |
 
-**Memoria** is for critical facts that should always be in context. **Session buscar** is for "did we discuss X last week?" queries where the agent needs to Recuerdos specifics from past conversations.
+**Memoria** es para hechos críticos que siempre deben estar en contexto. **Búsqueda de Sesión** es para consultas "¿discutimos X la semana pasada?" donde el agente necesita recordar detalles específicos de conversaciones pasadas.
 
 ## Configuración
 
@@ -207,12 +207,12 @@ memory:
   user_char_limit: 1375     # ~500 tokens
 ```
 
-## honcho Integración (Cross-Session User Modeling)
+## Integración Honcho (Modelado de Usuario Entre Sesiones)
 
-For deeper, AI-generated user understanding that works across sessions and platforms, you can Habilitar [honcho Memoria](./honcho.md). honcho runs alongside built-in Memoria in `hybrid` mode (the default) — `Memoria.md` and `USER.md` stay as-is, and honcho adds a persistent user modeling layer on top.
+Para una comprensión de usuario más profunda y generada por IA que funcione entre sesiones y plataformas, puedes habilitar [Memoria honcho](./honcho.md). honcho se ejecuta junto a la Memoria incorporada en modo `hybrid` (el predeterminado) — `Memoria.md` y `USER.md` permanecen como están, y honcho agrega una capa de modelado de usuario persistente encima.
 
 ```bash
 hermes honcho setup
 ```
 
-See the [honcho Memoria](./honcho.md) docs for full Configuración, Herramientas, and CLI reference.
+Ver la documentación [Memoria honcho](./honcho.md) para referencia completa de Configuración, Herramientas y CLI.

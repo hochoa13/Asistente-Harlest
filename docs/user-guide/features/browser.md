@@ -1,96 +1,96 @@
 ---
-title: Navegador Automation
-description: control cloud browsers with Navegadorbase integration for web interaction, form filling, scraping, and more.
+title: Automatización de Navegador
+description: Controla navegadores en la nube con integración Browserbase para interacción web, relleno de formularios, scraping y mucho más.
 sidebar_label: Navegador
 sidebar_position: 5
 ---
 
-# Navegador Automation
+# Automatización de Navegador
 
-Hermes Agent includes a full Navegador automation conjunto de herramientas powered by [Navegadorbase](https://browserbase.com), enabling the agent to navegar websites, interact with page elements, fill forms, and extract information — all running in cloud-hosted browsers with built-in anti-bot características furtivas.
+Hermes Agent incluye un conjunto completo de herramientas de automatización de navegador impulsado por [Browserbase](https://browserbase.com), permitiendo que el agente navegue sitios web, interactúe con elementos de la página, rellene formularios y extraiga información — todo ejecutándose en navegadores alojados en la nube con características antibots sigilosas integradas.
 
 ## Descripción General
 
-The herramientas de navegador Usar the `agent-Navegador` CLI with Navegadorbase cloud execution. Pages are represented as **árboles de accesibilidad** (text-based snapshots), making them ideal for LLM agents. Interactive elements Obtener ref IDs (like `@e1`, `@e2`) that the agent uses for clicking and typing.
+Las herramientas de navegador usan el CLI `agent-browser` con ejecución en la nube de Browserbase. Las páginas se representan como **árboles de accesibilidad** (instantáneas basadas en texto), lo que los hace ideales para agentes LLM. Los elementos interactivos obtienen IDs de referencia (como `@e1`, `@e2`) que el agente usa para hacer clic y escribir.
 
-Key capabilities:
+Capacidades clave:
 
-- **Cloud execution** — no local Navegador needed
-- **Built-in stealth** — random fingerprints, CAPTCHA solving, residential proxies
-- **Session isolation** — each task gets its own Navegador session
-- **Automatic cleanup** — inactive sessions are closed after a timeout
-- **Visión analysis** — Captura de pantalla + AI analysis for visual understanding
+- **Ejecución en la nube** — no se necesita navegador local
+- **Sigilo integrado** — huellas dactilares aleatorias, resolución de CAPTCHA, proxies residenciales
+- **Aislamiento de sesión** — cada tarea obtiene su propia sesión de navegador
+- **Limpieza automática** — las sesiones inactivas se cierran después de un tiempo de espera
+- **Análisis de visión** — Captura de pantalla + análisis de IA para comprensión visual
 
 ## Configuración
 
-### Required entorno Variables
+### Variables de Entorno Requeridas
 
 ```bash
-# Add to ~/.hermes/.env
+# Agregar a ~/.hermes/.env
 BROWSERBASE_API_KEY=your-api-key-here
 BROWSERBASE_PROJECT_ID=your-project-id-here
 ```
 
-Obtener your credenciales at [browserbase.com](https://browserbase.com).
+Obtén tus credenciales en [browserbase.com](https://browserbase.com).
 
-### Optional entorno Variables
+### Variables de Entorno Opcionales
 
 ```bash
-# Residential proxies for better CAPTCHA solving (default: "true")
+# Proxies residenciales para mejor resolución de CAPTCHA (predeterminado: "true")
 BROWSERBASE_PROXIES=true
 
-# Advanced stealth with custom Chromium — requires Scale Plan (default: "false")
+# Sigilo avanzado con Chromium personalizado — requiere Plan Scale (predeterminado: "false")
 BROWSERBASE_ADVANCED_STEALTH=false
 
-# Session reconnection after disconnects — requires paid plan (default: "true")
+# Reconexión de sesión después de desconexiones — requiere plan de pago (predeterminado: "true")
 BROWSERBASE_KEEP_ALIVE=true
 
-# Custom session timeout in milliseconds (default: project default)
+# Tiempo de espera de sesión personalizado en milisegundos (predeterminado: proyecto predeterminado)
 # Ejemplos: 600000 (10min), 1800000 (30min)
 BROWSERBASE_SESSION_TIMEOUT=600000
 
-# Inactivity timeout before auto-cleanup in seconds (default: 300)
+# Tiempo de espera de inactividad antes de limpieza automática en segundos (predeterminado: 300)
 BROWSER_INACTIVITY_TIMEOUT=300
 ```
 
-### Instalar agent-Navegador CLI
+### Instalar CLI de agent-browser
 
 ```bash
 npm install -g agent-browser
-# Or install locally in the repo:
+# O instalar localmente en el repositorio:
 npm install
 ```
 
-:::Información
-The `Navegador` conjunto de herramientas must be included in your config's `Conjuntos de herramientas` list or enabled via `hermes config Establecer Conjuntos de herramientas '["hermes-cli", "Navegador"]'`.
+:::información
+El conjunto de herramientas `Browser` debe estar incluido en la lista `toolsets` de tu configuración o habilitado via `hermes config set toolsets '["hermes-cli", "browser"]'`.
 :::
 
-## Available Herramientas
+## Herramientas Disponibles
 
 ### `browser_navigate`
 
-navegar to a URL. Must be called before any other Navegador herramienta. Initializes the Navegadorbase session.
+Navega a una URL. Debe llamarse antes que cualquier otra herramienta de navegador. Inicializa la sesión de Browserbase.
 
 ```
-Navigate to https://github.com/NousRebuscar
+Navigate to https://github.com/NousSearch
 ```
 
-:::Consejo
-For simple information retrieval, prefer `web_buscar` or `web_extract` — they are faster and cheaper. Usar herramientas de navegador when you need to **interact** with a page (hacer clic buttons, fill forms, handle dynamic content).
+:::consejo
+Para recuperación simple de información, prefiere `web_search` o `web_extract` — son más rápidas y económicas. Usa herramientas de navegador cuando necesites **interactuar** con una página (hacer clic en botones, rellenar formularios, manejar contenido dinámico).
 :::
 
 ### `browser_snapshot`
 
-Obtener a text-based snapshot of the current page's accessibility tree. Returns interactive elements with ref IDs like `@e1`, `@e2` for Usar with `browser_click` and `browser_type`.
+Obtén una instantánea basada en texto del árbol de accesibilidad de la página actual. Devuelve elementos interactivos con IDs de referencia como `@e1`, `@e2` para usar con `browser_click` y `browser_type`.
 
-- **`full=false`** (default): Compact view showing only interactive elements
-- **`full=true`**: Completo page content
+- **`full=false`** (predeterminado): Vista compacta mostrando solo elementos interactivos
+- **`full=true`**: Contenido completo de la página
 
-Snapshots over 8000 characters are automatically summarized by an LLM.
+Las instantáneas de más de 8000 caracteres se resumen automáticamente por un LLM.
 
 ### `browser_click`
 
-hacer clic an element identified by its ref ID from the snapshot.
+Haz clic en un elemento identificado por su ID de referencia de la instantánea.
 
 ```
 Click @e5 to press the "Sign In" button
@@ -98,15 +98,15 @@ Click @e5 to press the "Sign In" button
 
 ### `browser_type`
 
-escribir text into an input field. Clears the field first, then types the new text.
+Escribe texto en un campo de entrada. Primero limpia el campo, luego escribe el nuevo texto.
 
 ```
-Type "hermes agent" into the buscar field @e3
+Type "hermes agent" into the search field @e3
 ```
 
 ### `browser_scroll`
 
-desplazar the page up or down to reveal more content.
+Desplázate hacia arriba o hacia abajo en la página para revelar más contenido.
 
 ```
 Scroll down to see more results
@@ -114,51 +114,51 @@ Scroll down to see more results
 
 ### `browser_press`
 
-Press a keyboard key. Useful for submitting forms or navigation.
+Presiona una tecla del teclado. Útil para enviar formularios o navegación.
 
 ```
 Press Enter to submit the form
 ```
 
-Supported keys: `Enter`, `Tab`, `Escape`, `ArrowDown`, `ArrowUp`, and more.
+Teclas soportadas: `Enter`, `Tab`, `Escape`, `ArrowDown`, `ArrowUp` y más.
 
 ### `browser_back`
 
-navegar back to the previous page in Navegador history.
+Navega a la página anterior en el historial del navegador.
 
 ### `browser_get_images`
 
-List all images on the current page with their URLs and alt text. Useful for finding images to analyze.
+Lista todas las imágenes en la página actual con sus URLs y texto alternativo. Útil para encontrar imágenes a analizar.
 
 ### `browser_vision`
 
-Take a Captura de pantalla and analyze it with Visión AI. Usar this when text snapshots don't capture Importante visual information — especially useful for CAPTCHAs, complex layouts, or visual verification challenges.
+Toma una captura de pantalla y analízala con IA de Visión. Usa esto cuando las instantáneas de texto no capturen información visual importante — especialmente útil para CAPTCHAs, diseños complejos o desafíos de verificación visual.
 
-The Captura de pantalla is saved persistently and the archivo ruta is returned alongside the AI analysis. On messaging platforms (Telegram, Discord, Slack, WhatsApp), you can ask the agent to share the Captura de pantalla — it will be sent as a native photo attachment via the `MEDIA:` mechanism.
+La captura de pantalla se guarda persistentemente y la ruta del archivo se devuelve junto con el análisis de IA. En plataformas de mensajería (Telegram, Discord, Slack, WhatsApp), puedes pedirle al agente que comparta la captura de pantalla — se enviará como un archivo adjunto de foto nativa a través del mecanismo `MEDIA:`.
 
 ```
 What does the chart on this page show?
 ```
 
-Screenshots are stored in `~/.hermes/browser_screenshots/` and automatically cleaned up after 24 hours.
+Las capturas de pantalla se almacenan en `~/.hermes/browser_screenshots/` y se limpian automáticamente después de 24 horas.
 
 ### `browser_console`
 
-Obtener Navegador console output (log/warn/error messages) and uncaught JavaScript exceptions from the current page. Essential for detecting silent JS errors that don't appear in the accessibility tree.
+Obtén la salida de la consola del navegador (mensajes de registro/advertencia/error) y excepciones de JavaScript no capturadas de la página actual. Esencial para detectar errores de JS silenciosos que no aparecen en el árbol de accesibilidad.
 
 ```
 Check the browser console for any JavaScript errors
 ```
 
-Usar `clear=True` to clear the console after reading, so subsequent calls only show new messages.
+Usa `clear=True` para limpiar la consola después de leer, para que las llamadas posteriores solo muestren mensajes nuevos.
 
 ### `browser_close`
 
-Close the Navegador session and release resources. Call this when done to free up Navegadorbase session quota.
+Cierra la sesión del navegador y libera recursos. Llama a esto cuando termines para liberar la cuota de sesión de Browserbase.
 
-## Practical Ejemplos
+## Ejemplos Prácticos
 
-### Filling Out a Web Form
+### Rellenando un Formulario Web
 
 ```
 User: Sign up for an account on example.com with my email john@example.com
@@ -173,7 +173,7 @@ Agent workflow:
 7. browser_close()
 ```
 
-### Rebuscaring Dynamic Content
+### Búsqueda de Contenido Dinámico
 
 ```
 User: What are the top trending repos on GitHub right now?
@@ -185,18 +185,18 @@ Agent workflow:
 4. browser_close()
 ```
 
-## grabación de sesión
+## Grabación de Sesión
 
-Automatically record Navegador sessions as WebM video files:
+Graba automáticamente sesiones de navegador como archivos de video WebM:
 
 ```yaml
 browser:
-  record_sessions: true  # default: false
+  record_sessions: true  # predeterminado: false
 ```
 
-When enabled, recording starts automatically on the first `browser_navigate` and saves to `~/.hermes/browser_recordings/` when the session closes. Works in both local and cloud (Navegadorbase) modes. Recordings older than 72 hours are automatically cleaned up.
+Cuando está habilitado, la grabación se inicia automáticamente en el primer `browser_navigate` y se guarda en `~/.hermes/browser_recordings/` cuando se cierra la sesión. Funciona en modos locales y en la nube (Browserbase). Las grabaciones más antiguas de 72 horas se limpian automáticamente.
 
-## Stealth Características
+## Características de Sigilo
 
 Navegadorbase provides automatic stealth capabilities:
 

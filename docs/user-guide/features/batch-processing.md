@@ -1,21 +1,21 @@
 ---
 sidebar_position: 12
 title: "Procesamiento por Lotes"
-description: "Generate agent trajectories at scale — parallel processing, puntos de control, and conjunto de herramientas distributions"
+description: "Genera trayectorias de agentes a escala — procesamiento paralelo, puntos de control y distribuciones de conjuntos de herramientas"
 ---
 
 # Procesamiento por Lotes
 
-Procesamiento por lotes lets you Ejecutar the Hermes agent across hundreds or thousands of prompts in parallel, generating structured trajectory data. This is primarily used for **generación de datos de entrenamiento** — producing ShareGPT-format trajectories with herramienta Uso statistics that can be used for fine-tuning or evaluation.
+El procesamiento por lotes te permite ejecutar el agente Hermes en paralelo a través de cientos o miles de indicaciones, generando datos de trayectoria estructurados. Se utiliza principalmente para **generación de datos de entrenamiento** — produciendo trayectorias en formato ShareGPT con estadísticas de uso de herramientas que se pueden usar para ajuste fino o evaluación.
 
 ## Descripción General
 
-The batch runner (`batch_runner.py`) processes a JSONL dataset of prompts, running each through a full agent session with herramienta access. Each prompt gets its own isolated entorno. The output is structured trajectory data with full conversation history, herramienta call statistics, and reasoning coverage metrics.
+El ejecutor de lotes (`batch_runner.py`) procesa un conjunto de datos JSONL de indicaciones, ejecutando cada una a través de una sesión de agente completa con acceso a herramientas. Cada indicación obtiene su propio entorno aislado. La salida es datos de trayectoria estructurados con historial completo de conversación, estadísticas de llamadas de herramientas y métricas de cobertura de razonamiento.
 
-## Quick Iniciar
+## Inicio Rápido
 
 ```bash
-# Basic batch run
+# Ejecución básica de lotes
 python batch_runner.py \
     --dataset_file=data/prompts.jsonl \
     --batch_size=10 \
@@ -23,20 +23,20 @@ python batch_runner.py \
     --model=anthropic/claude-sonnet-4-20250514 \
     --num_workers=4
 
-# Resume an interrupted run
+# Reanudar una ejecución interrumpida
 python batch_runner.py \
     --dataset_file=data/prompts.jsonl \
     --batch_size=10 \
     --run_name=my_first_run \
     --reanudar
 
-# List available toolset distributions
+# Listar distribuciones de conjuntos de herramientas disponibles
 python batch_runner.py --list_distributions
 ```
 
-## formato de dataset
+## Formato de Conjunto de Datos
 
-The input dataset is a JSONL archivo (one JSON object per line). Each entry must have a `prompt` field:
+El conjunto de datos de entrada es un archivo JSONL (un objeto JSON por línea). Cada entrada debe tener un campo `prompt`:
 
 ```jsonl
 {"prompt": "Write a Python function that finds the longest palindromic substring"}
@@ -44,75 +44,75 @@ The input dataset is a JSONL archivo (one JSON object per line). Each entry must
 {"prompt": "Debug this error: TypeError: cannot unpack non-iterable NoneType object"}
 ```
 
-Entries can optionally include:
-- `image` or `docker_image`: A container image to Usar for this prompt's sandbox segura (works with docker, modal, and singularity backends)
-- `cwd`: Working directorio override for the task's terminal session
+Las entradas pueden incluir opcionalmente:
+- `image` o `docker_image`: Una imagen de contenedor a usar para la zona de pruebas segura de esta indicación (funciona con backends docker, modal y singularity)
+- `cwd`: Anulación del directorio de trabajo para la sesión de terminal de la tarea
 
-## Configuración Opciones
+## Opciones de Configuración
 
-| Parameter | Default | Description |
+| Parámetro | Predeterminado | Descripción |
 |-----------|---------|-------------|
-| `--dataset_file` | (required) | ruta to JSONL dataset |
-| `--batch_size` | (required) | Prompts per batch |
-| `--run_name` | (required) | Name for this Ejecutar (used for output dir and puntos de control) |
-| `--distribution` | `"default"` | Herramientaset distribution to sample from |
-| `--model` | `claude-sonnet-4-20250514` | Model to Usar |
-| `--base_url` | `https://openrouter.ai/API/v1` | API base URL |
-| `--api_key` | (env var) | clave API for model |
-| `--max_turns` | `10` | Maximum herramienta-calling iterations per prompt |
-| `--num_workers` | `4` | Parallel worker processes |
-| `--reanudar` | `false` | Resume from punto de control |
-| `--verbose` | `false` | Habilitar verbose logging |
-| `--max_samples` | all | Only process first N samples from dataset |
-| `--max_tokens` | model default | Maximum tokens per model response |
+| `--dataset_file` | (requerido) | Ruta al conjunto de datos JSONL |
+| `--batch_size` | (requerido) | Indicaciones por lote |
+| `--run_name` | (requerido) | Nombre para esta ejecución (se usa para directorio de salida y puntos de control) |
+| `--distribution` | `"default"` | Distribución de conjunto de herramientas a partir de la cual muestrear |
+| `--model` | `claude-sonnet-4-20250514` | Modelo a usar |
+| `--base_url` | `https://openrouter.ai/API/v1` | URL base de API |
+| `--api_key` | (variable de entorno) | Clave API para el modelo |
+| `--max_turns` | `10` | Máximo de iteraciones de llamada de herramientas por indicación |
+| `--num_workers` | `4` | Procesos de trabajo paralelos |
+| `--reanudar` | `false` | Reanudar desde punto de control |
+| `--verbose` | `false` | Habilitar registro detallado |
+| `--max_samples` | todo | Solo procesar las primeras N muestras del conjunto de datos |
+| `--max_tokens` | predeterminado del modelo | Máximo de tokens por respuesta del modelo |
 
-### Enrutamiento de Proveedor (openrouter)
+### Enrutamiento de Proveedor (OpenRouter)
 
-| Parameter | Description |
+| Parámetro | Descripción |
 |-----------|-------------|
-| `--providers_allowed` | Comma-separated Proveedores to allow (e.g., `"anthropic,openai"`) |
-| `--providers_ignored` | Comma-separated Proveedores to ignorar (e.g., `"together,deepinfra"`) |
-| `--providers_order` | Comma-separated preferred provider order |
-| `--provider_sort` | Sort by `"price"`, `"throughput"`, or `"latency"` |
+| `--providers_allowed` | Proveedores separados por comas a permitir (p. ej., `"anthropic,openai"`) |
+| `--providers_ignored` | Proveedores separados por comas a ignorar (p. ej., `"together,deepinfra"`) |
+| `--providers_order` | Orden de proveedores preferidos separados por comas |
+| `--provider_sort` | Ordenar por `"price"`, `"throughput"` o `"latency"` |
 
-### Reasoning control
+### Control de Razonamiento
 
-| Parameter | Description |
+| Parámetro | Descripción |
 |-----------|-------------|
-| `--reasoning_effort` | Effort level: `xhigh`, `high`, `medium`, `low`, `minimal`, `none` |
-| `--reasoning_disabled` | Completoly Deshabilitar reasoning/thinking tokens |
+| `--reasoning_effort` | Nivel de esfuerzo: `xhigh`, `high`, `medium`, `low`, `minimal`, `none` |
+| `--reasoning_disabled` | Deshabilitar completamente tokens de razonamiento/pensamiento |
 
-### Advanced Opciones
+### Opciones Avanzadas
 
-| Parameter | Description |
+| Parámetro | Descripción |
 |-----------|-------------|
-| `--ephemeral_system_prompt` | System prompt used during execution but NOT saved to trajectories |
-| `--log_prefix_chars` | Characters to show in log previews (default: 100) |
-| `--prefill_messages_file` | ruta to JSON archivo with prefill messages for few-shot priming |
+| `--ephemeral_system_prompt` | Indicación del sistema utilizada durante la ejecución pero NO guardada en trayectorias |
+| `--log_prefix_chars` | Caracteres a mostrar en vistas previas de registro (predeterminado: 100) |
+| `--prefill_messages_file` | Ruta al archivo JSON con mensajes de relleno previo para iniciación con pocos ejemplos |
 
-## Herramientaset Distributions
+## Distribuciones de Conjuntos de Herramientas
 
-Each prompt gets a randomly sampled Establecer of Conjuntos de herramientas from a **distribution**. This ensures datos de entrenamiento covers diverse herramienta combinations. Usar `--list_distributions` to see all available distributions.
+Cada indicación obtiene un conjunto muestreado aleatoriamente de conjuntos de herramientas de una **distribución**. Esto asegura que los datos de entrenamiento cubran combinaciones diversas de herramientas. Usa `--list_distributions` para ver todas las distribuciones disponibles.
 
-Distributions define probability weights for each conjunto de herramientas combination. Por ejemplo, a "default" distribution might assign high probability to `["terminal", "archivo", "web"]` and lower probability to web-only or archivo-only combinations.
+Las distribuciones definen pesos de probabilidad para cada combinación de conjunto de herramientas. Por ejemplo, una distribución "default" podría asignar alta probabilidad a `["terminal", "archivo", "web"]` y menor probabilidad a combinaciones solo web o solo archivo.
 
-## Output Format
+## Formato de Salida
 
-All output goes to `data/<run_name>/`:
+Toda la salida va a `data/<run_name>/`:
 
 ```
 data/my_run/
-├── trajectories.jsonl    # Combined final output (all batches merged)
-├── batch_0.jsonl         # Individual batch results
+├── trajectories.jsonl    # Salida final combinada (todos los lotes fusionados)
+├── batch_0.jsonl         # Resultados del lote individual
 ├── batch_1.jsonl
 ├── ...
-├── checkpoint.json       # Resume checkpoint
-└── statistics.json       # Aggregate tool usage stats
+├── checkpoint.json       # Punto de control para reanudar
+└── statistics.json       # Estadísticas de uso de herramientas agregadas
 ```
 
-### formato de trayectoria
+### Formato de Trayectoria
 
-Each line in `trajectories.jsonl` is a JSON object:
+Cada línea en `trajectories.jsonl` es un objeto JSON:
 
 ```json
 {
@@ -144,49 +144,49 @@ Each line in `trajectories.jsonl` is a JSON object:
 }
 ```
 
-The `conversations` field uses a ShareGPT-like format with `from` and `value` fields. herramienta stats are normalized to include all possible Herramientas with zero defaults, ensuring consistent esquema across entries for HuggingFace datasets compatibility.
+El campo `conversations` usa un formato similar a ShareGPT con campos `from` y `value`. Las estadísticas de herramientas se normalizan para incluir todas las herramientas posibles con ceros por defecto, asegurando un esquema consistente entre entradas para compatibilidad con conjuntos de datos de HuggingFace.
 
-## puntos de control
+## Puntos de Control
 
-The batch runner has robust puntos de control for fault tolerance:
+El ejecutor de lotes tiene puntos de control robustos para tolerancia a fallos:
 
-- **punto de control archivo:** Saved after each batch completes, seguimiento which prompt indices are done
-- **Content-based reanudar:** On `--reanudar`, the runner scans existing batch files and matches completed prompts by their actual text content (not just indices), enabling recovery even if the dataset order changes
-- **Failed prompts:** Only successfully completed prompts are marked as done — failed prompts will be retried on reanudar
-- **Batch merging:** On completion, all batch files (including from previous runs) are merged into a single `trajectories.jsonl`
+- **Archivo de punto de control:** Se guarda después de que cada lote se completa, rastreando qué índices de indicación están hechos
+- **Reanudar basado en contenido:** En `--reanudar`, el ejecutor escanea archivos de lotes existentes y coincide las indicaciones completadas por su contenido de texto real (no solo índices), permitiendo recuperación incluso si el orden del conjunto de datos cambia
+- **Indicaciones fallidas:** Solo las indicaciones completadas con éxito se marcan como hechas — las indicaciones fallidas se reintentarán al reanudar
+- **Fusión de lotes:** Al completarse, todos los archivos de lotes (incluidos de ejecuciones anteriores) se fusionan en un único `trajectories.jsonl`
 
-### How Resume Works
+### Cómo Funciona Reanudar
 
-1. Scan all `batch_*.jsonl` files for completed prompts (by content matching)
-2. Filter the dataset to exclude already-completed prompts
-3. Re-batch the remaining prompts
-4. Process only the remaining prompts
-5. Merge all batch files (old + new) into final output
+1. Escanear todos los archivos `batch_*.jsonl` para indicaciones completadas (por coincidencia de contenido)
+2. Filtrar el conjunto de datos para excluir indicaciones ya completadas
+3. Re-dividir en lotes las indicaciones restantes
+4. Procesar solo las indicaciones restantes
+5. Fusionar todos los archivos de lotes (antiguos + nuevos) en la salida final
 
-## Quality Filtering
+## Filtrado de Calidad
 
-The batch runner applies automatic quality filtering:
+El ejecutor de lotes aplica filtrado automático de calidad:
 
-- **No-reasoning filter:** Samples where zero assistant turns contain reasoning (no `<REASONING_SCRATCHPAD>` or native thinking tokens) are discarded
-- **Corrupted entry filter:** Entries with hallucinated herramienta names (not in the valid herramienta list) are filtered out during the final merge
-- **Reasoning statistics:** Tracks percentage of turns with/without reasoning across the entire Ejecutar
+- **Filtro sin razonamiento:** Las muestras donde ningún turno del asistente contiene razonamiento (sin `<REASONING_SCRATCHPAD>` o tokens de pensamiento nativos) se descartan
+- **Filtro de entrada corrupta:** Las entradas con nombres de herramientas alucinadas (no en la lista válida de herramientas) se filtran durante la fusión final
+- **Estadísticas de razonamiento:** Rastrea el porcentaje de turnos con/sin razonamiento en toda la ejecución
 
-## Statistics
+## Estadísticas
 
-After completion, the runner prints comprehensive statistics:
+Después de la finalización, el ejecutor imprime estadísticas completas:
 
-- **herramienta Uso:** Call counts, success/failure rates per herramienta
-- **Reasoning coverage:** Percentage of assistant turns with reasoning
-- **Samples discarded:** Count of samples filtered for lacking reasoning
-- **Duration:** Total processing time
+- **Uso de herramientas:** Recuentos de llamadas, tasas de éxito/fallo por herramienta
+- **Cobertura de razonamiento:** Porcentaje de turnos del asistente con razonamiento
+- **Muestras descartadas:** Recuento de muestras filtradas por falta de razonamiento
+- **Duración:** Tiempo total de procesamiento
 
-Statistics are also saved to `statistics.json` for programmatic analysis.
+Las estadísticas también se guardan en `statistics.json` para análisis programático.
 
-## Usar Cases
+## Casos de Uso
 
-### generación de datos de entrenamiento
+### Generación de Datos de Entrenamiento
 
-Generate diverse herramienta-Usar trajectories for fine-tuning:
+Genera trayectorias diversas de uso de herramientas para ajuste fino:
 
 ```bash
 python batch_runner.py \

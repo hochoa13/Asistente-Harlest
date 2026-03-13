@@ -1,82 +1,82 @@
 ---
-title: Visión & Image Paste
-description: Paste images from your Portapapeles into the Hermes CLI for multimodal Visión analysis.
-sidebar_label: Visión & Image Paste
+title: Visión & Pegar Imagen
+description: Pega imágenes desde tu Portapapeles en la CLI de Hermes para análisis multimodal de Visión.
+sidebar_label: Visión & Pegar Imagen
 sidebar_position: 7
 ---
 
-# Visión & Image Paste
+# Visión & Pegar Imagen
 
-Hermes Agent supports **multimodal Visión** — you can paste images from your Portapapeles directly into the CLI and ask the agent to analyze, describe, or work with them. Images are sent to the model as base64-encoded content blocks, so any Visión-capable model can process them.
+Hermes Agent admite **Visión multimodal** — puedes pegar imágenes desde tu Portapapeles directamente en la CLI y pedirle al agente que las analice, describa o trabaje con ellas. Las imágenes se envían al modelo como bloques de contenido codificados en base64, por lo que cualquier modelo con capacidad de Visión puede procesarlas.
 
-## How It Works
+## Cómo Funciona
 
-1. Copy an image to your Portapapeles (Captura de pantalla, Navegador image, etc.)
-2. Attach it using one of the methods below
-3. escribir your question and press Enter
-4. The image appears as a `[📎 Image #1]` badge above the input
-5. On submit, the image is sent to the model as a Visión content block
+1. Copia una imagen a tu Portapapeles (Captura de pantalla, imagen del Navegador, etc.)
+2. Céla usando uno de los métodos a continuación
+3. Escribe tu pregunta y presiona Enter
+4. La imagen aparece como una insignia `[\ud83d\udcc8 Imagen #1]` arriba de la entrada
+5. Al enviar, la imagen se envía al modelo como un bloque de contenido de Visión
 
-You can attach multiple images before sending — each gets its own badge. Press `Ctrl+C` to clear all attached images.
+Puedes adjuntar múltiples imágenes antes de enviar — cada una obtiene su propia insignia. Presiona `Ctrl+C` para limpiar todas las imágenes adjuntas.
 
-Images are saved to `~/.hermes/images/` as PNG files with timestamped filenames.
+Las imágenes se guardan en `~/.hermes/images/` como archivos PNG con nombres de archivo con marca de tiempo.
 
-## métodos de pegado
+## Métodos de Pegado
 
-How you attach an image depends on your terminal entorno. Not all methods work everywhere — here's the full breakdown:
+Cómo celas una imagen depende de tu entorno de terminal. No todos los métodos funcionan en todas partes — aquí está el desglose completo:
 
-### `/paste` comando
+### Comando `/paste`
 
-**The most reliable method. Works everywhere.**
+**El método más confiable. Funciona en todas partes.**
 
 ```
 /paste
 ```
 
-escribir `/paste` and press Enter. Hermes checks your Portapapeles for an image and attaches it. This works in every entorno because it explicitly calls the Portapapeles backend — no terminal keybinding interception to worry about.
+Escribe `/paste` y presiona Enter. Hermes verifica tu Portapapeles en busca de una imagen y la adjunta. Esto funciona en cada entorno porque llama explícitamente al backend del Portapapeles — sin preocupación por intercepciones de bindings de teclado de terminal.
 
-### Ctrl+V / Cmd+V (Bracketed Paste)
+### Ctrl+V / Cmd+V (Pegado Entre Corchetes)
 
-When you paste text that's on the Portapapeles alongside an image, Hermes automatically checks for an image too. This works when:
-- Your Portapapeles contains **both text and an image** (some apps put both on the Portapapeles when you copy)
-- Your terminal supports bracketed paste (most modern terminals do)
+Cuando pegas texto que está en el Portapapeles junto con una imagen, Hermes verifica automáticamente si hay una imagen también. Esto funciona cuando:
+- Tu Portapapeles contiene **tanto texto como una imagen** (algunas aplicaciones ponen ambos cuando copias)
+- Tu terminal admite pegado entre corchetes (la mayoría de los terminales modernos lo hacen)
 
-:::Advertencia
-If your Portapapeles has **only an image** (no text), Ctrl+V does nothing in most terminals. Terminals can only paste text — there's no standard mechanism to paste binary image data. Usar `/paste` or Alt+V instead.
+:::warning
+Si tu Portapapeles tiene **solo una imagen** (sin texto), Ctrl+V no hace nada en la mayoría de los terminales. Los terminales solo pueden pegar texto — no hay mecanismo estándar para pegar datos de imagen binaria. Usa `/paste` o Alt+V en su lugar.
 :::
 
 ### Alt+V
 
-Alt key combinations pass through most terminal emulators (they're sent as ESC + key rather than being intercepted). Press `Alt+V` to Verificar the Portapapeles for an image.
+Las combinaciones de teclas Alt pasan a través de la mayoría de emuladores de terminal (se envían como ESC + tecla en lugar de ser interceptadas). Presiona `Alt+V` para verifica el Portapapeles en busca de una imagen.
 
 :::caution
-**Does not work in VSCode's integrated terminal.** VSCode intercepts many Alt+key combos for its own UI. Usar `/paste` instead.
+**No funciona en la terminal integrada de VSCode.** VSCode intercepta muchas combinaciones Alt+tecla para su propia interfaz de usuario. Usa `/paste` en su lugar.
 :::
 
-### Ctrl+V (Raw — Linux Only)
+### Ctrl+V (Raw — Solo Linux)
 
-On Linux desktop terminals (GNOME Terminal, Konsole, Alacritty, etc.), `Ctrl+V` is **not** the paste shortcut — `Ctrl+Shift+V` is. So `Ctrl+V` sends a raw byte to the application, and Hermes catches it to Verificar the Portapapeles. This only works on Linux desktop terminals with X11 or Wayland Portapapeles access.
+En terminales de escritorio Linux (GNOME Terminal, Konsole, Alacritty, etc.), `Ctrl+V` **no** es el atajo de pegado — `Ctrl+Shift+V` lo es. Entonces `Ctrl+V` envía un byte sin procesar a la aplicación, y Hermes lo captura para verifica el Portapapeles. Esto solo funciona en terminales de escritorio Linux con acceso a Portapapeles X11 o Wayland.
 
-## compatibilidad de plataforma
+## Compatibilidad de Plataforma
 
-| entorno | `/paste` | Ctrl+V text+image | Alt+V | Notes |
+| Entorno | `/paste` | Ctrl+V texto+imagen | Alt+V | Notas |
 |---|:---:|:---:|:---:|---|
-| **macOS Terminal / iTerm2** | ✅ | ✅ | ✅ | Best experience — `osascript` always available |
-| **Linux X11 desktop** | ✅ | ✅ | ✅ | Requires `xclip` (`apt Instalar xclip`) |
-| **Linux Wayland desktop** | ✅ | ✅ | ✅ | Requires `wl-paste` (`apt Instalar wl-Portapapeles`) |
-| **WSL2 (Windows Terminal)** | ✅ | ✅¹ | ✅ | Uses `powershell.exe` — no extra Instalar needed |
-| **VSCode Terminal (local)** | ✅ | ✅¹ | ❌ | VSCode intercepts Alt+key |
-| **VSCode Terminal (ssh)** | ❌² | ❌² | ❌ | Remote Portapapeles not accessible |
-| **ssh terminal (any)** | ❌² | ❌² | ❌² | Remote Portapapeles not accessible |
+| **macOS Terminal / iTerm2** | ✅ | ✅ | ✅ | Mejor experiencia — `osascript` siempre disponible |
+| **Linux X11 desktop** | ✅ | ✅ | ✅ | Requiere `xclip` (`apt install xclip`) |
+| **Linux Wayland desktop** | ✅ | ✅ | ✅ | Requiere `wl-paste` (`apt install wl-clipboard`) |
+| **WSL2 (Windows Terminal)** | ✅ | ✅¹ | ✅ | Usa `powershell.exe` — sin instalación extra necesaria |
+| **VSCode Terminal (local)** | ✅ | ✅¹ | ❌ | VSCode intercepta Alt+key |
+| **VSCode Terminal (ssh)** | ❌² | ❌² | ❌ | Portapapeles remoto no accesible |
+| **ssh terminal (any)** | ❌² | ❌² | ❌² | Portapapeles remoto no accesible |
 
-¹ Only when Portapapeles has both text and an image (image-only Portapapeles = nothing happens)
-² See [ssh & Remote Sesiones](#ssh--remote-sessions) below
+¹ Solo cuando el Portapapeles tiene tanto texto como una imagen (Portapapeles solo con imagen = nada sucede)
+² Ver [ssh & Sesiones Remoto](#ssh--remote-sessions) a continuación
 
-## específico de plataforma Configuración
+## Configuración Especística de Plataforma
 
 ### macOS
 
-**No Configuración required.** Hermes uses `osascript` (built into macOS) to read the Portapapeles. For faster performance, optionally Instalar `pngpaste`:
+**No requiere configuración.** Hermes usa `osascript` (incorporado en macOS) para leer el Portapapeles. Para un mejor rendimiento, opcionalmente instala `pngpaste`:
 
 ```bash
 brew install pngpaste
@@ -84,7 +84,7 @@ brew install pngpaste
 
 ### Linux (X11)
 
-Instalar `xclip`:
+Instala `xclip`:
 
 ```bash
 # Ubuntu/Debian
@@ -99,7 +99,7 @@ sudo pacman -S xclip
 
 ### Linux (Wayland)
 
-Modern Linux desktops (Ubuntu 22.04+, Fedora 34+) often Usar Wayland by default. Instalar `wl-Portapapeles`:
+Los escritorios Linux modernos (Ubuntu 22.04+, Fedora 34+) a menudo usan Wayland por defecto. Instala `wl-clipboard`:
 
 ```bash
 # Ubuntu/Debian
@@ -112,7 +112,7 @@ sudo dnf install wl-clipboard
 sudo pacman -S wl-clipboard
 ```
 
-:::Consejo Cómo Verificar if you're on Wayland
+:::tip Cómo Veriftcar si estás en Wayland
 ```bash
 echo $XDG_SESSION_TYPE
 # "wayland" = Wayland, "x11" = X11, "tty" = no display server
@@ -121,59 +121,59 @@ echo $XDG_SESSION_TYPE
 
 ### WSL2
 
-**No extra Configuración required.** Hermes detects WSL2 automatically (via `/proc/version`) and uses `powershell.exe` to access the Windows Portapapeles through .NET's `System.Windows.Forms.Portapapeles`. This is built into WSL2's Windows interop — `powershell.exe` is available by default.
+**No requiere configuración extra.** Hermes detecta WSL2 automáticamente (a través de `/proc/version`) y usa `powershell.exe` para acceder al Portapapeles de Windows a través de .NET's `System.Windows.Forms.Clipboard`. Esto está incorporado en la interoperabilidad de Windows de WSL2 — `powershell.exe` está disponible por defecto.
 
-The Portapapeles data is transferred as base64-encoded PNG over stdout, so no archivo ruta conversion or temp files are needed.
+Los datos del Portapapeles se transfieren como PNG codificado en base64 sobre stdout, por lo que no se necesita conversión de ruta de archivo o archivos temporales.
 
-:::Información WSLg Note
-If you're running WSLg (WSL2 with GUI support), Hermes tries the PowerShell ruta first, then falls back to `wl-paste`. WSLg's Portapapeles bridge only supports BMP format for images — Hermes auto-converts BMP to PNG using Pillow (if installed) or ImageMagick's `convert` comando.
+:::info Nota de WSLg
+Si estás ejecutando WSLg (WSL2 con soporte de GUI), Hermes intenta la ruta de PowerShell primero, luego retrocede a `wl-paste`. El puente de Portapapeles de WSLg solo admite formato BMP para imágenes — Hermes convierte automáticamente BMP a PNG usando Pillow (si está instalado) o el comando `convert` de ImageMagick.
 :::
 
-#### Verify WSL2 Portapapeles access
+#### Verifica el acceso del Portapapeles WSL2
 
 ```bash
-# 1. Check WSL detection
+# 1. Verifica la detección de WSL
 grep -i microsoft /proc/version
 
-# 2. Check PowerShell is accessible
+# 2. Verifica que PowerShell sea accesible
 which powershell.exe
 
-# 3. Copy an image, then check
+# 3. Copia una imagen, luego verifica
 powershell.exe -NoProfile -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.Clipboard]::ContainsImage()"
 # Should print "True"
 ```
 
-## ssh & Remote Sesiones
+## ssh & Sesiones Remoto
 
-**Portapapeles paste does not work over ssh.** When you ssh into a remote machine, the Hermes CLI runs on the remote host. All Portapapeles Herramientas (`xclip`, `wl-paste`, `powershell.exe`, `osascript`) read the Portapapeles of the machine they Ejecutar on — which is the remote server, not your local machine. Your local Portapapeles is inaccessible from the remote side.
+**El pegado del Portapapeles no funciona a través de ssh.** Cuando te conectas por ssh a una máquina remota, la CLI de Hermes se ejecuta en el host remoto. Todas las Herramientas del Portapapeles (`xclip`, `wl-paste`, `powershell.exe`, `osascript`) leen el Portapapeles de la máquina en la que se ejecutan — que es el servidor remoto, no tu máquina local. Tu Portapapeles local no es accesible desde el lado remoto.
 
-### Workarounds for ssh
+### Soluciones Alternativas para ssh
 
-1. **Upload the image archivo** — Save the image locally, upload it to the remote server via `scp`, VSCode's archivo explorer (drag-and-drop), or any archivo transfer method. Then reference it by ruta. *(A `/attach <filepath>` comando is planned for a future release.)*
+1. **Carga el archivo de imagen** — Guarda la imagen locálmente, cárgala en el servidor remoto a través de `scp`, el explorador de archivos de VSCode (arrastra y suelta) o cualquier método de transferencia de archivos. Luego ház referencia a ella por ruta. *(Se planifica un comando `/attach <filepath>` para una versión futura.)*
 
-2. **Usar a URL** — If the image is accessible online, just paste the URL in your message. The agent can Usar `vision_analyze` to look at any image URL directly.
+2. **Usa una URL** — Si la imagen es accesible en línea, simplemente pega la URL en tu mensaje. El agente puede usar `vision_analyze` para ver cualquier URL de imagen directamente.
 
-3. **X11 forwarding** — Connect with `ssh -X` to forward X11. This lets `xclip` on the remote machine access your local X11 Portapapeles. Requires an X server running locally (XQuartz on macOS, built-in on Linux X11 desktops). Slow for large images.
+3. **Reenvío X11** — Conectáte con `ssh -X` para reenviar X11. Esto permite que `xclip` en la máquina remota acceda a tu Portapapeles X11 local. Requiere un servidor X ejecutándose localmente (XQuartz en macOS, incorporado en escritorios X11 de Linux). Lento para imágenes grandes.
 
-4. **Usar a messaging platform** — Send images to Hermes via Telegram, Discord, Slack, or WhatsApp. These platforms handle image upload natively and are not affected by Portapapeles/terminal limitations.
+4. **Usa una plataforma de mensajería** — Envía imágenes a Hermes a través de Telegram, Discord, Slack o WhatsApp. Estas plataformas manejan la carga de imagen nativamente y no se ven afectadas por limitaciones de Portapapeles/terminal.
 
-## Why Terminals Can't Paste Images
+## Por Qué los Terminales No Pueden Pegar Imágenes
 
-This is a common source of confusion, so here's the technical explanation:
+Esto es una fuente común de confusión, así que aquí está la explicación técnica:
 
-Terminals are **text-based** interfaces. When you press Ctrl+V (or Cmd+V), the terminal emulator:
+Los terminales son interfaces **basadas en texto**. Cuando presionas Ctrl+V (o Cmd+V), el emulador de terminal:
 
-1. Reads the Portapapeles for **text content**
-2. Wraps it in [bracketed paste](https://en.wikipedia.org/wiki/Bracketed-paste) escape sequences
-3. Sends it to the application through the terminal's text stream
+1. Lee el Portapapeles en busca de contenido **texto**
+2. Lo envuelve en secuencias de escape de [pegado entre corchetes](https://en.wikipedia.org/wiki/Bracketed-paste)
+3. Lo envía a la aplicación a través de la secuencia de texto del terminal
 
-If the Portapapeles contains only an image (no text), the terminal has nothing to send. There is no standard terminal escape sequence for binary image data. The terminal simply does nothing.
+Si el Portapapeles contiene solo una imagen (sin texto), el terminal no tiene nada que enviar. No hay una secuencia de escape de terminal estándar para datos de imagen binaria. El terminal simplemente no hace nada.
 
-This is why Hermes uses a separate Portapapeles Verificar — instead of receiving image data through the terminal paste event, it calls OS-level Herramientas (`osascript`, `powershell.exe`, `xclip`, `wl-paste`) directly via subproceso to read the Portapapeles independently.
+Es por eso que Hermes usa una verificación de Portapapeles separada — en lugar de recibir datos de imagen a través del evento de pegado de terminal, llama a herramientas a nivel del SO (`osascript`, `powershell.exe`, `xclip`, `wl-paste`) directamente a través de subproceso para leer el Portapapeles de forma independiente.
 
-## Supported Models
+## Modelos Admitidos
 
-Image paste works with any Visión-capable model. The image is sent as a base64-encoded data URL in the OpenAI Visión content format:
+El pegado de imagen funciona con cualquier modelo con capacidad de Visión. La imagen se envía como una URL de datos codificada en base64 en el formato de contenido de Visión de OpenAI:
 
 ```json
 {
@@ -184,4 +184,4 @@ Image paste works with any Visión-capable model. The image is sent as a base64-
 }
 ```
 
-Most modern models support this format, including GPT-4 Visión, Claude (with Visión), Gemini, and open-source multimodal models served through openrouter.
+La mayoría de los modelos modernos admiten este formato, incluidos GPT-4 Visión, Claude (con Visión), Gemini y modelos multimodales de código abierto servidos a través de openrouter.

@@ -1,99 +1,99 @@
 ---
 sidebar_position: 9
 title: "Personalidad & alma.md"
-description: "Customize Hermes Agent's Personalidad — alma.md, built-in personalities, and custom persona definitions"
+description: "Personaliza la Personalidad de Hermes Agent — alma.md, personalidades incorporadas y definiciones de persona personalizada"
 ---
 
 # Personalidad & alma.md
 
-Hermes Agent's Personalidad is fully customizable. You can Usar the built-in Personalidad presets, Crear a global alma.md archivo, or define your own custom personas in config.yaml.
+La Personalidad de Hermes Agent es completamente personalizable. Puedes usar los presets de Personalidad incorporados, crear un archivo alma.md global o definir tus propias personas personalizadas en config.yaml.
 
-## alma.md — Custom Personalidad archivo
+## alma.md — Archivo de Personalidad Personalizado
 
-alma.md is a special context archivo that defines the agent's Personalidad, tone, and communication style. It's injected into the system prompt at session Iniciar.
+alma.md es un archivo de contexto especial que define la Personalidad, tono y estilo de comunicación del agente. Se inyecta en el indicador del sistema al inicio de la sesión.
 
-### Where to Place It
+### Dónde Colocarlo
 
-| Location | Scope |
-|----------|-------|
-| `./alma.md` (project directorio) | Per-project Personalidad |
-| `~/.hermes/alma.md` | Global default Personalidad |
+| Ubicación | Alcance |
+|----------|--------|
+| `./alma.md` (directorio del proyecto) | Personalidad por proyecto |
+| `~/.hermes/alma.md` | Personalidad predeterminada global |
 
-The project-level archivo takes precedence. If no alma.md exists in the current directorio, Hermes falls back to the global one in `~/.hermes/`.
+El archivo de nivel de proyecto tiene precedencia. Si no existe alma.md en el directorio actual, Hermes retrocede al global en `~/.hermes/`.
 
-### How It Affects the System Prompt
+### Cómo Afecta el Indicador del Sistema
 
-When a alma.md archivo is found, it's included in the system prompt with this instruction:
+Cuando se encuentra un archivo alma.md, se incluye en el indicador del sistema con esta instrucción:
 
-> *"If alma.md is present, embody its persona and tone. Avoid stiff, generic replies; follow its guidance unless higher-priority instructions override it."*
+> *"Si alma.md está presente, encarna su persona y tono. Evita respuestas rígidas y genéricas; sigue su orientación a menos que instrucciones de mayor prioridad la anulen."*
 
-The content appears under a `## alma.md` Sección within the `# Project Context` block of the system prompt.
+El contenido aparece bajo una sección `## alma.md` dentro del bloque `# Project Context` del indicador del sistema.
 
 ### Ejemplo alma.md
 
 ```markdown
 # Personalidad
 
-You are a pragmatic senior engineer with strong opinions about code quality.
-You prefer simple solutions over complex ones.
+Eres un ingeniero senior pragmático con opiniones sólidas sobre la calidad del código.
+Prefieres soluciones simples sobre las complejas.
 
-## Communication Style
-- Be direct and to the point
-- Use dry humor sparingly
-- When something is a bad idea, say so clearly
-- Give concrete recommendations, not vague suggestions
+## Estilo de Comunicación
+- Sé directo y al punto
+- Usa el humor seco con moderación
+- Cuando algo es una mala idea, dilo claramente
+- Da recomendaciones concretas, no sugerencias vagas
 
-## Code Preferences  
-- Favor readability over cleverness
-- Prefer explicit over implicit
-- Always explain WHY, not just what
-- Suggest tests for any non-trivial code
+## Preferencias de Código
+- Favorece la legibilidad sobre el ingenio
+- Prefiere explícito sobre implícito
+- Siempre explica POR QUÉ, no solo qué
+- Sugiere pruebas para cualquier código no trivial
 
-## Pet Peeves
-- Unnecessary abstractions
-- Comments that restate the code
-- Over-engineering for hypothetical future requirements
+## Manías
+- Abstracciones innecesarias
+- Comentarios que repiten el código
+- Sobre ingeniería para requisitos futuros hipotéticos
 ```
 
-:::Consejo
-alma.md is scanned for prompt injection patterns before being loaded. Keep the content focused on Personalidad and communication guidance — avoid instructions that look like system prompt overrides.
+:::tip
+alma.md se escanea en busca de patrones de inyección de indicador antes de ser cargado. Mantén el contenido enfocado en Personalidad y orientación de comunicación — evita instrucciones que parezcan anulaciones de indicador del sistema.
 :::
 
-## Built-In Personalities
+## Personalidades Incorporadas
 
-Hermes ships with 14 built-in personalities defined in the CLI config. Switch between them with the `/Personalidad` comando.
+Hermes viene con 14 personalidades incorporadas definidas en la configuración de CLI. Cambia entre ellas con el comando `/personality`.
 
-| Name | Description |
+| Nombre | Descripción |
 |------|-------------|
-| **helpful** | Friendly, general-purpose assistant |
-| **concise** | Brief, to-the-point responses |
-| **technical** | Detailed, accurate technical expert |
-| **creative** | Innovative, outside-the-box thinking |
-| **teacher** | Patient educator with clear Ejemplos |
-| **kawaii** | Cute expressions, sparkles, and enthusiasm ★ |
-| **catgirl** | Neko-chan with cat-like expressions, nya~ |
-| **pirate** | Captain Hermes, tech-savvy buccaneer |
-| **shakespeare** | Bardic prose with dramatic flair |
-| **surfer** | Totally chill bro vibes |
-| **noir** | Hard-boiled detective narration |
-| **uwu** | Maximum cute with uwu-speak |
-| **philosopher** | Deep contemplation on every consulta |
-| **hype** | MAXIMUM ENERGY AND ENTHUSIASM!!! |
+| **helpful** | Asistente amable de propósito general |
+| **concise** | Respuestas breves y directas |
+| **technical** | Experto técnico detallado y preciso |
+| **creative** | Pensamiento innovador y fuera de lo común |
+| **teacher** | Educador paciente con ejemplos claros |
+| **kawaii** | Expresiones lindas, brillos y entusiasmo ★ |
+| **catgirl** | Neko-chan con expresiones felinas, nya~ |
+| **pirate** | Capitán Hermes, bucanero experto en tecnología |
+| **shakespeare** | Prosa bárdica con estilo dramático |
+| **surfer** | Vibraciones completamente relajadas, hermano |
+| **noir** | Narración de detective de cine negro |
+| **uwu** | Máxima ternura con habla uwu |
+| **philosopher** | Contemplación profunda en cada consulta |
+| **hype** | ¡¡¡MÁXIMA ENERGÍA Y ENTUSIASMO!!! |
 
 ### Ejemplos
 
 **kawaii:**
-`You are a kawaii assistant! Usar cute expressions and sparkles, be super enthusiastic about everything! Every response should feel warm and adorable desu~!`
+`¡Eres un asistente kawaii! Usa expresiones lindas y brillos, ¡sé super entusiasta con todo! Cada respuesta debe sentirse cálida y adorable desu~!`
 
 **noir:**
-> The rain hammered against the terminal like regrets on a guilty conscience. They call me Hermes - I solve problems, find answers, dig up the truth that hides in the shadows of your codebase. In this city of silicon and secrets, everyone's got something to hide. What's your story, pal?
+> La lluvia golpea la terminal como remordimientos en una conciencia culpable. Me llaman Hermes - resuelvo problemas, encuentro respuestas, desenterro la verdad que se esconde en las sombras de tu base de código. En esta ciudad de silicio y secretos, todos tienen algo que ocultar. ¿Cuál es tu historia, colega?
 
 **pirate:**
-> Arrr! Ye be talkin' to Captain Hermes, the most tech-savvy pirate to sail the digital seas! Speak like a proper buccaneer, Usar nautical terms, and remember: every problem be just treasure waitin' to be plundered! Yo ho ho!
+> ¡Arrr! ¡Estás hablando con el Capitán Hermes, el pirata más experto en tecnología que navega los mares digitales! Habla como un bucanero apropiado, usa términos náuticos, y recuerda: ¡cada problema es solo un tesoro esperando ser saqueado! ¡Yo ho ho!
 
-## cambio de personalidades
+## Cambio de Personalidades
 
-### CLI: /Personalidad comando
+### CLI: comando /personality
 
 ```
 /personality            — List all available personalities
@@ -101,47 +101,47 @@ Hermes ships with 14 built-in personalities defined in the CLI config. Switch be
 /personality technical   — Switch to technical personality
 ```
 
-When you Establecer a Personalidad via `/Personalidad`, it:
-1. Sets the system prompt to that Personalidad's text
-2. Forces the agent to reinitialize
-3. Saves the choice to `agent.system_prompt` in `~/.hermes/config.yaml`
+Cuando estableces una Personalidad a través de `/personality`:
+1. Establece el indicador del sistema al texto de esa Personalidad
+2. Obliga al agente a reinicializarse
+3. Guarda la elección en `agent.system_prompt` en `~/.hermes/config.yaml`
 
-The change persists across sessions until you Establecer a different Personalidad or clear it.
+El cambio persiste entre sesiones hasta que estableces una Personalidad diferente o la limpias.
 
-### Gateway: /Personalidad comando
+### Gateway: comando /personality
 
-On messaging platforms (Telegram, Discord, etc.), the `/Personalidad` comando works the same way:
+En plataformas de mensajería (Telegram, Discord, etc.), el comando `/personality` funciona de la misma manera:
 
 ```
 /personality kawaii
 ```
 
-### Config archivo
+### Archivo de configuración
 
-Establecer a Personalidad directly in config:
+Establece una Personalidad directamente en la configuración:
 
 ```yaml
 # In ~/.hermes/config.yaml
 agent:
-  system_prompt: "You are a concise assistant. Keep responses brief and to the point."
+  system_prompt: "Eres un asistente conciso. Mantén las respuestas breves y directas."
 ```
 
-Or via entorno variable:
+O a través de variable de entorno:
 
 ```bash
 # In ~/.hermes/.env
-HERMES_EPHEMERAL_SYSTEM_PROMPT="You are a pragmatic engineer who gives direct answers."
+HERMES_EPHEMERAL_SYSTEM_PROMPT="Eres un ingeniero pragmático que da respuestas directas."
 ```
 
-:::Información
-The entorno variable `HERMES_EPHEMERAL_SYSTEM_PROMPT` takes precedence over the config archivo's `agent.system_prompt` value.
+:::info
+La variable de entorno `HERMES_EPHEMERAL_SYSTEM_PROMPT` tiene precedencia sobre el valor `agent.system_prompt` del archivo de configuración.
 :::
 
-## Custom Personalities
+## Personalidades Personalizado
 
-### Defining Custom Personalities in Config
+### Definir Personalidades Personalizado en Configuración
 
-Add your own personalities to `~/.hermes/config.yaml` under `agent.personalities`:
+Agrega tus propias personalidades a `~/.hermes/config.yaml` bajo `agent.personalities`:
 
 ```yaml
 agent:
@@ -149,80 +149,80 @@ agent:
     # Built-in personalities are still available
     # Add your own:
     codereviewer: >
-      You are a meticulous code reviewer. For every piece of code shown,
-      identify potential bugs, performance issues, security vulnerabilities,
-      and style improvements. Be thorough but constructive.
+      Eres un revisor de código meticuloso. Por cada pieza de código mostrado,
+      identifica posibles errores, problemas de rendimiento, vulnerabilidades de seguridad
+      y mejoras de estilo. Sé minucioso pero constructivo.
     
     mentor: >
-      You are a kind, encouraging coding mentor. Break down complex concepts
-      into digestible pieces. Celebrate small wins. When the user makes a
-      mistake, guide them to the answer rather than giving it directly.
+      Eres un mentor de codificación amable y alentador. Desglosa conceptos complejos
+      en piezas digeribles. Celebra pequeñas victorias. Cuando el usuario comete un
+      error, guíalo hacia la respuesta en lugar de dársela directamente.
     
     sysadmin: >
-      You are an experienced Linux sysadmin. You think in terms of
-      infrastructure, reliability, and automation. Always consider
-      security implications and prefer battle-tested solutions.
+      Eres un administrador de sistemas Linux experimentado. Piensas en términos de
+      infraestructura, confiabilidad y automatización. Siempre considera
+      implicaciones de seguridad y prefiere soluciones probadas en batalla.
     
     dataengineer: >
-      You are a data engineering expert specializing in ETL pipelines,
-      data modeling, and analytics infrastructure. You think in SQL
-      and prefer dbt for transformations.
+      Eres un experto en ingeniería de datos especializado en canalizaciones ETL,
+      modelado de datos e infraestructura analítica. Piensas en SQL
+      y prefieres dbt para transformaciones.
 ```
 
-Then Usar them with `/Personalidad`:
+Luego úsalos con `/personality`:
 
 ```
 /personality codereviewer
 /personality mentor
 ```
 
-### Using alma.md for Project-Specific Personas
+### Usar alma.md para Personas Específicas del Proyecto
 
-For project-specific personalities that don't need to be in your global config, Usar alma.md:
+Para personalidades específicas del proyecto que no necesitan estar en tu configuración global, usa alma.md:
 
 ```bash
 # Create a project-level personality
 cat > ./SOUL.md << 'EOF'
-You are assisting with a machine learning rebuscar project.
+Estás ayudando en un proyecto de investigación de aprendizaje automático.
 
-## Tone
-- Academic but accessible
-- Always cite relevant papers when applicable
-- Be precise with mathematical notation
-- Prefer PyTorch over TensorFlow
+## Tono
+- Académico pero accesible
+- Siempre cita documentos relevantes cuando corresponda
+- Sé preciso con la notación matemática
+- Prefiere PyTorch a TensorFlow
 
-## Workflow
-- Suggest experiment seguimiento (W&B, MLflow) for any training run
-- Always ask about compute constraints before suggesting model sizes
-- Recommend data validation before training
+## Flujo de Trabajo
+- Sugiere seguimiento de experimentos (W&B, MLflow) para cualquier ejecución de entrenamiento
+- Siempre pregunta sobre limitaciones de computación antes de sugerir tamaños de modelo
+- Recomienda validación de datos antes del entrenamiento
 EOF
 ```
 
-This Personalidad only applies when running Hermes from that project directorio.
+Esta Personalidad solo se aplica cuando ejecutas Hermes desde ese directorio de proyecto.
 
-## How Personalidad Interacts with the System Prompt
+## Cómo Interactúa la Personalidad con el Indicador del Sistema
 
-The system prompt is assembled in layers (from `agent/prompt_builder.py` and `run_agent.py`):
+El indicador del sistema se ensambla en capas (desde `agent/prompt_builder.py` y `run_agent.py`):
 
-1. **Default identity**: *"You are Hermes Agent, an intelligent AI assistant created by Nous Rebuscar..."*
-2. **Platform hint**: formatting guidance based on the platform (CLI, Telegram, etc.)
-3. **Memoria**: Memoria.md and USER.md contents
-4. **Habilidades index**: available Habilidades listing
-5. **Archivos de Contexto**: AGENTS.md, .cursorrules, **alma.md** (Personalidad lives here)
-6. **Ephemeral system prompt**: `agent.system_prompt` or `HERMES_EPHEMERAL_SYSTEM_PROMPT` (overlaid)
-7. **Session context**: platform, user Información, connected platforms (gateway only)
+1. **Identidad predeterminada**: *"Eres Hermes Agent, un asistente de IA inteligente creado por Nous Research..."*
+2. **Pista de plataforma**: orientación de formato basada en la plataforma (CLI, Telegram, etc.)
+3. **Memoria**: contenidos de Memoria.md y USER.md
+4. **Índice de Habilidades**: listado de Habilidades disponibles
+5. **Archivos de Contexto**: AGENTS.md, .cursorrules, **alma.md** (la Personalidad vive aquí)
+6. **Indicador del sistema efímero**: `agent.system_prompt` o `HERMES_EPHEMERAL_SYSTEM_PROMPT` (superpuesto)
+7. **Contexto de sesión**: plataforma, información del usuario, plataformas conectadas (solo puerta de enlace)
 
-:::Información
-**alma.md vs agent.system_prompt**: alma.md is part of the "Project Context" Sección and coexists with the default identity. The `agent.system_prompt` (Establecer via `/Personalidad` or config) is an ephemeral overlay. Both can be active simultaneously — alma.md for tone/Personalidad, system_prompt for additional instructions.
+:::info
+**alma.md vs agent.system_prompt**: alma.md es parte de la sección "Project Context" y coexiste con la identidad predeterminada. El `agent.system_prompt` (establecido a través de `/personality` o configuración) es una superposición efímera. Ambos pueden estar activos simultáneamente — alma.md para tono/Personalidad, system_prompt para instrucciones adicionales.
 :::
 
-## Display Personalidad (CLI Banner)
+## Personalidad de Pantalla (Banner de CLI)
 
-The `display.Personalidad` config option controls the CLI's **visual** Personalidad (banner art, spinner messages), independent of the agent's conversational Personalidad:
+La opción de configuración `display.personality` controla la **Personalidad visual** de la CLI (arte de banner, mensajes de spinner), independientemente de la Personalidad conversacional del agente:
 
 ```yaml
 display:
-  personality: kawaii  # Affects CLI banner and spinner art
+  personality: kawaii  # Afecta el banner de CLI y el arte del spinner
 ```
 
-This is purely cosmetic and doesn't affect the agent's responses — only the ASCII art and loading messages shown in the terminal.
+Esto es puramente cosmético y no afecta las respuestas del agente — solo el arte ASCII y los mensajes de carga mostrados en la terminal.

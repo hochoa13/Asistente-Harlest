@@ -1,26 +1,25 @@
 ---
-title: honcho Memoria
-description: AI-native persistent Memoria for cross-session user modeling and personalization.
-sidebar_label: honcho Memoria
+title: Memoria honcho
+description: Sistema de memoria nativo de IA para modelado de usuario persistente entre sesiones y personalización.
+sidebar_label: Memoria honcho
 sidebar_position: 8
 ---
 
-# honcho Memoria
+# Memoria honcho
 
-[honcho](https://honcho.dev) is an AI-native Memoria system that gives Hermes persistent, cross-session understanding of users. While Hermes has built-in Memoria (`Memoria.md` and `USER.md`), honcho adds a deeper layer of **user modeling** — learning preferences, goals, communication style, and context across conversations via a arquitectura de doble par where both the user and the AI build representations over time.
+[honcho](https://honcho.dev) es un sistema de memoria nativo de IA que le da a Hermes comprensión persistente entre sesiones de los usuarios. Mientras que Hermes tiene memoria incorporada (`memory.md` y `USER.md`), honcho añade una capa más profunda de **modelado de usuario** — aprendiendo preferencias, objetivos, estilo de comunicación y contexto entre conversaciones a través de una arquitectura de par dialecto donde tanto el usuario como la IA construyen representaciones a lo largo del tiempo.
 
-## Works Alongside Built-in Memoria
+## Trabaja Junto con Memoria Incorporada
 
-Hermes has two Memoria systems that can work together or be configured separately. In `hybrid` mode (the default), both Ejecutar side by side — honcho adds cross-session user modeling while local files handle agent-level notes.
+Hermes tiene dos sistemas de memoria que pueden trabajar juntos o configurarse por separado. En modo `hybrid` (el predeterminado), ambos se ejecutan lado a lado — honcho añade modelado de usuario entre sesiones mientras que los archivos locales manejan notas a nivel de agente.
 
-| Feature | Built-in Memoria | honcho Memoria |
-|---------|----------------|---------------|
-| Storage | Local files (`~/.hermes/memories/`) | Cloud-hosted honcho API |
-| Scope | Agent-level notes and user profile | Deep user modeling via dialectic reasoning |
-| Persistence | Across sessions on same machine | Across sessions, machines, and platforms |
-| consulta | Injected into system prompt automatically | Prefetched + on-demand via Herramientas |
-| Content | Manually curated by the agent | Automatically learned from conversations |
-| Write surface | `Memoria` herramienta (add/replace/remove) | `honcho_conclude` herramienta (persist facts) |
+| Caracter\u00edstica | Memoria Incorporada | Memoria honcho |
+|---------|----------------|----------------|\n| Almacenamiento | Archivos locales (`~/.hermes/memories/`) | API honcho alojada en la nube |
+| Alcance | Notas a nivel de agente y perfil de usuario | Modelado de usuario profundo a trav\u00e9s de razonamiento dial\u00e9ctico |
+| Persistencia | Entre sesiones en la misma m\u00e1quina | Entre sesiones, m\u00e1quinas y plataformas |
+| Consulta | Inyectada en indicador del sistema autom\u00e1ticamente | Precargada + bajo demanda a trav\u00e9s de herramientas |
+| Contenido | Curado manualmente por el agente | Aprendido autom\u00e1ticamente de conversaciones |
+| Superficie de escritura | Herramienta `memory` (agregar/reemplazar/eliminar) | Herramienta `honcho_conclude` (persistir hechos) |
 
 Establecer `memoryMode` to `honcho` to Usar honcho exclusively. See [Memoria Modes](#Memoria-modes) for per-peer Configuración.
 
@@ -43,13 +42,13 @@ The Configuración wizard walks through clave API, peer names, workspace, Memori
 pip install 'honcho-ai>=2.0.1'
 ```
 
-#### 2. Obtener an clave API
+#### 2. Obtener una Clave API
 
-Go to [app.honcho.dev](https://app.honcho.dev) > Settings > claves API.
+Ve a [app.honcho.dev](https://app.honcho.dev) > Settings > API Keys.
 
 #### 3. Configurar
 
-honcho reads from `~/.honcho/config.json` (shared across all honcho-enabled applications):
+honcho lee desde `~/.honcho/config.json` (compartido en todas las aplicaciones habilitadas para honcho):
 
 ```json
 {
@@ -69,16 +68,16 @@ honcho reads from `~/.honcho/config.json` (shared across all honcho-enabled appl
 }
 ```
 
-`apiKey` lives at the root because it is a shared credential across all honcho-enabled Herramientas. All other settings are scoped under `hosts.hermes`. The `hermes honcho Configuración` wizard writes this structure automatically.
+`apiKey` vive en la raíz porque es una credencial compartida en todas las herramientas habilitadas para honcho. Todas las otras configuraciones están alcanzadas bajo `hosts.hermes`. El asistente `hermes honcho setup` escribe esta estructura automáticamente.
 
-Or Establecer the clave API as an entorno variable:
+O establece la clave API como variable de entorno:
 
 ```bash
 hermes config set HONCHO_API_KEY your-key
 ```
 
-:::Información
-When an clave API is present (either in `~/.honcho/config.json` or as `HONCHO_API_KEY`), honcho auto-enables unless explicitly Establecer to `"enabled": false`.
+:::información
+Cuando una clave API está presente (ya sea en `~/.honcho/config.json` o como `HONCHO_API_KEY`), honcho auto-habilita a menos que se establezca explícitamente a `"enabled": false`.
 :::
 
 ## Configuración
@@ -201,157 +200,157 @@ Intentionally minimal — most Configuración comes from `~/.honcho/config.json`
 honcho: {}
 ```
 
-## How It Works
+## Cómo Funciona
 
-### contexto asincrónico tubería
+### Tubería de Contexto Asincrónico
 
-honcho context is fetched asynchronously to avoid blocking the response ruta:
+El contexto de honcho se obtiene de forma asincrónica para evitar bloquear la ruta de respuesta:
 
 ```
-Turn N:
-  user message
-    → consume cached context (from previous turn's background fetch)
-    → inject into system prompt (user representation, AI representation, dialectic)
-    → LLM call
-    → response
-    → fire background fetch for next turn
-         → fetch context    ─┐
-         → fetch dialectic  ─┴→ cache for Turn N+1
+Giro N:
+  mensaje del usuario
+    → consume contexto en caché (de la obtención en segundo plano del giro anterior)
+    → inyecta en indicador del sistema (representación del usuario, representación de IA, dialéctico)
+    → llamada LLM
+    → respuesta
+    → dispara obtención en segundo plano para el próximo giro
+         → obtiene contexto    ─┐
+         → obtiene dialéctico  ─┴→ en caché para Giro N+1
 ```
 
-Turn 1 is a cold Iniciar (no cache). All subsequent turns consume cached results with zero HTTP latency on the response ruta. The system prompt on turn 1 uses only static context to preserve prefix cache hits at the LLM provider.
+El Giro 1 es un inicio frío (sin caché). Todos los giros posteriores consumen resultados en caché con cero latencia HTTP en la ruta de respuesta. El indicador del sistema en el giro 1 usa solo contexto estático para preservar hits de caché de prefijo en el proveedor LLM.
 
-### arquitectura de doble par
+### Arquitectura de Doble Par
 
-Both the user and AI have peer representations in honcho:
+Tanto el usuario como la IA tienen representaciones de pares en honcho:
 
-- **User peer** — observed from user messages. honcho learns preferences, goals, communication style.
-- **AI peer** — observed from assistant messages (`observe_me=True`). honcho builds a representation of the agent's knowledge and behavior.
+- **Par de usuario** — observado a partir de mensajes del usuario. honcho aprende preferencias, objetivos, estilo de comunicación.
+- **Par de IA** — observado a partir de mensajes del asistente (`observe_me=True`). honcho construye una representación del conocimiento y comportamiento del agente.
 
-Both representations are injected into the system prompt when available.
+Ambas representaciones se inyectan en el indicador del sistema cuando están disponibles.
 
-### Dynamic Reasoning Level
+### Nivel de Razonamiento Dinámico
 
-Dialectic queries scale reasoning effort with message complexity:
+Las consultas dialécticas escalan el esfuerzo de razonamiento con la complejidad del mensaje:
 
-| Message length | Reasoning level |
+| Longitud del mensaje | Nivel de razonamiento |
 |----------------|-----------------|
-| < 120 chars | Config default (typically `low`) |
-| 120-400 chars | One level above default (cap: `high`) |
-| > 400 chars | Two levels above default (cap: `high`) |
+| < 120 caracteres | Predeterminado de configuración (típicamente `low`) |
+| 120-400 caracteres | Un nivel por encima del predeterminado (límite: `high`) |
+| > 400 caracteres | Dos niveles por encima del predeterminado (límite: `high`) |
 
-`max` is never selected automatically.
+Nunca se selecciona `max` automáticamente.
 
-### Gateway Integración
+### Integración Gateway
 
-The gateway creates short-lived `AIAgent` instances per request. honcho managers are owned at the gateway session layer (`_honcho_managers` dict) so they persist across requests within the same session and flush at real session boundaries (reset, reanudar, expiry, server Detener).
+La puerta de enlace crea instancias `AIAgent` de corta duración por solicitud. Los gestores de honcho son propiedad de la capa de sesión de la puerta de enlace (diccionario `_honcho_managers`) para que persistan en las solicitudes dentro de la misma sesión y se limpien en límites de sesión reales (reinicio, reanudación, expiración, parada del servidor).
 
 ## Herramientas
 
-When honcho is active, four Herramientas become available. Availability is gated dynamically — they are invisible when honcho is disabled.
+Cuando honcho está activo, cuatro herramientas están disponibles. La disponibilidad se controla dinámicamente — son invisibles cuando honcho está deshabilitado.
 
 ### `honcho_profile`
 
-Fast peer card retrieval (no LLM). Returns a curated list of key facts about the user.
+Retrieval de tarjeta de pares rápido (sin LLM). Devuelve una lista curada de hechos clave sobre el usuario.
 
-### `honcho_buscar`
+### `honcho_search`
 
-Semantic buscar over Memoria (no LLM). Returns raw excerpts ranked by relevance. Cheaper and faster than `honcho_context` — good for factual lookups.
+Búsqueda semántica sobre la Memoria (sin LLM). Devuelve fragmentos sin procesar clasificados por relevancia. Más barato y más rápido que `honcho_context` — bueno para búsquedas fácticas.
 
 Parámetros:
-- `consulta` (string) — buscar consulta
-- `max_tokens` (integer, optional) — result token budget
+- `query` (string) — consulta de búsqueda
+- `max_tokens` (integer, opcional) — presupuesto de tokens de resultado
 
 ### `honcho_context`
 
-Dialectic Q&A powered by honcho's LLM. Synthesizes an answer from accumulated conversation history.
+Pregunta y respuesta dialéctica impulsada por el LLM de honcho. Sintetiza una respuesta a partir del historial de conversación acumulado.
 
 Parámetros:
-- `consulta` (string) — natural language question
-- `peer` (string, optional) — `"user"` (default) or `"ai"`. Querying `"ai"` asks about the assistant's own history and identity.
+- `query` (string) — pregunta en lenguaje natural
+- `peer` (string, opcional) — `"user"` (predeterminado) o `"ai"`. Consultar `"ai"` pregunta sobre el historial e identidad propios del asistente.
 
-Ejemplo queries the agent might make:
+Ejemplos de consultas que el agente podría hacer:
 
 ```
-"What are this user's main goals?"
-"What communication style does this user prefer?"
-"What topics has this user discussed recently?"
-"What is this user's technical expertise level?"
+"¿Cuáles son los objetivos principales de este usuario?"
+"¿Qué estilo de comunicación prefiere este usuario?"
+"¿Qué temas ha discutido recientemente este usuario?"
+"¿Cuál es el nivel de pericia técnica de este usuario?"
 ```
 
 ### `honcho_conclude`
 
-Writes a fact to honcho Memoria. Usar when the user explicitly states a preference, correction, or project context worth remembering. Feeds into the user's peer card and representation.
+Escribe un hecho en la Memoria de honcho. Usa cuando el usuario afirma explícitamente una preferencia, corrección o contexto de proyecto que vale la pena recordar. Se alimenta en la tarjeta de pares del usuario y la representación.
 
 Parámetros:
-- `conclusion` (string) — the fact to persist
+- `conclusion` (string) — el hecho a persistir
 
-## CLI Commands
+## Comandos CLI
 
 ```
-hermes honcho setup                        # Interactive setup wizard
-hermes honcho status                       # Show config and connection status
-hermes honcho sessions                     # List directory → session name mappings
-hermes honcho map <name>                   # Map current directory to a session name
-hermes honcho peer                         # Show peer names and dialectic settings
-hermes honcho peer --user NAME             # Set user peer name
-hermes honcho peer --ai NAME               # Set AI peer name
-hermes honcho peer --reasoning LEVEL       # Set dialectic reasoning level
-hermes honcho mode                         # Show current memory mode
-hermes honcho mode [hybrid|honcho]         # Set memory mode
-hermes honcho tokens                       # Show token budget settings
-hermes honcho tokens --context N           # Set context token cap
-hermes honcho tokens --dialectic N         # Set dialectic char cap
-hermes honcho identity                     # Show AI peer identity
-hermes honcho identity <file>              # Seed AI peer identity from file (SOUL.md, etc.)
-hermes honcho migrate                      # Migración guide: OpenClaw → Hermes + Honcho
+hermes honcho setup                        # Asistente de configuración interactivo
+hermes honcho status                       # Mostrar estado de configuración y conexión
+hermes honcho sessions                     # Listar asignaciones de directorio → nombre de sesión
+hermes honcho map <name>                   # Asignar directorio actual a un nombre de sesión
+hermes honcho peer                         # Mostrar nombres de pares y configuración dialéctica
+hermes honcho peer --user NAME             # Establecer nombre de par de usuario
+hermes honcho peer --ai NAME               # Establecer nombre de par de IA
+hermes honcho peer --reasoning LEVEL       # Establecer nivel de razonamiento dialéctico
+hermes honcho mode                         # Mostrar modo de memoria actual
+hermes honcho mode [hybrid|honcho]         # Establecer modo de memoria
+hermes honcho tokens                       # Mostrar configuración de presupuesto de tokens
+hermes honcho tokens --context N           # Establecer límite de token de contexto
+hermes honcho tokens --dialectic N         # Establecer límite de caracteres dialéctico
+hermes honcho identity                     # Mostrar identidad de par de IA
+hermes honcho identity <file>              # Sembrar identidad de par de IA desde archivo (SOUL.md, etc.)
+hermes honcho migrate                      # Guía de migración: OpenClaw → Hermes + Honcho
 ```
 
-### Doctor Integración
+### Integración Doctor
 
-`hermes doctor` includes a honcho Sección that validates config, clave API, and connection status.
+`hermes doctor` incluye una sección honcho que valida configuración, clave API y estado de conexión.
 
 ## Migración
 
-### From Local Memoria
+### Desde Memoria Local
 
-When honcho activates on an instance with existing local history, migration runs automatically:
+Cuando honcho se activa en una instancia con historial local existente, la migración se ejecuta automáticamente:
 
-1. **Conversation history** — prior messages are uploaded as an XML transcript archivo
-2. **Memoria files** — existing `Memoria.md`, `USER.md`, and `alma.md` are uploaded for context
+1. **Historial de conversación** — los mensajes anteriores se cargan como un archivo de transcripción XML
+2. **Archivos de Memoria** — `Memoria.md`, `USER.md` y `alma.md` existentes se cargan para contexto
 
-### From OpenClaw
+### Desde OpenClaw
 
 ```bash
 hermes honcho migrate
 ```
 
-Walks through converting an OpenClaw native honcho Configuración to the shared `~/.honcho/config.json` format.
+Guida a través de la conversión de una configuración nativa de honcho de OpenClaw al formato `~/.honcho/config.json` compartido.
 
-## AI Peer Identity
+## Identidad de Par de IA
 
-honcho can build a representation of the AI assistant over time (via `observe_me=True`). You can also seed the AI peer explicitly:
+honcho puede construir una representación del asistente de IA a lo largo del tiempo (a través de `observe_me=True`). También puedes sembrar el par de IA explícitamente:
 
 ```bash
 hermes honcho identity ~/.hermes/SOUL.md
 ```
 
-This uploads the archivo content through honcho's observation tubería. The AI peer representation is then injected into the system prompt alongside the user's, giving the agent awareness of its own accumulated identity.
+Esto carga el contenido del archivo a través de la tubería de observación de honcho. La representación del par de IA se inyecta entonces en el indicador del sistema junto con la del usuario, dando al agente conciencia de su identidad acumulada propia.
 
 ```bash
 hermes honcho identity --show
 ```
 
-Shows the current AI peer representation from honcho.
+Muestra la representación actual del par de IA de honcho.
 
-## Usar Cases
+## Casos de Uso
 
-- **Personalized responses** — honcho learns how each user prefers to communicate
-- **Goal seguimiento** — remembers what users are working toward across sessions
-- **Expertise adaptation** — adjusts technical depth based on user's background
-- **Cross-platform Memoria** — same user understanding across CLI, Telegram, Discord, etc.
-- **Multi-user support** — each user (via messaging platforms) gets their own user model
+- **Respuestas personalizadas** — honcho aprende cómo cada usuario prefiere comunicarse
+- **Seguimiento de objetivos** — recuerda en qué están trabajando los usuarios entre sesiones
+- **Adaptación de pericia** — ajusta la profundidad técnica según la historia del usuario
+- **Memoria entre plataformas** — el mismo conocimiento del usuario en CLI, Telegram, Discord, etc.
+- **Soporte multiusuario** — cada usuario (a través de plataformas de mensajería) obtiene su propio modelo de usuario
 
-:::Consejo
-honcho is fully opt-in — zero behavior change when disabled or unconfigured. All honcho calls are non-fatal; if the service is unreachable, the agent continues normally.
+:::tip
+honcho es completamente opcional — cero cambio de comportamiento cuando está deshabilitado o sin configurar. Todas las llamadas a honcho no son fatales; si el servicio no es accesible, el agente continúa normalmente.
 :::

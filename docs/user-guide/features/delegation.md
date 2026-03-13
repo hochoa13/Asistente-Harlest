@@ -1,14 +1,14 @@
 ---
 sidebar_position: 7
-title: "Subagente Delegación"
-description: "Spawn isolated child agents for parallel workstreams with delegate_task"
+title: "Delegación de Subagentes"
+description: "Genera instancias de agentes hijo aisladas para flujos de trabajo paralelos con delegate_task"
 ---
 
-# Subagente Delegación
+# Delegación de Subagentes
 
-The `delegate_task` herramienta spawns child AIAgent instances with isolated context, restricted Conjuntos de herramientas, and their own terminal sessions. Each child gets a fresh conversation and works independently — only its final summary enters the parent's context.
+La herramienta `delegate_task` genera instancias de AIAgent hijo con contexto aislado, conjuntos de herramientas restringidos y sus propias sesiones de terminal. Cada hijo obtiene una conversación fresca y trabaja independientemente — solo su resumen final entra en el contexto del padre.
 
-## Single Task
+## Tarea Única
 
 ```python
 delegate_task(
@@ -18,72 +18,72 @@ delegate_task(
 )
 ```
 
-## Parallel Batch
+## Lote Paralelo
 
-Up to 3 concurrent subagentes:
+Hasta 3 subagentes concurrentes:
 
 ```python
 delegate_task(tasks=[
-    {"goal": "Rebuscar topic A", "toolsets": ["web"]},
-    {"goal": "Rebuscar topic B", "toolsets": ["web"]},
+    {"goal": "Search topic A", "toolsets": ["web"]},
+    {"goal": "Search topic B", "toolsets": ["web"]},
     {"goal": "Fix the build", "toolsets": ["terminal", "file"]}
 ])
 ```
 
-## How contexto del subagente Works
+## Cómo Funciona el Contexto del Subagente
 
-:::Advertencia Critical: subagentes Know Nothing
-subagentes Iniciar with a **completely fresh conversation**. They have zero knowledge of the parent's conversation history, prior Llamadas de Herramientas, or anything discussed before Delegación. The Subagente's only context comes from the `goal` and `context` fields you provide.
+:::advertencia Crítico: Los subagentes no Saben Nada
+Los subagentes comienzan con una **conversación completamente fresca**. No tienen conocimiento del historial de conversación del padre, llamadas de herramientas anteriores o nada discutido antes de la delegación. El único contexto del subagente proviene de los campos `goal` y `context` que proporcionas.
 :::
 
-This means you must pass **everything** the Subagente needs:
+Esto significa que debes pasar **todo** lo que el subagente necesita:
 
 ```python
-# BAD - subagent has no idea what "the error" is
+# MAL - el subagente no tiene idea qué es "el error"
 delegate_task(goal="Fix the error")
 
-# GOOD - subagent has all context it needs
+# BIEN - el subagente tiene todo el contexto que necesita
 delegate_task(
     goal="Fix the TypeError in api/handlers.py",
-    context="""The file api/handlers.py has a TypeError on line 47:
+    context="""El archivo api/handlers.py tiene un TypeError en la línea 47:
     'NoneType' object has no attribute 'get'.
-    The function process_request() receives a dict from parse_body(),
-    but parse_body() returns None when Content-Type is missing.
-    The project is at /home/user/myproject and uses Python 3.11."""
+    La función process_request() recibe un dict de parse_body(),
+    pero parse_body() devuelve None cuando Content-Type está ausente.
+    El proyecto está en /home/user/myproject y usa Python 3.11."""
 )
 ```
 
-The Subagente receives a focused system prompt built from your goal and context, instructing it to complete the task and provide a structured summary of what it did, what it found, any files modified, and any issues encountered.
+El subagente recibe un indicador del sistema enfocado construido a partir de tu goal y context, instruyéndole a completar la tarea y proporcionar un resumen estructurado de qué hizo, qué encontró, qué archivos modificó y cualquier problema encontrado.
 
-## Practical Ejemplos
+## Ejemplos Prácticos
 
-### Parallel Rebuscar
+### Búsqueda Paralela
 
-Rebuscar multiple topics simultaneously and collect summaries:
+Búsqueda de múltiples temas simultáneamente y recopilación de resúmenes:
 
 ```python
 delegate_task(tasks=[
     {
-        "goal": "Rebuscar the current state of WebAssembly in 2025",
+        "goal": "Search the current state of WebAssembly in 2025",
         "context": "Focus on: browser support, non-browser runtimes, language support",
         "toolsets": ["web"]
     },
     {
-        "goal": "Rebuscar the current state of RISC-V adoption in 2025",
+        "goal": "Search the current state of RISC-V adoption in 2025",
         "context": "Focus on: server chips, embedded systems, software ecosystem",
         "toolsets": ["web"]
     },
     {
-        "goal": "Rebuscar quantum computing progress in 2025",
+        "goal": "Search quantum computing progress in 2025",
         "context": "Focus on: error correction breakthroughs, practical applications, key players",
         "toolsets": ["web"]
     }
 ])
 ```
 
-### Code Review + Fix
+### Revisión de Código + Arreglo
 
-Delegate a review-and-fix workflow to a fresh context:
+Delega un flujo de trabajo de revisión y arreglo a un contexto fresco:
 
 ```python
 delegate_task(
@@ -91,15 +91,15 @@ delegate_task(
     context="""Project at /home/user/webapp.
     Auth module files: src/auth/login.py, src/auth/jwt.py, src/auth/middleware.py.
     The project uses Flask, PyJWT, and bcrypt.
-    Focus on: SQL injection, JWT validation, password handling, session gestión.
+    Focus on: SQL injection, JWT validation, password handling, session management.
     Fix any issues found and run the test suite (pytest tests/auth/).""",
     toolsets=["terminal", "file"]
 )
 ```
 
-### Multi-archivo Refactoring
+### Refactorización Multi-Archivo
 
-Delegate a large refactoring task that would flood the parent's context:
+Delega una tarea de refactorización grande que inundaría el contexto del padre:
 
 ```python
 delegate_task(
@@ -117,87 +117,87 @@ delegate_task(
 )
 ```
 
-## Modo de Lote Detalles
+## Detalles del Modo de Lote
 
-When you provide a `tasks` array, subagentes Ejecutar in **parallel** using a thread pool:
+Cuando proporcionas un array `tasks`, los subagentes se ejecutan en **paralelo** usando un thread pool:
 
-- **Maximum concurrency:** 3 tasks (the `tasks` array is truncated to 3 if longer)
-- **Thread pool:** Uses `ThreadPoolExecutor` with `MAX_CONCURRENT_CHILDREN = 3` workers
-- **Progress display:** In CLI mode, a tree-view shows Llamadas de Herramientas from each Subagente in real-time with per-task completion lines. In gateway mode, progress is batched and relayed to the parent's progress callback
-- **Result ordering:** Results are sorted by task index to match input order regardless of completion order
-- **Interrupt propagation:** Interrupting the parent (e.g., sending a new message) interrupts all active children
+- **Concurrencia máxima:** 3 tareas (el array `tasks` se trunca a 3 si es más largo)
+- **Thread pool:** Usa `ThreadPoolExecutor` con `MAX_CONCURRENT_CHILDREN = 3` workers
+- **Visualización del progreso:** En modo CLI, una vista de árbol muestra llamadas de herramientas de cada subagente en tiempo real con líneas de finalización por tarea. En modo gateway, el progreso se agrupa en lotes y se envía al callback de progreso del padre
+- **Ordenamiento de resultados:** Los resultados se ordenan por índice de tarea para coincidir con el orden de entrada independientemente del orden de finalización
+- **Propagación de interrupción:** Interrumpir al padre (p. ej., enviar un nuevo mensaje) interrumpe todos los hijos activos
 
-Single-task Delegación runs directly without thread pool overhead.
+La delegación de tarea única se ejecuta directamente sin gastos generales del thread pool.
 
-## Model Override
+## Anulación de Modelo
 
-You can Usar a different model for subagentes — useful for delegating simple tasks to cheaper/faster models:
+Puedes usar un modelo diferente para subagentes — útil para delegar tareas simples a modelos más baratos/rápidos:
 
 ```python
 delegate_task(
     goal="Summarize this README file",
     context="File at /project/README.md",
     toolsets=["file"],
-    model="google/gemini-flash-2.0"  # Cheaper model for simple tasks
+    model="google/gemini-flash-2.0"  # Modelo más barato para tareas simples
 )
 ```
 
-If omitted, subagentes Usar the same model as the parent.
+Si se omite, los subagentes usan el mismo modelo que el padre.
 
-## Herramientaset Selection Consejos
+## Consejos de Selección de Conjunto de Herramientas
 
-The `Conjuntos de herramientas` parameter controls what Herramientas the Subagente has access to. Choose based on the task:
+El parámetro `toolsets` controla a qué herramientas tiene acceso el subagente. Elige basándote en la tarea:
 
-| Herramientaset Pattern | Usar Case |
+| Patrón de Conjunto de Herramientas | Caso de Uso |
 |----------------|----------|
-| `["terminal", "archivo"]` | Code work, debugging, archivo editing, builds |
-| `["web"]` | Rebuscar, fact-checking, documentation lookup |
-| `["terminal", "archivo", "web"]` | Full-stack tasks (default) |
-| `["archivo"]` | Read-only analysis, code review without execution |
-| `["terminal"]` | System administration, process gestión |
+| `["terminal", "file"]` | Trabajo de código, depuración, edición de archivos, compilaciones |
+| `["web"]` | Búsqueda, verificación de hechos, búsqueda de documentación |
+| `["terminal", "file", "web"]` | Tareas full-stack (predeterminado) |
+| `["file"]` | Análisis de solo lectura, revisión de código sin ejecución |
+| `["terminal"]` | Administración del sistema, gestión de procesos |
 
-Certain Conjuntos de herramientas are **always blocked** for subagentes regardless of what you specify:
-- `Delegación` — no recursive Delegación (prevents infinite spawning)
-- `clarify` — subagentes cannot interact with the user
-- `Memoria` — no writes to shared persistent Memoria
-- `code_execution` — children should reason step-by-step
-- `send_message` — no cross-platform side effects (e.g., sending Telegram messages)
+Ciertos conjuntos de herramientas siempre están **bloqueados** para subagentes independientemente de lo que especifiques:
+- `delegate` — sin delegación recursiva (evita generación infinita)
+- `clarify` — los subagentes no pueden interactuar con el usuario
+- `memory` — sin escrituras a memoria persistente compartida
+- `code_execution` — los hijos deben razonar paso a paso
+- `send_message` — sin efectos secundarios entre plataformas (p. ej., enviar mensajes de Telegram)
 
-## Iteraciones máximas
+## Iteraciones Máximas
 
-Each Subagente has an iteration limit (default: 50) that controls how many herramienta-calling turns it can take:
+Cada subagente tiene un límite de iteración (predeterminado: 50) que controla cuántos turnos de llamada de herramienta puede tomar:
 
 ```python
 delegate_task(
     goal="Quick file check",
     context="Check if /etc/nginx/nginx.conf exists and print its first 10 lines",
-    max_iterations=10  # Simple task, don't need many turns
+    max_iterations=10  # Tarea simple, no necesita muchos turnos
 )
 ```
 
-## Depth Limit
+## Límite de Profundidad
 
-Delegación has a **depth limit of 2** — a parent (depth 0) can spawn children (depth 1), but children cannot delegate further. This prevents runaway recursive Delegación chains.
+La delegación tiene un **límite de profundidad de 2** — un padre (profundidad 0) puede generar hijos (profundidad 1), pero los hijos no pueden delegar más. Esto evita cadenas de delegación recursiva desenfrenada.
 
-## Key Properties
+## Propiedades Clave
 
-- Each Subagente gets its **own terminal session** (separate from the parent)
-- **No nested Delegación** — children cannot delegate further (no grandchildren)
-- subagentes **cannot** call: `delegate_task`, `clarify`, `Memoria`, `send_message`, `execute_code`
-- **Interrupt propagation** — interrupting the parent interrupts all active children
-- Only the final summary enters the parent's context, keeping token Uso efficient
-- subagentes inherit the parent's **clave API and provider Configuración**
+- Cada subagente obtiene su **propia sesión de terminal** (separada del padre)
+- **Sin delegación anidada** — los hijos no pueden delegar más (sin nietos)
+- Los subagentes **no pueden** llamar a: `delegate_task`, `clarify`, `memory`, `send_message`, `execute_code`
+- **Propagación de interrupción** — interrumpir al padre interrumpe todos los hijos activos
+- Solo el resumen final entra en el contexto del padre, manteniendo eficiente el uso de tokens
+- Los subagentes heredan la **clave API y configuración del proveedor** del padre
 
 ## Delegación vs execute_code
 
 | Factor | delegate_task | execute_code |
 |--------|--------------|-------------|
-| **Reasoning** | Full LLM reasoning loop | Just Python Ejecución de Código |
-| **Context** | Fresh isolated conversation | No conversation, just script |
-| **herramienta access** | All non-blocked Herramientas with reasoning | 7 Herramientas via RPC, no reasoning |
-| **Parallelism** | Up to 3 concurrent subagentes | Single script |
-| **Best for** | Complex tasks needing judgment | Mechanical multi-step pipelines |
-| **token cost** | Higher (full LLM loop) | Lower (only stdout returned) |
+| **Razonamiento** | Bucle completo de razonamiento de LLM | Solo ejecución de Python |
+| **Contexto** | Conversación aislada fresca | Sin conversación, solo script |
+| **Acceso a herramientas** | Todas las herramientas no bloqueadas con razonamiento | 7 herramientas a través de RPC, sin razonamiento |
+| **Paralelismo** | Hasta 3 subagentes concurrentes | Script único |
+| **Mejor para** | Tareas complejas que requieren juicio | Tuberías mecánicas de múltiples pasos |
+| **Costo de token** | Más alto (bucle LLM completo) | Más bajo (solo stdout devuelto) |
 | **User interaction** | None (subagentes can't clarify) | None |
 
 **Rule of thumb:** Usar `delegate_task` when the subtask requires reasoning, judgment, or multi-step problem solving. Usar `execute_code` when you need mechanical data processing or scripted workflows.

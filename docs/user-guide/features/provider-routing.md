@@ -1,45 +1,45 @@
 ---
 title: Enrutamiento de Proveedor
-description: Configurar openrouter provider preferences to optimize for cost, speed, or quality.
+description: Configura las preferencias de proveedor de openrouter para optimizar por costo, velocidad o calidad.
 sidebar_label: Enrutamiento de Proveedor
 sidebar_position: 7
 ---
 
 # Enrutamiento de Proveedor
 
-When using [openrouter](https://openrouter.ai) as your LLM provider, Hermes Agent supports **Enrutamiento de Proveedores** — fine-grained control over which underlying AI Proveedores handle your requests and how they're prioritized.
+Cuando usas [openrouter](https://openrouter.ai) como tu proveedor de LLM, Hermes Agent admite **Enrutamiento de Proveedor** — control granular sobre qué Proveedores de IA subyacentes manejan tus solicitudes y cómo se priorizan.
 
-openrouter routes requests to many Proveedores (e.g., Anthropic, Google, AWS Bedrock, Together AI). Enrutamiento de Proveedores lets you optimize for cost, speed, quality, or enforce specific provider Requisitos.
+openrouter enruta solicitudes a muchos Proveedores (ej., Anthropic, Google, AWS Bedrock, Together AI). El Enrutamiento de Proveedor te permite optimizar por costo, velocidad, calidad o aplicar Requisitos de proveedor específicos.
 
 ## Configuración
 
-Add a `provider_routing` Sección to your `~/.hermes/config.yaml`:
+Agrega una sección `provider_routing` a tu `~/.hermes/config.yaml`:
 
 ```yaml
 provider_routing:
-  sort: "price"           # Cómo rank providers
-  only: []                # Whitelist: only use these providers
-  ignore: []              # Blacklist: never use these providers
-  order: []               # Explicit provider priority order
-  require_parameters: false  # Only use providers that support all parameters
-  data_collection: null   # Control data collection ("allow" or "deny")
+  sort: "price"           # Cómo clasificar proveedores
+  only: []                # Lista blanca: solo usar estos proveedores
+  ignore: []              # Lista negra: nunca usar estos proveedores
+  order: []               # Orden explícito de prioridad de proveedor
+  require_parameters: false  # Solo usar proveedores que soporten todos los parámetros
+  data_collection: null   # Controlar recopilación de datos ("allow" o "deny")
 ```
 
-:::Información
-Enrutamiento de Proveedores only applies when using openrouter. It has no effect with direct provider connections (e.g., connecting directly to the Anthropic API).
+:::info
+El Enrutamiento de Proveedor solo se aplica cuando usas openrouter. No tiene efecto con conexiones directas de proveedor (ej., conectar directamente a la API de Anthropic).
 :::
 
 ## Opciones
 
 ### `sort`
 
-Controls how openrouter ranks available Proveedores for your request.
+Controla cómo openrouter clasifica los Proveedores disponibles para tu solicitud.
 
-| Value | Description |
+| Valor | Descripción |
 |-------|-------------|
-| `"price"` | Cheapest provider first |
-| `"throughput"` | Fastest tokens-per-second first |
-| `"latency"` | Lowest time-to-first-token first |
+| `"price"` | Proveedor más barato primero |
+| `"throughput"` | Tokens más rápidos por segundo primero |
+| `"latency"` | Menor tiempo para primer token primero |
 
 ```yaml
 provider_routing:
@@ -48,7 +48,7 @@ provider_routing:
 
 ### `only`
 
-lista blanca of provider names. When Establecer, **only** these Proveedores will be used. All others are excluded.
+Lista blanca de nombres de proveedor. Cuando se establece, **solo** se usarán estos Proveedores. Todos los demás se excluyen.
 
 ```yaml
 provider_routing:
@@ -57,9 +57,9 @@ provider_routing:
     - "Google"
 ```
 
-### `ignorar`
+### `ignore`
 
-Blacklist of provider names. These Proveedores will **never** be used, even if they offer the cheapest or fastest option.
+Lista negra de nombres de proveedor. Estos Proveedores **nunca** se usarán, incluso si ofrecen la opción más barata o más rápida.
 
 ```yaml
 provider_routing:
@@ -70,7 +70,7 @@ provider_routing:
 
 ### `order`
 
-Explicit priority order. Proveedores listed first are preferred. Unlisted Proveedores are used as fallbacks.
+Orden de prioridad explícito. Los Proveedores enumerados primero son preferidos. Los Proveedores no enumerados se usan como alternativas.
 
 ```yaml
 provider_routing:
@@ -82,7 +82,7 @@ provider_routing:
 
 ### `require_parameters`
 
-When `true`, openrouter will only route to Proveedores that support **all** Parámetros in your request (like `temperature`, `top_p`, `Herramientas`, etc.). This avoids silent parameter drops.
+Cuando es `true`, openrouter solo enrutará a Proveedores que soporten **todos** los Parámetros en tu solicitud (como `temperature`, `top_p`, `tools`, etc.). Esto evita caidas silenciosas de parámetros.
 
 ```yaml
 provider_routing:
@@ -91,45 +91,45 @@ provider_routing:
 
 ### `data_collection`
 
-Controls whether Proveedores can Usar your prompts for training. Opciones are `"allow"` or `"deny"`.
+Controla si los Proveedores pueden usar tus indicadores para entrenamiento. Las opciones son `"allow"` o `"deny"`.
 
 ```yaml
 provider_routing:
   data_collection: "deny"
 ```
 
-## Practical Ejemplos
+## Ejemplos Prácticos
 
-### Optimize for Cost
+### Optimizar por Costo
 
-Route to the cheapest available provider. Good for high-volume Uso and development:
+Enruta al proveedor más barato disponible. Bueno para uso de alto volumen y desarrollo:
 
 ```yaml
 provider_routing:
   sort: "price"
 ```
 
-### Optimize for Speed
+### Optimizar por Velocidad
 
-Prioritize low-latency Proveedores for interactive Usar:
+Prioriza Proveedores de baja latencia para uso interactivo:
 
 ```yaml
 provider_routing:
   sort: "latency"
 ```
 
-### Optimize for Throughput
+### Optimizar por Rendimiento
 
-Best for long-form generation where tokens-per-second matters:
+Mejor para generación de texto largo donde importa tokens por segundo:
 
 ```yaml
 provider_routing:
   sort: "throughput"
 ```
 
-### Lock to Specific Proveedores
+### Bloquear a Proveedores Específicos
 
-Ensure all requests go through a specific provider for consistency:
+Asegura que todas las solicitudes pasen por un proveedor específico por consistencia:
 
 ```yaml
 provider_routing:
@@ -137,9 +137,9 @@ provider_routing:
     - "Anthropic"
 ```
 
-### Avoid Specific Proveedores
+### Evitar Proveedores Específicos
 
-Exclude Proveedores you don't want to Usar (e.g., for data privacy):
+Excluye Proveedores que no deseas usar (ej., por privacidad de datos):
 
 ```yaml
 provider_routing:
@@ -149,9 +149,9 @@ provider_routing:
   data_collection: "deny"
 ```
 
-### Preferred Order with Fallbacks
+### Orden Preferido con Alternativas
 
-Try your preferred Proveedores first, fall back to others if unavailable:
+Intenta tus Proveedores preferidos primero, cambia a otros si no están disponibles:
 
 ```yaml
 provider_routing:
@@ -161,14 +161,14 @@ provider_routing:
   require_parameters: true
 ```
 
-## How It Works
+## Cómo Funciona
 
-Enrutamiento de Proveedores preferences are passed to the openrouter API via the `extra_body.provider` field on every API call. This applies to both:
+Las preferencias de Enrutamiento de Proveedor se pasan a la API de openrouter a través del campo `extra_body.provider` en cada llamada de API. Esto se aplica a ambos:
 
-- **CLI mode** — configured in `~/.hermes/config.yaml`, loaded at startup
-- **Gateway mode** — same config archivo, loaded when the gateway starts
+- **Modo CLI** — configurado en `~/.hermes/config.yaml`, cargado al inicio
+- **Modo Gateway** — mismo archivo de configuración, cargado cuando se inicia la puerta de enlace
 
-The routing config is read from `config.yaml` and passed as Parámetros when creating the `AIAgent`:
+La configuración de enrutamiento se lee desde `config.yaml` y se pasa como Parámetros al crear el `AIAgent`:
 
 ```
 providers_allowed  ← from provider_routing.only
@@ -179,8 +179,8 @@ provider_require_parameters ← from provider_routing.require_parameters
 provider_data_collection    ← from provider_routing.data_collection
 ```
 
-:::Consejo
-You can combine multiple Opciones. Por ejemplo, sort by price but exclude certain Proveedores and require parameter support:
+:::tip
+Puedes combinar múltiples Opciones. Por ejemplo, ordena por precio pero excluye ciertos Proveedores y requiere soporte de parámetros:
 
 ```yaml
 provider_routing:
@@ -191,6 +191,6 @@ provider_routing:
 ```
 :::
 
-## Default Behavior
+## Comportamiento Predeterminado
 
-When no `provider_routing` Sección is configured (the default), openrouter uses its own default routing logic, which generally balances cost and availability automatically.
+Cuando no se configura una sección `provider_routing` (el predeterminado), openrouter usa su lógica de enrutamiento predeterminada, que generalmente equilibra costo y disponibilidad automáticamente.

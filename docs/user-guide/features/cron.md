@@ -1,18 +1,18 @@
 ---
 sidebar_position: 5
-title: "Scheduled Tasks (Cron)"
-description: "Schedule automated tasks with natural language — Cron jobs, opciones de entrega, and the programador de puerta de enlace"
+title: "Tareas Programadas (Cron)"
+description: "Programa tareas automatizadas con lenguaje natural — trabajos cron, opciones de entrega y el programador de gateway"
 ---
 
-# Scheduled Tasks (Cron)
+# Tareas Programadas (Cron)
 
-Schedule tasks to Ejecutar automatically with natural language or expresiones Cron. The agent can self-schedule using the `schedule_cronjob` herramienta from any platform.
+Programa tareas para ejecutarse automáticamente con lenguaje natural o expresiones Cron. El agente puede auto-programarse usando la herramienta `schedule_cronjob` desde cualquier plataforma.
 
-## Creating Scheduled Tasks
+## Creando Tareas Programadas
 
-### In the CLI
+### En la CLI
 
-Usar the `/Cron` slash comando:
+Usa el comando slash `/cron`:
 
 ```
 /cron add 30m "Remind me to check the build"
@@ -22,51 +22,51 @@ Usar the `/Cron` slash comando:
 /cron remove <job_id>
 ```
 
-### Through Natural Conversation
+### A Través de Conversación Natural
 
-Simply ask the agent on any platform:
+Simplemente pídele al agente en cualquier plataforma:
 
 ```
 Every morning at 9am, check Hacker News for AI news and send me a summary on Telegram.
 ```
 
-The agent will Usar the `schedule_cronjob` herramienta to Establecer it up.
+El agente usará la herramienta `schedule_cronjob` para configurarlo.
 
-## How It Works
+## Cómo Funciona
 
-**Cron execution is handled by the gateway daemon.** The gateway ticks the scheduler every 60 seconds, running any due jobs in isolated agent sessions:
+**La ejecución de cron es manejada por el daemon gateway.** El gateway marca el programador cada 60 segundos, ejecutando cualquier trabajo vencido en sesiones de agente aisladas:
 
 ```bash
-hermes gateway install     # Install as system service (recommended)
-hermes gateway             # Or run in foreground
+hermes gateway install     # Instalar como servicio del sistema (recomendado)
+hermes gateway             # O ejecutar en primer plano
 
-hermes cron list           # View scheduled jobs
-hermes cron status         # Check if gateway is running
+hermes cron list           # Ver trabajos programados
+hermes cron status         # Comprobar si el gateway se está ejecutando
 ```
 
-### The programador de puerta de enlace
+### El Programador de Gateway
 
-The scheduler runs as a background thread inside the gateway process. On each tick (every 60 seconds):
+El programador se ejecuta como un thread de fondo dentro del proceso del gateway. En cada marca (cada 60 segundos):
 
-1. It loads all jobs from `~/.hermes/Cron/jobs.json`
-2. Checks each enabled job's `next_run_at` against the current time
-3. For each due job, spawns a fresh `AIAgent` session with the job's prompt
-4. The agent runs to completion with full herramienta access
-5. The final response is delivered to the configured target
-6. The job's Ejecutar count is incremented and next Ejecutar time computed
-7. Jobs that hit their repeat limit are auto-removed
+1. Carga todos los trabajos desde `~/.hermes/cron/jobs.json`
+2. Verifica cada `next_run_at` del trabajo habilitado contra la hora actual
+3. Para cada trabajo vencido, genera una sesión `AIAgent` fresca con el indicador del trabajo
+4. El agente se ejecuta hasta finalizar con acceso completo a herramientas
+5. La respuesta final se entrega al destino configurado
+6. El recuento de ejecución del trabajo se incrementa y se calcula el próximo tiempo de ejecución
+7. Los trabajos que alcanzan su límite de repetición se auto-eliminan
 
-A **archivo-based lock** (`~/.hermes/Cron/.tick.lock`) prevents duplicate execution if multiple processes overlap (e.g., gateway + manual tick).
+Un **bloqueo basado en archivo** (`~/.hermes/cron/.tick.lock`) evita ejecución duplicada si múltiples procesos se superponen (p. ej., gateway + marca manual).
 
-:::Información
-Even if no messaging platforms are configured, the gateway stays running for Cron. A archivo lock prevents duplicate execution if multiple processes overlap.
+:::información
+Aunque no se configuren plataformas de mensajería, el gateway se mantiene en ejecución para Cron. Un bloqueo de archivo evita ejecución duplicada si múltiples procesos se superponen.
 :::
 
-## opciones de entrega
+## Opciones de Entrega
 
-When Programación jobs, you specify where the output goes:
+Cuando programas trabajos, especificas dónde va la salida:
 
-| Option | Description | Ejemplo |
+| Opción | Descripción | Ejemplo |
 |--------|-------------|---------|
 | `"origin"` | Back to where the job was created | Default on messaging platforms |
 | `"local"` | Save to local files only (`~/.hermes/Cron/output/`) | Default on CLI |
@@ -79,112 +79,112 @@ When Programación jobs, you specify where the output goes:
 
 **How platform names work:** When you specify a bare platform name like `"Telegram"`, Hermes first checks if the job's origin matches that platform and uses the origin chat ID. Otherwise, it falls back to the platform's home channel configured via entorno variable (e.g., `TELEGRAM_HOME_CHANNEL`).
 
-The agent's final response is automatically delivered — you do **not** need to include `send_message` in the Cron prompt.
+La respuesta final del agente se entrega autom\u00e1ticamente — **no** necesitas incluir `send_message` en el indicador de Cron.
 
-The agent knows your connected platforms and home channels — it'll choose sensible defaults.
+El agente conoce tus plataformas conectadas y canales de inicio — elegirá defaults sensatos.
 
-## formatos de programación
+## Formatos de Programaci\u00f3n
 
-### Relative Delays (One-Shot)
+### Retrasos Relativos (Una Sola Ejecución)
 
-Ejecutar once after a delay:
-
-```
-30m     → Run once in 30 minutes
-2h      → Run once in 2 hours
-1d      → Run once in 1 day
-```
-
-Supported units: `m`/`min`/`minutes`, `h`/`hr`/`hours`, `d`/`day`/`days`.
-
-### Intervals (Recurring)
-
-Ejecutar repeatedly at fixed intervals:
+Ejecutar una vez después de un retraso:
 
 ```
-every 30m    → Every 30 minutes
-every 2h     → Every 2 hours
-every 1d     → Every day
+30m     → Ejecutar una vez en 30 minutos
+2h      → Ejecutar una vez en 2 horas
+1d      → Ejecutar una vez en 1 día
 ```
 
-### expresiones Cron
+Unidades soportadas: `m`/`min`/`minutes`, `h`/`hr`/`hours`, `d`/`day`/`days`.
 
-Standard 5-field Cron syntax for precise Programación:
+### Intervalos (Recurrentes)
 
-```
-0 9 * * *       → Daily at 9:00 AM
-0 9 * * 1-5     → Weekdays at 9:00 AM
-0 */6 * * *     → Every 6 hours
-30 8 1 * *      → First of every month at 8:30 AM
-0 0 * * 0       → Every Sunday at midnight
-```
-
-#### Cron Expression Cheat Sheet
+Ejecutar repetidamente en intervalos fijos:
 
 ```
-┌───── minute (0-59)
-│ ┌───── hour (0-23)
-│ │ ┌───── day of month (1-31)
-│ │ │ ┌───── month (1-12)
-│ │ │ │ ┌───── day of week (0-7, 0 and 7 = Sunday)
+every 30m    → Cada 30 minutos
+every 2h     → Cada 2 horas
+every 1d     → Cada día
+```
+
+### Expresiones Cron
+
+Sintaxis cron estándar de 5 campos para programación precisa:
+
+```
+0 9 * * *       → Diariamente a las 9:00 AM
+0 9 * * 1-5     → Días de semana a las 9:00 AM
+0 */6 * * *     → Cada 6 horas
+30 8 1 * *      → Primero de cada mes a las 8:30 AM
+0 0 * * 0       → Cada domingo a medianoche
+```
+
+#### Hoja de Trucos de Expresiones Cron
+
+```
+┌───── minuto (0-59)
+│ ┌───── hora (0-23)
+│ │ ┌───── día del mes (1-31)
+│ │ │ ┌───── mes (1-12)
+│ │ │ │ ┌───── día de la semana (0-7, 0 y 7 = domingo)
 │ │ │ │ │
 * * * * *
 
-Special characters:
-  *     Any value
-  ,     List separator (1,3,5)
-  -     Range (1-5)
-  /     Step values (*/15 = every 15)
+Caracteres especiales:
+  *     Cualquier valor
+  ,     Separador de lista (1,3,5)
+  -     Rango (1-5)
+  /     Valores de paso (*/15 = cada 15)
 ```
 
-:::note
-expresiones Cron require the `croniter` Python package. Instalar with `pip Instalar croniter` if not already available.
+:::nota
+Las expresiones cron requieren el paquete Python `croniter`. Instala con `pip install croniter` si no está disponible ya.
 :::
 
-### ISO Timestamps
+### Marcas de Tiempo ISO
 
-Ejecutar once at a specific date/time:
+Ejecutar una vez a una fecha/hora específica:
 
 ```
-2026-03-15T09:00:00    → One-time at March 15, 2026 9:00 AM
+2026-03-15T09:00:00    → Una sola ejecución a las 9:00 AM del 15 de marzo de 2026
 ```
 
-## comportamiento de repetición
+## Comportamiento de Repetición
 
-The `repeat` parameter controls how many times a job runs:
+El parámetro `repeat` controla cuántas veces se ejecuta un trabajo:
 
-| Schedule escribir | Default Repeat | Behavior |
-|--------------|----------------|----------|
-| One-shot (`30m`, timestamp) | 1 (Ejecutar once) | Runs once, then auto-deleted |
-| Interval (`every 2h`) | Forever (`null`) | Runs indefinitely until removed |
-| Cron expression | Forever (`null`) | Runs indefinitely until removed |
+| Tipo de Programación | Repetición Predeterminada | Comportamiento |
+|--------------|----------------|-------|
+| Una sola ejecución (`30m`, timestamp) | 1 (Ejecutar una vez) | Se ejecuta una vez, luego auto-eliminado |
+| Intervalo (`every 2h`) | Siempre (`null`) | Se ejecuta indefinidamente hasta eliminación |
+| Expresión cron | Siempre (`null`) | Se ejecuta indefinidamente hasta eliminación |
 
-You can override the default:
+Puedes anular el predeterminado:
 
 ```python
 schedule_cronjob(
     prompt="...",
     schedule="every 2h",
-    repeat=5  # Run exactly 5 times, then auto-delete
+    repeat=5  # Ejecutar exactamente 5 veces, luego auto-eliminar
 )
 ```
 
-When a job hits its repeat limit, it is automatically removed from the job list.
+Cuando un trabajo alcanza su límite de repetición, se elimina automáticamente de la lista de trabajos.
 
-## Real-World Ejemplos
+## Ejemplos del Mundo Real
 
-### Daily Standup Report
+### Reporte Diario de Standup
 
 ```
-Schedule a daily standup report: Every weekday at 9am, check the GitHub
-repository at github.com/myorg/myproject for:
-1. Pull requests opened/merged in the last 24 hours
-2. Issues created or closed
-3. Any CI/CD failures on the main branch
-Format as a brief standup-style summary. Deliver to telegram.
+Programa un reporte de standup diario: Cada día de semana a las 9am, verifica el
+repositorio de GitHub en github.com/myorg/myproject para:
+1. Pull requests abiertos/fusionados en las últimas 24 horas
+2. Issues creados o cerrados
+3. Cualquier fallo de CI/CD en la rama principal
+Formatea como un resumen estilo standup breve. Entrega a telegram.
 ```
 
-The agent creates:
+El agente crea:
 ```python
 schedule_cronjob(
     prompt="Check github.com/myorg/myproject for PRs, issues, and CI status from the last 24 hours. Format as a standup report.",
@@ -194,10 +194,10 @@ schedule_cronjob(
 )
 ```
 
-### Weekly Backup Verification
+### Verificación de Copia de Seguridad Semanal
 
 ```
-Every Sunday at 2am, verify that backups exist in /data/backups/ for
+Cada domingo a las 2am, verifica que existan copias de seguridad en /data/backups/
 each day of the past week. Check file sizes are > 1MB. Report any
 gaps or suspiciously small files.
 ```
