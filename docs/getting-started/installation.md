@@ -1,12 +1,12 @@
 ---
 sidebar_position: 2
 title: "Instalación"
-description: "Instala Hermes Agent on Linux, macOS, or WSL2"
+description: "Instala Hermes Agent en Linux, macOS o WSL2"
 ---
 
-# Installation
+# Instalación
 
-Get Hermes Agent up and running in under two minutes with the one-line installer, or follow the manual steps for full control.
+Obtén Hermes Agent funcionando en menos de dos minutos con el instalador de una línea, o sigue los pasos manuales para tener control total.
 
 ## Quick Install
 
