@@ -1,65 +1,65 @@
 ---
 sidebar_position: 2
 title: "Configuración"
-description: "Configure Hermes Agent — config.yaml, providers, models, API keys, and more"
+description: "Configura Hermes Agent — config.yaml, proveedores, modelos, claves API, y más"
 ---
 
-# Configuration
+# Configuración
 
-All settings are stored in the `~/.hermes/` directory for easy access.
+Todos los ajustes se almacenan en el directorio `~/.hermes/` para un fácil acceso.
 
-## Directory Structure
+## Estructura de directorio
 
 ```text
 ~/.hermes/
 ├── config.yaml     # Settings (model, terminal, TTS, compression, etc.)
 ├── .env            # API keys and secrets
 ├── auth.json       # OAuth provider credentials (Nous Portal, etc.)
-├── SOUL.md         # Optional: global persona (agent embodies this personality)
-├── memories/       # Persistent memory (MEMORY.md, USER.md)
-├── skills/         # Agent-created skills (managed via skill_manage tool)
-├── cron/           # Scheduled jobs
-├── sessions/       # Gateway sessions
-└── logs/           # Logs (errors.log, gateway.log — secrets auto-redacted)
+├── SOUL.md         # Opcional: persona global (el agente encarna esta personalidad)
+├── memories/       # Memoria persistente (MEMORY.md, USER.md)
+├── skills/         # Habilidades creadas por agente (gestionadas a través de herramienta skill_manage)
+├── cron/           # Trabajos programados
+├── sessions/       # Sesiones de puerta de enlace
+└── logs/           # Registros (errors.log, gateway.log — secretos redactados automáticamente)
 ```
 
-## Managing Configuration
+## Gestión de configuración
 
 ```bash
-hermes config              # View current configuration
-hermes config edit         # Open config.yaml in your editor
-hermes config set KEY VAL  # Set a specific value
-hermes config check        # Check for missing options (after updates)
-hermes config migrate      # Interactively add missing options
+hermes config              # Vea la configuración actual
+hermes config edit         # Abre config.yaml en tu editor
+hermes config set KEY VAL  # Establece un valor específico
+hermes config check        # Verifica opciones faltantes (después de actualizaciones)
+hermes config migrate      # Agrega interactivamente opciones faltantes
 
-# Examples:
+# Ejemplos:
 hermes config set model anthropic/claude-opus-4
 hermes config set terminal.backend docker
-hermes config set OPENROUTER_API_KEY sk-or-...  # Saves to .env
+hermes config set OPENROUTER_API_KEY sk-or-...  # Se guarda en .env
 ```
 
 :::tip
 The `hermes config set` command automatically routes values to the right file — API keys are saved to `.env`, everything else to `config.yaml`.
 :::
 
-## Configuration Precedence
+## Precedencia de configuración
 
-Settings are resolved in this order (highest priority first):
+Los ajustes se resuelven en este orden (mayor prioridad primero):
 
-1. **CLI arguments** — e.g., `hermes chat --model anthropic/claude-sonnet-4` (per-invocation override)
-2. **`~/.hermes/config.yaml`** — the primary config file for all non-secret settings
-3. **`~/.hermes/.env`** — fallback for env vars; **required** for secrets (API keys, tokens, passwords)
-4. **Built-in defaults** — hardcoded safe defaults when nothing else is set
+1. **Argumentos CLI** — p. ej., `hermes chat --model anthropic/claude-sonnet-4` (anulación por invocación)
+2. **`~/.hermes/config.yaml`** — el archivo de configuración principal para todos los ajustes no secretos
+3. **`~/.hermes/.env`** — respaldo para variables de entorno; **requerido** para secretos (claves API, tokens, contraseñas)
+4. **Valores por defecto integrados** — valores predeterminados seguros codificados cuando nada más está configurado
 
 :::info Rule of Thumb
 Secrets (API keys, bot tokens, passwords) go in `.env`. Everything else (model, terminal backend, compression settings, memory limits, toolsets) goes in `config.yaml`. When both are set, `config.yaml` wins for non-secret settings.
 :::
 
-## Inference Providers
+## Proveedores de inferencia
 
-You need at least one way to connect to an LLM. Use `hermes model` to switch providers and models interactively, or configure directly:
+Necesitas al menos una forma de conectar a un LLM. Usa `hermes model` para cambiar proveedores y modelos interactivamente, o configura directamente:
 
-| Provider | Setup |
+| Proveedor | Configuración |
 |----------|-------|
 | **Nous Portal** | `hermes model` (OAuth, subscription-based) |
 | **OpenAI Codex** | `hermes model` (ChatGPT OAuth, uses Codex models) |
@@ -360,58 +360,58 @@ LLM_MODEL=meta-llama/Llama-3.1-70B-Instruct-Turbo
 You can switch between providers at any time with `hermes model` — no restart required. Your conversation history, memory, and skills carry over regardless of which provider you use.
 :::
 
-## Optional API Keys
+## Claves API opcionales
 
-| Feature | Provider | Env Variable |
-|---------|----------|--------------|
-| Web scraping | [Firecrawl](https://firecrawl.dev/) | `FIRECRAWL_API_KEY` |
-| Browser automation | [Browserbase](https://browserbase.com/) | `BROWSERBASE_API_KEY`, `BROWSERBASE_PROJECT_ID` |
-| Image generation | [FAL](https://fal.ai/) | `FAL_KEY` |
-| Premium TTS voices | [ElevenLabs](https://elevenlabs.io/) | `ELEVENLABS_API_KEY` |
-| OpenAI TTS + voice transcription | [OpenAI](https://platform.openai.com/api-keys) | `VOICE_TOOLS_OPENAI_KEY` |
-| RL Training | [Tinker](https://tinker-console.thinkingmachines.ai/) + [WandB](https://wandb.ai/) | `TINKER_API_KEY`, `WANDB_API_KEY` |
-| Cross-session user modeling | [Honcho](https://honcho.dev/) | `HONCHO_API_KEY` |
+| Función | Proveedor | Variable de entorno |
+|---------|-----------|-------------------|
+| Raspado web | [Firecrawl](https://firecrawl.dev/) | `FIRECRAWL_API_KEY` |
+| Automatización del navegador | [Browserbase](https://browserbase.com/) | `BROWSERBASE_API_KEY`, `BROWSERBASE_PROJECT_ID` |
+| Generación de imágenes | [FAL](https://fal.ai/) | `FAL_KEY` |
+| Voces TTS premium | [ElevenLabs](https://elevenlabs.io/) | `ELEVENLABS_API_KEY` |
+| TTS de OpenAI + transcripción de voz | [OpenAI](https://platform.openai.com/api-keys) | `VOICE_TOOLS_OPENAI_KEY` |
+| Entrenamiento de RL | [Tinker](https://tinker-console.thinkingmachines.ai/) + [WandB](https://wandb.ai/) | `TINKER_API_KEY`, `WANDB_API_KEY` |
+| Modelado de usuario entre sesiones | [Honcho](https://honcho.dev/) | `HONCHO_API_KEY` |
 
-### Self-Hosting Firecrawl
+### Alojamiento propio de Firecrawl
 
-By default, Hermes uses the [Firecrawl cloud API](https://firecrawl.dev/) for web search and scraping. If you prefer to run Firecrawl locally, you can point Hermes at a self-hosted instance instead.
+Por defecto, Hermes utiliza la [API en la nube de Firecrawl](https://firecrawl.dev/) para búsqueda y raspado web. Si prefieres ejecutar Firecrawl localmente, puedes apuntar Hermes a una instancia auto-alojada en su lugar.
 
-**What you get:** No API key required, no rate limits, no per-page costs, full data sovereignty.
+**Lo que obtienes:** Sin clave API requerida, sin límites de velocidad, sin costos por página, soberanía de datos completa.
 
-**What you lose:** The cloud version uses Firecrawl's proprietary "Fire-engine" for advanced anti-bot bypassing (Cloudflare, CAPTCHAs, IP rotation). Self-hosted uses basic fetch + Playwright, so some protected sites may fail. Search uses DuckDuckGo instead of Google.
+**Lo que pierdes:** La versión en la nube utiliza el "Fire-engine" propietario de Firecrawl para elu dir anti-bots avanzado (Cloudflare, CAPTCHAs, rotación de IP). El auto-alojado utiliza fetch básico + Playwright, por lo que algunos sitios protegidos pueden fallar. La búsqueda utiliza DuckDuckGo en lugar de Google.
 
-**Setup:**
+**Configuración:**
 
-1. Clone and start the Firecrawl Docker stack (5 containers: API, Playwright, Redis, RabbitMQ, PostgreSQL — requires ~4-8 GB RAM):
+1. Clona e inicia la pila de Docker de Firecrawl (5 contenedores: API, Playwright, Redis, RabbitMQ, PostgreSQL — requiere ~4-8 GB de RAM):
    ```bash
    git clone https://github.com/mendableai/firecrawl
    cd firecrawl
-   # In .env, set: USE_DB_AUTHENTICATION=false
+   # En .env, establece: USE_DB_AUTHENTICATION=false
    docker compose up -d
    ```
 
-2. Point Hermes at your instance (no API key needed):
+2. Apunta Hermes a tu instancia (sin clave API requerida):
    ```bash
    hermes config set FIRECRAWL_API_URL http://localhost:3002
    ```
 
-You can also set both `FIRECRAWL_API_KEY` and `FIRECRAWL_API_URL` if your self-hosted instance has authentication enabled.
+También puedes establecer tanto `FIRECRAWL_API_KEY` como `FIRECRAWL_API_URL` si tu instancia auto-alojada tiene autenticación habilitada.
 
-## OpenRouter Provider Routing
+## Enrutamiento de proveedor de OpenRouter
 
-When using OpenRouter, you can control how requests are routed across providers. Add a `provider_routing` section to `~/.hermes/config.yaml`:
+Cuando uses OpenRouter, puedes controlar cómo se enrutan las solicitudes a través de proveedores. Agrega una sección `provider_routing` a `~/.hermes/config.yaml`:
 
 ```yaml
 provider_routing:
-  sort: "throughput"          # "price" (default), "throughput", or "latency"
-  # only: ["anthropic"]      # Only use these providers
-  # ignore: ["deepinfra"]    # Skip these providers
-  # order: ["anthropic", "google"]  # Try providers in this order
-  # require_parameters: true  # Only use providers that support all request params
-  # data_collection: "deny"   # Exclude providers that may store/train on data
+  sort: "throughput"          # "price" (predeterminado), "throughput", o "latency"
+  # only: ["anthropic"]      # Solo usa estos proveedores
+  # ignore: ["deepinfra"]    # Omite estos proveedores
+  # order: ["anthropic", "google"]  # Intenta proveedores en este orden
+  # require_parameters: true  # Solo usa proveedores que soporten todos los parámetros de solicitud
+  # data_collection: "deny"   # Excluye proveedores que puedan almacen ar/entrenar con datos
 ```
 
-**Shortcuts:** Append `:nitro` to any model name for throughput sorting (e.g., `anthropic/claude-sonnet-4:nitro`), or `:floor` for price sorting.
+**Atajos:** Agrega `:nitro` a cualquier nombre de modelo para ordenamiento de rendimiento (p. ej., `anthropic/claude-sonnet-4:nitro`), o `:floor` para ordenamiento de precio.
 
 ## Terminal Backend Configuration
 
@@ -458,7 +458,7 @@ Can also be set via environment variable: `TERMINAL_DOCKER_VOLUMES='["/host:/con
 
 See [Code Execution](features/code-execution.md) and the [Terminal section of the README](features/tools.md) for details on each backend.
 
-## Memory Configuration
+## Configuración de memoria
 
 ```yaml
 memory:
@@ -468,18 +468,18 @@ memory:
   user_char_limit: 1375     # ~500 tokens
 ```
 
-## Git Worktree Isolation
+## Aislamiento de worktree de Git
 
-Enable isolated git worktrees for running multiple agents in parallel on the same repo:
+Habilita worktrees de git aislados para ejecutar múltiples agentes en paralelo en el mismo repositorio:
 
 ```yaml
-worktree: true    # Always create a worktree (same as hermes -w)
-# worktree: false # Default — only when -w flag is passed
+worktree: true    # Siempre crea un worktree (igual a hermes -w)
+# worktree: false # Predeterminado — solo cuando se pasa la bandera -w
 ```
 
-When enabled, each CLI session creates a fresh worktree under `.worktrees/` with its own branch. Agents can edit files, commit, push, and create PRs without interfering with each other. Clean worktrees are removed on exit; dirty ones are kept for manual recovery.
+Cuando está habilitado, cada sesión de CLI crea un worktree fresco bajo `.worktrees/` con su propia rama. Los agentes pueden editar archivos, hacer commit, push y crear PRs sin interferirse entre sí. Los worktrees limpios se eliminan al salir; los sucios se guardan para recuperación manual.
 
-You can also list gitignored files to copy into worktrees via `.worktreeinclude` in your repo root:
+También puedes enumerar archivos ignorados por git para copiar en worktrees a través de `.worktreeinclude` en la raíz de tu repositorio:
 
 ```
 # .worktreeinclude
@@ -488,58 +488,58 @@ You can also list gitignored files to copy into worktrees via `.worktreeinclude`
 node_modules/
 ```
 
-## Context Compression
+## Compresión de contexto
 
 ```yaml
 compression:
   enabled: true
-  threshold: 0.85              # Compress at 85% of context limit
-  summary_model: "google/gemini-3-flash-preview"   # Model for summarization
+  threshold: 0.85              # Comprimir al 85% del límite de contexto
+  summary_model: "google/gemini-3-flash-preview"   # Modelo para resumen
   # summary_provider: "auto"   # "auto", "openrouter", "nous", "main"
 ```
 
 The `summary_model` must support a context length at least as large as your main model's, since it receives the full middle section of the conversation for compression.
 
-## Iteration Budget Pressure
+## Presión de presupuesto de iteración
 
-When the agent is working on a complex task with many tool calls, it can burn through its iteration budget (default: 90 turns) without realizing it's running low. Budget pressure automatically warns the model as it approaches the limit:
+Cuando el agente está trabajando en una tarea compleja con muchas llamadas de herramientas, puede quemar su presupuesto de iteración (predeterminado: 90 turnos) sin darse cuenta de que se está agotando. La presión de presupuesto advierte automáticamente al modelo a medida que se acerca al límite:
 
-| Threshold | Level | What the model sees |
-|-----------|-------|---------------------|
-| **70%** | Caution | `[BUDGET: 63/90. 27 iterations left. Start consolidating.]` |
-| **90%** | Warning | `[BUDGET WARNING: 81/90. Only 9 left. Respond NOW.]` |
+| Umbral | Nivel | Lo que ve el modelo |
+|--------|-------|---------------------|
+| **70%** | Precaución | `[BUDGET: 63/90. 27 iterations left. Start consolidating.]` |
+| **90%** | Advertencia | `[BUDGET WARNING: 81/90. Only 9 left. Respond NOW.]` |
 
-Warnings are injected into the last tool result's JSON (as a `_budget_warning` field) rather than as separate messages — this preserves prompt caching and doesn't disrupt the conversation structure.
+Las advertencias se inyectan en el JSON del último resultado de herramienta (como un campo `_budget_warning`) en lugar de como mensajes separados — esto preserva el almacenamiento en caché de indicadores y no interrumpe la estructura de la conversación.
 
 ```yaml
 agent:
-  max_turns: 90                # Max iterations per conversation turn (default: 90)
+  max_turns: 90                # Máximo de iteraciones por turno de conversación (predeterminado: 90)
 ```
 
-Budget pressure is enabled by default. The agent sees warnings naturally as part of tool results, encouraging it to consolidate its work and deliver a response before running out of iterations.
+La presión de presupuesto está habilitada de forma predeterminada. El agente ve las advertencias naturalmente como parte de los resultados de las herramientas, lo que lo anima a consolidar su trabajo y entregar una respuesta antes de quedarse sin iteraciones.
 
-## Auxiliary Models
+## Modelos auxiliares
 
-Hermes uses lightweight "auxiliary" models for side tasks like image analysis, web page summarization, and browser screenshot analysis. By default, these use **Gemini Flash** via OpenRouter or Nous Portal — you don't need to configure anything.
+Hermes utiliza modelos "auxiliares" livianos para tareas secundarias como análisis de imágenes, resumen de páginas web y análisis de capturas de pantalla del navegador. Por defecto, estos utilizan **Gemini Flash** a través de OpenRouter o Nous Portal — no necesitas configurar nada.
 
-To use a different model, add an `auxiliary` section to `~/.hermes/config.yaml`:
+Para usar un modelo diferente, agrega una sección `auxiliary` a `~/.hermes/config.yaml`:
 
 ```yaml
 auxiliary:
-  # Image analysis (vision_analyze tool + browser screenshots)
+  # Análisis de imágenes (herramienta vision_analyze + capturas de pantalla del navegador)
   vision:
     provider: "auto"           # "auto", "openrouter", "nous", "main"
-    model: ""                  # e.g. "openai/gpt-4o", "google/gemini-2.5-flash"
+    model: ""                  # p. ej. "openai/gpt-4o", "google/gemini-2.5-flash"
 
-  # Web page summarization + browser page text extraction
+  # Resumen de página web + extracción de texto de página del navegador
   web_extract:
     provider: "auto"
-    model: ""                  # e.g. "google/gemini-2.5-flash"
+    model: ""                  # p. ej. "google/gemini-2.5-flash"
 ```
 
-### Changing the Vision Model
+### Cambiar el modelo de visión
 
-To use GPT-4o instead of Gemini Flash for image analysis:
+Para usar GPT-4o en lugar de Gemini Flash para análisis de imágenes:
 
 ```yaml
 auxiliary:
@@ -547,7 +547,7 @@ auxiliary:
     model: "openai/gpt-4o"
 ```
 
-Or via environment variable (in `~/.hermes/.env`):
+O a través de variable de entorno (en `~/.hermes/.env`):
 
 ```bash
 AUXILIARY_VISION_MODEL=openai/gpt-4o
