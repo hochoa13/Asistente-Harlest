@@ -1,29 +1,29 @@
 ---
 title: Navegador Automation
-description: Control cloud browsers with Navegadorbase integration for web interaction, form filling, scraping, and more.
+description: control cloud browsers with Navegadorbase integration for web interaction, form filling, scraping, and more.
 sidebar_label: Navegador
 sidebar_position: 5
 ---
 
 # Navegador Automation
 
-Hermes Agent includes a full browser automation toolset powered by [Navegadorbase](https://browserbase.com), enabling the agent to navigate websites, interact with page elements, fill forms, and extract information — all running in cloud-hosted browsers with built-in anti-bot stealth features.
+Hermes Agent includes a full Navegador automation conjunto de herramientas powered by [Navegadorbase](https://browserbase.com), enabling the agent to navegar websites, interact with page elements, fill forms, and extract information — all running in cloud-hosted browsers with built-in anti-bot características furtivas.
 
 ## Descripción General
 
-The browser tools use the `agent-browser` CLI with Navegadorbase cloud execution. Pages are represented as **accessibility trees** (text-based snapshots), making them ideal for LLM agents. Interactive elements get ref IDs (like `@e1`, `@e2`) that the agent uses for clicking and typing.
+The herramientas de navegador Usar the `agent-Navegador` CLI with Navegadorbase cloud execution. Pages are represented as **árboles de accesibilidad** (text-based snapshots), making them ideal for LLM agents. Interactive elements Obtener ref IDs (like `@e1`, `@e2`) that the agent uses for clicking and typing.
 
 Key capabilities:
 
-- **Cloud execution** — no local browser needed
+- **Cloud execution** — no local Navegador needed
 - **Built-in stealth** — random fingerprints, CAPTCHA solving, residential proxies
-- **Session isolation** — each task gets its own browser session
+- **Session isolation** — each task gets its own Navegador session
 - **Automatic cleanup** — inactive sessions are closed after a timeout
-- **Visión analysis** — screenshot + AI analysis for visual understanding
+- **Visión analysis** — Captura de pantalla + AI analysis for visual understanding
 
 ## Configuración
 
-### Required Environment Variables
+### Required entorno Variables
 
 ```bash
 # Add to ~/.hermes/.env
@@ -31,9 +31,9 @@ BROWSERBASE_API_KEY=your-api-key-here
 BROWSERBASE_PROJECT_ID=your-project-id-here
 ```
 
-Get your credentials at [browserbase.com](https://browserbase.com).
+Obtener your credenciales at [browserbase.com](https://browserbase.com).
 
-### Optional Environment Variables
+### Optional entorno Variables
 
 ```bash
 # Residential proxies for better CAPTCHA solving (default: "true")
@@ -53,7 +53,7 @@ BROWSERBASE_SESSION_TIMEOUT=600000
 BROWSER_INACTIVITY_TIMEOUT=300
 ```
 
-### Install agent-browser CLI
+### Instalar agent-Navegador CLI
 
 ```bash
 npm install -g agent-browser
@@ -61,27 +61,27 @@ npm install -g agent-browser
 npm install
 ```
 
-:::info
-The `browser` toolset must be included in your config's `toolsets` list or enabled via `hermes config set toolsets '["hermes-cli", "browser"]'`.
+:::Información
+The `Navegador` conjunto de herramientas must be included in your config's `Conjuntos de herramientas` list or enabled via `hermes config Establecer Conjuntos de herramientas '["hermes-cli", "Navegador"]'`.
 :::
 
 ## Available Herramientas
 
 ### `browser_navigate`
 
-Navigate to a URL. Must be called before any other browser tool. Initializes the Navegadorbase session.
+navegar to a URL. Must be called before any other Navegador herramienta. Initializes the Navegadorbase session.
 
 ```
 Navigate to https://github.com/NousRebuscar
 ```
 
-:::tip
-For simple information retrieval, prefer `web_buscar` or `web_extract` — they are faster and cheaper. Use browser tools when you need to **interact** with a page (click buttons, fill forms, handle dynamic content).
+:::Consejo
+For simple information retrieval, prefer `web_buscar` or `web_extract` — they are faster and cheaper. Usar herramientas de navegador when you need to **interact** with a page (hacer clic buttons, fill forms, handle dynamic content).
 :::
 
 ### `browser_snapshot`
 
-Get a text-based snapshot of the current page's accessibility tree. Returns interactive elements with ref IDs like `@e1`, `@e2` for use with `browser_click` and `browser_type`.
+Obtener a text-based snapshot of the current page's accessibility tree. Returns interactive elements with ref IDs like `@e1`, `@e2` for Usar with `browser_click` and `browser_type`.
 
 - **`full=false`** (default): Compact view showing only interactive elements
 - **`full=true`**: Completo page content
@@ -90,7 +90,7 @@ Snapshots over 8000 characters are automatically summarized by an LLM.
 
 ### `browser_click`
 
-Click an element identified by its ref ID from the snapshot.
+hacer clic an element identified by its ref ID from the snapshot.
 
 ```
 Click @e5 to press the "Sign In" button
@@ -98,7 +98,7 @@ Click @e5 to press the "Sign In" button
 
 ### `browser_type`
 
-Type text into an input field. Clears the field first, then types the new text.
+escribir text into an input field. Clears the field first, then types the new text.
 
 ```
 Type "hermes agent" into the buscar field @e3
@@ -106,7 +106,7 @@ Type "hermes agent" into the buscar field @e3
 
 ### `browser_scroll`
 
-Scroll the page up or down to reveal more content.
+desplazar the page up or down to reveal more content.
 
 ```
 Scroll down to see more results
@@ -124,7 +124,7 @@ Supported keys: `Enter`, `Tab`, `Escape`, `ArrowDown`, `ArrowUp`, and more.
 
 ### `browser_back`
 
-Navigate back to the previous page in browser history.
+navegar back to the previous page in Navegador history.
 
 ### `browser_get_images`
 
@@ -132,9 +132,9 @@ List all images on the current page with their URLs and alt text. Useful for fin
 
 ### `browser_vision`
 
-Take a screenshot and analyze it with vision AI. Use this when text snapshots don't capture important visual information — especially useful for CAPTCHAs, complex layouts, or visual verification challenges.
+Take a Captura de pantalla and analyze it with Visión AI. Usar this when text snapshots don't capture Importante visual information — especially useful for CAPTCHAs, complex layouts, or visual verification challenges.
 
-The screenshot is saved persistently and the file path is returned alongside the AI analysis. On messaging platforms (Telegram, Discord, Slack, WhatsApp), you can ask the agent to share the screenshot — it will be sent as a native photo attachment via the `MEDIA:` mechanism.
+The Captura de pantalla is saved persistently and the archivo ruta is returned alongside the AI analysis. On messaging platforms (Telegram, Discord, Slack, WhatsApp), you can ask the agent to share the Captura de pantalla — it will be sent as a native photo attachment via the `MEDIA:` mechanism.
 
 ```
 What does the chart on this page show?
@@ -144,17 +144,17 @@ Screenshots are stored in `~/.hermes/browser_screenshots/` and automatically cle
 
 ### `browser_console`
 
-Get browser console output (log/warn/error messages) and uncaught JavaScript exceptions from the current page. Essential for detecting silent JS errors that don't appear in the accessibility tree.
+Obtener Navegador console output (log/warn/error messages) and uncaught JavaScript exceptions from the current page. Essential for detecting silent JS errors that don't appear in the accessibility tree.
 
 ```
 Check the browser console for any JavaScript errors
 ```
 
-Use `clear=True` to clear the console after reading, so subsequent calls only show new messages.
+Usar `clear=True` to clear the console after reading, so subsequent calls only show new messages.
 
 ### `browser_close`
 
-Close the browser session and release resources. Call this when done to free up Navegadorbase session quota.
+Close the Navegador session and release resources. Call this when done to free up Navegadorbase session quota.
 
 ## Practical Ejemplos
 
@@ -185,9 +185,9 @@ Agent workflow:
 4. browser_close()
 ```
 
-## Session Recording
+## grabación de sesión
 
-Automatically record browser sessions as WebM video files:
+Automatically record Navegador sessions as WebM video files:
 
 ```yaml
 browser:
@@ -213,7 +213,7 @@ If paid features aren't available on your plan, Hermes automatically falls back 
 
 ## Session Management
 
-- Each task gets an isolated browser session via Navegadorbase
+- Each task gets an isolated Navegador session via Navegadorbase
 - Sesiones are automatically cleaned up after inactivity (default: 5 minutes)
 - A background thread checks every 30 seconds for stale sessions
 - Emergency cleanup runs on process exit to prevent orphaned sessions
@@ -221,10 +221,10 @@ If paid features aren't available on your plan, Hermes automatically falls back 
 
 ## Limitations
 
-- **Requires Navegadorbase account** — no local browser fallback
-- **Requires `agent-browser` CLI** — must be installed via npm
+- **Requires Navegadorbase account** — no local Navegador fallback
+- **Requires `agent-Navegador` CLI** — must be installed via npm
 - **Text-based interaction** — relies on accessibility tree, not pixel coordinates
 - **Snapshot size** — large pages may be truncated or LLM-summarized at 8000 characters
 - **Session timeout** — sessions expire based on your Navegadorbase plan settings
-- **Cost** — each session consumes Navegadorbase credits; use `browser_close` when done
-- **No file downloads** — cannot download files from the browser
+- **Cost** — each session consumes Navegadorbase credits; Usar `browser_close` when done
+- **No archivo downloads** — cannot download files from the Navegador

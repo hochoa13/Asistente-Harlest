@@ -1,14 +1,14 @@
-# Filesystem Puntos de Control
+# Filesystem Puntos de control
 
-Hermes can automatically snapshot your working directory before making file changes, giving you a safety net to roll back if something goes wrong.
+Hermes can automatically snapshot your working directorio before making archivo changes, giving you a safety net to roll back if something goes wrong.
 
 ## How It Works
 
-When enabled, Hermes takes a **one-time snapshot** at the start of each conversation turn before the first file-modifying operation (`write_file` or `patch`). This creates a point-in-time backup you can restore to at any time.
+When enabled, Hermes takes a **one-time snapshot** at the Iniciar of each conversation turn before the first archivo-modifying operation (`write_file` or `patch`). This creates a point-in-time backup you can restore to at any time.
 
-Under the hood, checkpoints use a **shadow git repository** stored at `~/.hermes/checkpoints/`. This is completely separate from your project's git — no `.git` directory is created in your project, and your own git history is never touched.
+Under the hood, Puntos de control Usar a **shadow git repository** stored at `~/.hermes/Puntos de control/`. This is completely separate from your project's git — no `.git` directorio is created in your project, and your own git history is never touched.
 
-## Enabling Puntos de Control
+## Enabling Puntos de control
 
 ### Per-session (CLI flag)
 
@@ -27,7 +27,7 @@ checkpoints:
 
 ## Rolling Back
 
-Use the `/rollback` slash command:
+Usar the `/Deshacer` slash comando:
 
 ```
 /rollback          # List all available checkpoints
@@ -36,7 +36,7 @@ Use the `/rollback` slash command:
 /rollback abc1234  # Restore by git commit hash
 ```
 
-Example output:
+Ejemplo output:
 
 ```
 📸 Puntos de Control for /home/user/project:
@@ -48,11 +48,11 @@ Example output:
 Use /rollback <number> to restore, e.g. /rollback 1
 ```
 
-When you restore, Hermes automatically takes a **pre-rollback snapshot** first — so you can always undo your undo.
+When you restore, Hermes automatically takes a **pre-Deshacer snapshot** first — so you can always undo your undo.
 
 ## What Gets Checkpointed
 
-Puntos de Control capture the entire working directory (the project root), excluding common large/sensitive patterns:
+Puntos de control capture the entire working directorio (the project root), excluding common large/sensitive patterns:
 
 - `node_modules/`, `dist/`, `build/`
 - `.env`, `.env.*`
@@ -63,35 +63,35 @@ Puntos de Control capture the entire working directory (the project root), exclu
 
 ## Performance
 
-Puntos de Control are designed to be lightweight:
+Puntos de control are designed to be lightweight:
 
-- **Once per turn** — only the first file operation triggers a snapshot, not every write
+- **Once per turn** — only the first archivo operation triggers a snapshot, not every write
 - **Skips large directories** — directories with >50,000 files are skipped automatically
-- **Skips when nothing changed** — if no files were modified since the last checkpoint, no commit is created
-- **Non-blocking** — if a checkpoint fails for any reason, the file operation proceeds normally
+- **Skips when nothing changed** — if no files were modified since the last punto de control, no commit is created
+- **Non-blocking** — if a punto de control fails for any reason, the archivo operation proceeds normally
 
 ## How It Determines the Project Root
 
-When you write to a file like `src/components/Button.tsx`, Hermes walks up the directory tree looking for project markers (`.git`, `pyproject.toml`, `package.json`, `Cargo.toml`, etc.) to find the project root. This ensures the entire project is checkpointed, not just the file's parent directory.
+When you write to a archivo like `src/components/Button.tsx`, Hermes walks up the directorio tree looking for project markers (`.git`, `pyproject.toml`, `package.json`, `Cargo.toml`, etc.) to find the project root. This ensures the entire project is checkpointed, not just the archivo's parent directorio.
 
 ## Platforms
 
-Puntos de Control work on both:
-- **CLI** — uses your current working directory
+Puntos de control work on both:
+- **CLI** — uses your current working directorio
 - **Gateway** (Telegram, Discord, etc.) — uses `MESSAGING_CWD`
 
-The `/rollback` command is available on all platforms.
+The `/Deshacer` comando is available on all platforms.
 
-## FAQ
+## Preguntas frecuentes
 
 **Does this conflict with my project's git?**
-No. Puntos de Control use a completely separate shadow git repository via `GIT_DIR` environment variables. Your project's `.git/` is never touched.
+No. Puntos de control Usar a completely separate shadow git repository via `GIT_DIR` entorno variables. Your project's `.git/` is never touched.
 
-**How much disk space do checkpoints use?**
-Git is very efficient at storing diffs. For most projects, checkpoint data is negligible. Old checkpoints are pruned when `max_snapshots` is exceeded.
+**How much disk space do Puntos de control Usar?**
+Git is very efficient at storing diffs. For most projects, punto de control data is negligible. Old Puntos de control are pruned when `max_snapshots` is exceeded.
 
-**Can I checkpoint without git installed?**
-No — git must be available on your PATH. If it's not installed, checkpoints silently disable.
+**Can I punto de control without git installed?**
+No — git must be available on your ruta. If it's not installed, Puntos de control silently Deshabilitar.
 
 **Can I roll back across sessions?**
-Yes! Puntos de Control persist in `~/.hermes/checkpoints/` and survive across sessions. You can roll back to a checkpoint from yesterday.
+Yes! Puntos de control persist in `~/.hermes/Puntos de control/` and survive across sessions. You can roll back to a punto de control from yesterday.

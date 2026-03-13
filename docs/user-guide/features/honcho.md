@@ -1,28 +1,28 @@
 ---
-title: Honcho Memoria
-description: AI-native persistent memory for cross-session user modeling and personalization.
-sidebar_label: Honcho Memoria
+title: honcho Memoria
+description: AI-native persistent Memoria for cross-session user modeling and personalization.
+sidebar_label: honcho Memoria
 sidebar_position: 8
 ---
 
-# Honcho Memoria
+# honcho Memoria
 
-[Honcho](https://honcho.dev) is an AI-native memory system that gives Hermes persistent, cross-session understanding of users. While Hermes has built-in memory (`MEMORY.md` and `USER.md`), Honcho adds a deeper layer of **user modeling** — learning preferences, goals, communication style, and context across conversations via a dual-peer architecture where both the user and the AI build representations over time.
+[honcho](https://honcho.dev) is an AI-native Memoria system that gives Hermes persistent, cross-session understanding of users. While Hermes has built-in Memoria (`Memoria.md` and `USER.md`), honcho adds a deeper layer of **user modeling** — learning preferences, goals, communication style, and context across conversations via a arquitectura de doble par where both the user and the AI build representations over time.
 
 ## Works Alongside Built-in Memoria
 
-Hermes has two memory systems that can work together or be configured separately. In `hybrid` mode (the default), both run side by side — Honcho adds cross-session user modeling while local files handle agent-level notes.
+Hermes has two Memoria systems that can work together or be configured separately. In `hybrid` mode (the default), both Ejecutar side by side — honcho adds cross-session user modeling while local files handle agent-level notes.
 
-| Feature | Built-in Memoria | Honcho Memoria |
+| Feature | Built-in Memoria | honcho Memoria |
 |---------|----------------|---------------|
-| Storage | Local files (`~/.hermes/memories/`) | Cloud-hosted Honcho API |
+| Storage | Local files (`~/.hermes/memories/`) | Cloud-hosted honcho API |
 | Scope | Agent-level notes and user profile | Deep user modeling via dialectic reasoning |
 | Persistence | Across sessions on same machine | Across sessions, machines, and platforms |
-| Query | Injected into system prompt automatically | Prefetched + on-demand via tools |
+| consulta | Injected into system prompt automatically | Prefetched + on-demand via Herramientas |
 | Content | Manually curated by the agent | Automatically learned from conversations |
-| Write surface | `memory` tool (add/replace/remove) | `honcho_conclude` tool (persist facts) |
+| Write surface | `Memoria` herramienta (add/replace/remove) | `honcho_conclude` herramienta (persist facts) |
 
-Set `memoryMode` to `honcho` to use Honcho exclusively. See [Memoria Modes](#memory-modes) for per-peer configuration.
+Establecer `memoryMode` to `honcho` to Usar honcho exclusively. See [Memoria Modes](#Memoria-modes) for per-peer Configuración.
 
 
 ## Configuración
@@ -33,23 +33,23 @@ Set `memoryMode` to `honcho` to use Honcho exclusively. See [Memoria Modes](#mem
 hermes honcho setup
 ```
 
-The setup wizard walks through API key, peer names, workspace, memory mode, write frequency, recall mode, and session strategy. It offers to install `honcho-ai` if missing.
+The Configuración wizard walks through clave API, peer names, workspace, Memoria mode, write frequency, Recuerdos mode, and session strategy. It offers to Instalar `honcho-ai` if missing.
 
 ### Manual Configuración
 
-#### 1. Install the Client Library
+#### 1. Instalar the Client Library
 
 ```bash
 pip install 'honcho-ai>=2.0.1'
 ```
 
-#### 2. Get an API Key
+#### 2. Obtener an clave API
 
-Go to [app.honcho.dev](https://app.honcho.dev) > Settings > API Keys.
+Go to [app.honcho.dev](https://app.honcho.dev) > Settings > claves API.
 
-#### 3. Configure
+#### 3. Configurar
 
-Honcho reads from `~/.honcho/config.json` (shared across all Honcho-enabled applications):
+honcho reads from `~/.honcho/config.json` (shared across all honcho-enabled applications):
 
 ```json
 {
@@ -69,16 +69,16 @@ Honcho reads from `~/.honcho/config.json` (shared across all Honcho-enabled appl
 }
 ```
 
-`apiKey` lives at the root because it is a shared credential across all Honcho-enabled tools. All other settings are scoped under `hosts.hermes`. The `hermes honcho setup` wizard writes this structure automatically.
+`apiKey` lives at the root because it is a shared credential across all honcho-enabled Herramientas. All other settings are scoped under `hosts.hermes`. The `hermes honcho Configuración` wizard writes this structure automatically.
 
-Or set the API key as an environment variable:
+Or Establecer the clave API as an entorno variable:
 
 ```bash
 hermes config set HONCHO_API_KEY your-key
 ```
 
-:::info
-When an API key is present (either in `~/.honcho/config.json` or as `HONCHO_API_KEY`), Honcho auto-enables unless explicitly set to `"enabled": false`.
+:::Información
+When an clave API is present (either in `~/.honcho/config.json` or as `HONCHO_API_KEY`), honcho auto-enables unless explicitly Establecer to `"enabled": false`.
 :::
 
 ## Configuración
@@ -91,8 +91,8 @@ Settings are scoped to `hosts.hermes` and fall back to root-level globals when t
 
 | Field | Default | Description |
 |-------|---------|-------------|
-| `apiKey` | — | Honcho API key (required, shared across all hosts) |
-| `sessions` | `{}` | Manual session name overrides per directory (shared) |
+| `apiKey` | — | honcho clave API (required, shared across all hosts) |
+| `sessions` | `{}` | Manual session name overrides per directorio (shared) |
 
 **Host-level (`hosts.hermes`)**
 
@@ -101,29 +101,29 @@ Settings are scoped to `hosts.hermes` and fall back to root-level globals when t
 | `workspace` | `"hermes"` | Workspace identifier |
 | `peerName` | *(derived)* | Your identity name for user modeling |
 | `aiPeer` | `"hermes"` | AI assistant identity name |
-| `environment` | `"production"` | Honcho environment |
-| `enabled` | *(auto)* | Auto-enables when API key is present |
-| `saveMessages` | `true` | Whether to sync messages to Honcho |
+| `entorno` | `"production"` | honcho entorno |
+| `enabled` | *(auto)* | Auto-enables when clave API is present |
+| `saveMessages` | `true` | Whether to sync messages to honcho |
 | `memoryMode` | `"hybrid"` | Memoria mode: `hybrid` or `honcho` |
 | `writeFrequency` | `"async"` | When to write: `async`, `turn`, `session`, or integer N |
-| `recallMode` | `"hybrid"` | Retrieval strategy: `hybrid`, `context`, or `tools` |
+| `recallMode` | `"hybrid"` | Retrieval strategy: `hybrid`, `context`, or `Herramientas` |
 | `sessionStrategy` | `"per-session"` | How sessions are scoped |
 | `sessionPeerPrefix` | `false` | Prefix session names with peer name |
-| `contextTokens` | *(Honcho default)* | Max tokens for auto-injected context |
+| `contextTokens` | *(honcho default)* | Max tokens for auto-injected context |
 | `dialecticReasoningLevel` | `"low"` | Floor for dialectic reasoning: `minimal` / `low` / `medium` / `high` / `max` |
 | `dialecticMaxChars` | `600` | Char cap on dialectic results injected into system prompt |
 | `linkedHosts` | `[]` | Other host keys whose workspaces to cross-reference |
 
-All host-level fields fall back to the equivalent root-level key if not set under `hosts.hermes`. Existing configs with settings at root level continue to work.
+All host-level fields fall back to the equivalent root-level key if not Establecer under `hosts.hermes`. Existing configs with settings at root level continue to work.
 
 ### Memoria Modes
 
 | Mode | Effect |
 |------|--------|
-| `hybrid` | Write to both Honcho and local files (default) |
-| `honcho` | Honcho only — skip local file writes |
+| `hybrid` | Write to both honcho and local files (default) |
+| `honcho` | honcho only — skip local archivo writes |
 
-Memoria mode can be set globally or per-peer (user, agent1, agent2, etc):
+Memoria mode can be Establecer globally or per-peer (user, agent1, agent2, etc):
 
 ```json
 {
@@ -134,17 +134,17 @@ Memoria mode can be set globally or per-peer (user, agent1, agent2, etc):
 }
 ```
 
-To disable Honcho entirely, set `enabled: false` or remove the API key.
+To Deshabilitar honcho entirely, Establecer `enabled: false` or remove the clave API.
 
-### Recall Modes
+### Recuerdos Modes
 
-Controls how Honcho context reaches the agent:
+Controls how honcho context reaches the agent:
 
 | Mode | Behavior |
 |------|----------|
-| `hybrid` | Auto-injected context + Honcho tools available (default) |
-| `context` | Auto-injected context only — Honcho tools hidden |
-| `tools` | Honcho tools only — no auto-injected context |
+| `hybrid` | Auto-injected context + honcho Herramientas available (default) |
+| `context` | Auto-injected context only — honcho Herramientas hidden |
+| `Herramientas` | honcho Herramientas only — no auto-injected context |
 
 ### Write Frequency
 
@@ -157,10 +157,10 @@ Controls how Honcho context reaches the agent:
 
 ### Session Strategies
 
-| Strategy | Session key | Use case |
+| Strategy | Session key | Usar case |
 |----------|-------------|----------|
-| `per-session` | Unique per run | Default. Fresh session every time. |
-| `per-directory` | CWD basename | Each project gets its own session. |
+| `per-session` | Unique per Ejecutar | Default. Fresh session every time. |
+| `per-directorio` | CWD basename | Each project gets its own session. |
 | `per-repo` | Git repo root name | Groups subdirectories under one session. |
 | `global` | Fixed `"global"` | Single cross-project session. |
 
@@ -168,7 +168,7 @@ Resolution order: manual map > session title > strategy-derived key > platform k
 
 ### Multi-host Configuración
 
-Multiple Honcho-enabled tools share `~/.honcho/config.json`. Each tool writes only to its own host block, reads its host block first, and falls back to root-level globals:
+Multiple honcho-enabled Herramientas share `~/.honcho/config.json`. Each herramienta writes only to its own host block, reads its host block first, and falls back to root-level globals:
 
 ```json
 {
@@ -191,11 +191,11 @@ Multiple Honcho-enabled tools share `~/.honcho/config.json`. Each tool writes on
 }
 ```
 
-Resolution: `hosts.<tool>` field > root-level field > default. In this example, both tools share the root `apiKey` and `peerName`, but each has its own `aiPeer` and workspace settings.
+Resolution: `hosts.<herramienta>` field > root-level field > default. In this Ejemplo, both Herramientas share the root `apiKey` and `peerName`, but each has its own `aiPeer` and workspace settings.
 
 ### Hermes Config (`~/.hermes/config.yaml`)
 
-Intentionally minimal — most configuration comes from `~/.honcho/config.json`:
+Intentionally minimal — most Configuración comes from `~/.honcho/config.json`:
 
 ```yaml
 honcho: {}
@@ -203,9 +203,9 @@ honcho: {}
 
 ## How It Works
 
-### Async Context Pipeline
+### contexto asincrónico tubería
 
-Honcho context is fetched asynchronously to avoid blocking the response path:
+honcho context is fetched asynchronously to avoid blocking the response ruta:
 
 ```
 Turn N:
@@ -219,14 +219,14 @@ Turn N:
          → fetch dialectic  ─┴→ cache for Turn N+1
 ```
 
-Turn 1 is a cold start (no cache). All subsequent turns consume cached results with zero HTTP latency on the response path. The system prompt on turn 1 uses only static context to preserve prefix cache hits at the LLM provider.
+Turn 1 is a cold Iniciar (no cache). All subsequent turns consume cached results with zero HTTP latency on the response ruta. The system prompt on turn 1 uses only static context to preserve prefix cache hits at the LLM provider.
 
-### Dual-Peer Architecture
+### arquitectura de doble par
 
-Both the user and AI have peer representations in Honcho:
+Both the user and AI have peer representations in honcho:
 
-- **User peer** — observed from user messages. Honcho learns preferences, goals, communication style.
-- **AI peer** — observed from assistant messages (`observe_me=True`). Honcho builds a representation of the agent's knowledge and behavior.
+- **User peer** — observed from user messages. honcho learns preferences, goals, communication style.
+- **AI peer** — observed from assistant messages (`observe_me=True`). honcho builds a representation of the agent's knowledge and behavior.
 
 Both representations are injected into the system prompt when available.
 
@@ -244,11 +244,11 @@ Dialectic queries scale reasoning effort with message complexity:
 
 ### Gateway Integración
 
-The gateway creates short-lived `AIAgent` instances per request. Honcho managers are owned at the gateway session layer (`_honcho_managers` dict) so they persist across requests within the same session and flush at real session boundaries (reset, reanudar, expiry, server stop).
+The gateway creates short-lived `AIAgent` instances per request. honcho managers are owned at the gateway session layer (`_honcho_managers` dict) so they persist across requests within the same session and flush at real session boundaries (reset, reanudar, expiry, server Detener).
 
 ## Herramientas
 
-When Honcho is active, four tools become available. Availability is gated dynamically — they are invisible when Honcho is disabled.
+When honcho is active, four Herramientas become available. Availability is gated dynamically — they are invisible when honcho is disabled.
 
 ### `honcho_profile`
 
@@ -256,21 +256,21 @@ Fast peer card retrieval (no LLM). Returns a curated list of key facts about the
 
 ### `honcho_buscar`
 
-Semantic buscar over memory (no LLM). Returns raw excerpts ranked by relevance. Cheaper and faster than `honcho_context` — good for factual lookups.
+Semantic buscar over Memoria (no LLM). Returns raw excerpts ranked by relevance. Cheaper and faster than `honcho_context` — good for factual lookups.
 
-Parameters:
-- `query` (string) — buscar query
+Parámetros:
+- `consulta` (string) — buscar consulta
 - `max_tokens` (integer, optional) — result token budget
 
 ### `honcho_context`
 
-Dialectic Q&A powered by Honcho's LLM. Synthesizes an answer from accumulated conversation history.
+Dialectic Q&A powered by honcho's LLM. Synthesizes an answer from accumulated conversation history.
 
-Parameters:
-- `query` (string) — natural language question
+Parámetros:
+- `consulta` (string) — natural language question
 - `peer` (string, optional) — `"user"` (default) or `"ai"`. Querying `"ai"` asks about the assistant's own history and identity.
 
-Example queries the agent might make:
+Ejemplo queries the agent might make:
 
 ```
 "What are this user's main goals?"
@@ -281,9 +281,9 @@ Example queries the agent might make:
 
 ### `honcho_conclude`
 
-Writes a fact to Honcho memory. Use when the user explicitly states a preference, correction, or project context worth remembering. Feeds into the user's peer card and representation.
+Writes a fact to honcho Memoria. Usar when the user explicitly states a preference, correction, or project context worth remembering. Feeds into the user's peer card and representation.
 
-Parameters:
+Parámetros:
 - `conclusion` (string) — the fact to persist
 
 ## CLI Commands
@@ -309,16 +309,16 @@ hermes honcho migrate                      # Migración guide: OpenClaw → Herm
 
 ### Doctor Integración
 
-`hermes doctor` includes a Honcho section that validates config, API key, and connection status.
+`hermes doctor` includes a honcho Sección that validates config, clave API, and connection status.
 
 ## Migración
 
 ### From Local Memoria
 
-When Honcho activates on an instance with existing local history, migration runs automatically:
+When honcho activates on an instance with existing local history, migration runs automatically:
 
-1. **Conversation history** — prior messages are uploaded as an XML transcript file
-2. **Memoria files** — existing `MEMORY.md`, `USER.md`, and `SOUL.md` are uploaded for context
+1. **Conversation history** — prior messages are uploaded as an XML transcript archivo
+2. **Memoria files** — existing `Memoria.md`, `USER.md`, and `alma.md` are uploaded for context
 
 ### From OpenClaw
 
@@ -326,32 +326,32 @@ When Honcho activates on an instance with existing local history, migration runs
 hermes honcho migrate
 ```
 
-Walks through converting an OpenClaw native Honcho setup to the shared `~/.honcho/config.json` format.
+Walks through converting an OpenClaw native honcho Configuración to the shared `~/.honcho/config.json` format.
 
 ## AI Peer Identity
 
-Honcho can build a representation of the AI assistant over time (via `observe_me=True`). You can also seed the AI peer explicitly:
+honcho can build a representation of the AI assistant over time (via `observe_me=True`). You can also seed the AI peer explicitly:
 
 ```bash
 hermes honcho identity ~/.hermes/SOUL.md
 ```
 
-This uploads the file content through Honcho's observation pipeline. The AI peer representation is then injected into the system prompt alongside the user's, giving the agent awareness of its own accumulated identity.
+This uploads the archivo content through honcho's observation tubería. The AI peer representation is then injected into the system prompt alongside the user's, giving the agent awareness of its own accumulated identity.
 
 ```bash
 hermes honcho identity --show
 ```
 
-Shows the current AI peer representation from Honcho.
+Shows the current AI peer representation from honcho.
 
-## Use Cases
+## Usar Cases
 
-- **Personalized responses** — Honcho learns how each user prefers to communicate
+- **Personalized responses** — honcho learns how each user prefers to communicate
 - **Goal seguimiento** — remembers what users are working toward across sessions
 - **Expertise adaptation** — adjusts technical depth based on user's background
-- **Cross-platform memory** — same user understanding across CLI, Telegram, Discord, etc.
+- **Cross-platform Memoria** — same user understanding across CLI, Telegram, Discord, etc.
 - **Multi-user support** — each user (via messaging platforms) gets their own user model
 
-:::tip
-Honcho is fully opt-in — zero behavior change when disabled or unconfigured. All Honcho calls are non-fatal; if the service is unreachable, the agent continues normally.
+:::Consejo
+honcho is fully opt-in — zero behavior change when disabled or unconfigured. All honcho calls are non-fatal; if the service is unreachable, the agent continues normally.
 :::

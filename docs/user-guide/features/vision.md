@@ -1,31 +1,31 @@
 ---
 title: Visión & Image Paste
-description: Paste images from your clipboard into the Hermes CLI for multimodal vision analysis.
+description: Paste images from your Portapapeles into the Hermes CLI for multimodal Visión analysis.
 sidebar_label: Visión & Image Paste
 sidebar_position: 7
 ---
 
 # Visión & Image Paste
 
-Hermes Agent supports **multimodal vision** — you can paste images from your clipboard directly into the CLI and ask the agent to analyze, describe, or work with them. Images are sent to the model as base64-encoded content blocks, so any vision-capable model can process them.
+Hermes Agent supports **multimodal Visión** — you can paste images from your Portapapeles directly into the CLI and ask the agent to analyze, describe, or work with them. Images are sent to the model as base64-encoded content blocks, so any Visión-capable model can process them.
 
 ## How It Works
 
-1. Copy an image to your clipboard (screenshot, browser image, etc.)
+1. Copy an image to your Portapapeles (Captura de pantalla, Navegador image, etc.)
 2. Attach it using one of the methods below
-3. Type your question and press Enter
+3. escribir your question and press Enter
 4. The image appears as a `[📎 Image #1]` badge above the input
-5. On submit, the image is sent to the model as a vision content block
+5. On submit, the image is sent to the model as a Visión content block
 
 You can attach multiple images before sending — each gets its own badge. Press `Ctrl+C` to clear all attached images.
 
 Images are saved to `~/.hermes/images/` as PNG files with timestamped filenames.
 
-## Paste Methods
+## métodos de pegado
 
-How you attach an image depends on your terminal environment. Not all methods work everywhere — here's the full breakdown:
+How you attach an image depends on your terminal entorno. Not all methods work everywhere — here's the full breakdown:
 
-### `/paste` Command
+### `/paste` comando
 
 **The most reliable method. Works everywhere.**
 
@@ -33,50 +33,50 @@ How you attach an image depends on your terminal environment. Not all methods wo
 /paste
 ```
 
-Type `/paste` and press Enter. Hermes checks your clipboard for an image and attaches it. This works in every environment because it explicitly calls the clipboard backend — no terminal keybinding interception to worry about.
+escribir `/paste` and press Enter. Hermes checks your Portapapeles for an image and attaches it. This works in every entorno because it explicitly calls the Portapapeles backend — no terminal keybinding interception to worry about.
 
 ### Ctrl+V / Cmd+V (Bracketed Paste)
 
-When you paste text that's on the clipboard alongside an image, Hermes automatically checks for an image too. This works when:
-- Your clipboard contains **both text and an image** (some apps put both on the clipboard when you copy)
+When you paste text that's on the Portapapeles alongside an image, Hermes automatically checks for an image too. This works when:
+- Your Portapapeles contains **both text and an image** (some apps put both on the Portapapeles when you copy)
 - Your terminal supports bracketed paste (most modern terminals do)
 
-:::warning
-If your clipboard has **only an image** (no text), Ctrl+V does nothing in most terminals. Terminals can only paste text — there's no standard mechanism to paste binary image data. Use `/paste` or Alt+V instead.
+:::Advertencia
+If your Portapapeles has **only an image** (no text), Ctrl+V does nothing in most terminals. Terminals can only paste text — there's no standard mechanism to paste binary image data. Usar `/paste` or Alt+V instead.
 :::
 
 ### Alt+V
 
-Alt key combinations pass through most terminal emulators (they're sent as ESC + key rather than being intercepted). Press `Alt+V` to check the clipboard for an image.
+Alt key combinations pass through most terminal emulators (they're sent as ESC + key rather than being intercepted). Press `Alt+V` to Verificar the Portapapeles for an image.
 
 :::caution
-**Does not work in VSCode's integrated terminal.** VSCode intercepts many Alt+key combos for its own UI. Use `/paste` instead.
+**Does not work in VSCode's integrated terminal.** VSCode intercepts many Alt+key combos for its own UI. Usar `/paste` instead.
 :::
 
 ### Ctrl+V (Raw — Linux Only)
 
-On Linux desktop terminals (GNOME Terminal, Konsole, Alacritty, etc.), `Ctrl+V` is **not** the paste shortcut — `Ctrl+Shift+V` is. So `Ctrl+V` sends a raw byte to the application, and Hermes catches it to check the clipboard. This only works on Linux desktop terminals with X11 or Wayland clipboard access.
+On Linux desktop terminals (GNOME Terminal, Konsole, Alacritty, etc.), `Ctrl+V` is **not** the paste shortcut — `Ctrl+Shift+V` is. So `Ctrl+V` sends a raw byte to the application, and Hermes catches it to Verificar the Portapapeles. This only works on Linux desktop terminals with X11 or Wayland Portapapeles access.
 
-## Platform Compatibility
+## compatibilidad de plataforma
 
-| Environment | `/paste` | Ctrl+V text+image | Alt+V | Notes |
+| entorno | `/paste` | Ctrl+V text+image | Alt+V | Notes |
 |---|:---:|:---:|:---:|---|
 | **macOS Terminal / iTerm2** | ✅ | ✅ | ✅ | Best experience — `osascript` always available |
-| **Linux X11 desktop** | ✅ | ✅ | ✅ | Requires `xclip` (`apt install xclip`) |
-| **Linux Wayland desktop** | ✅ | ✅ | ✅ | Requires `wl-paste` (`apt install wl-clipboard`) |
-| **WSL2 (Windows Terminal)** | ✅ | ✅¹ | ✅ | Uses `powershell.exe` — no extra install needed |
+| **Linux X11 desktop** | ✅ | ✅ | ✅ | Requires `xclip` (`apt Instalar xclip`) |
+| **Linux Wayland desktop** | ✅ | ✅ | ✅ | Requires `wl-paste` (`apt Instalar wl-Portapapeles`) |
+| **WSL2 (Windows Terminal)** | ✅ | ✅¹ | ✅ | Uses `powershell.exe` — no extra Instalar needed |
 | **VSCode Terminal (local)** | ✅ | ✅¹ | ❌ | VSCode intercepts Alt+key |
-| **VSCode Terminal (SSH)** | ❌² | ❌² | ❌ | Remote clipboard not accessible |
-| **SSH terminal (any)** | ❌² | ❌² | ❌² | Remote clipboard not accessible |
+| **VSCode Terminal (ssh)** | ❌² | ❌² | ❌ | Remote Portapapeles not accessible |
+| **ssh terminal (any)** | ❌² | ❌² | ❌² | Remote Portapapeles not accessible |
 
-¹ Only when clipboard has both text and an image (image-only clipboard = nothing happens)
-² See [SSH & Remote Sesiones](#ssh--remote-sessions) below
+¹ Only when Portapapeles has both text and an image (image-only Portapapeles = nothing happens)
+² See [ssh & Remote Sesiones](#ssh--remote-sessions) below
 
-## Platform-Specific Configuración
+## específico de plataforma Configuración
 
 ### macOS
 
-**No setup required.** Hermes uses `osascript` (built into macOS) to read the clipboard. For faster performance, optionally install `pngpaste`:
+**No Configuración required.** Hermes uses `osascript` (built into macOS) to read the Portapapeles. For faster performance, optionally Instalar `pngpaste`:
 
 ```bash
 brew install pngpaste
@@ -84,7 +84,7 @@ brew install pngpaste
 
 ### Linux (X11)
 
-Install `xclip`:
+Instalar `xclip`:
 
 ```bash
 # Ubuntu/Debian
@@ -99,7 +99,7 @@ sudo pacman -S xclip
 
 ### Linux (Wayland)
 
-Modern Linux desktops (Ubuntu 22.04+, Fedora 34+) often use Wayland by default. Install `wl-clipboard`:
+Modern Linux desktops (Ubuntu 22.04+, Fedora 34+) often Usar Wayland by default. Instalar `wl-Portapapeles`:
 
 ```bash
 # Ubuntu/Debian
@@ -112,7 +112,7 @@ sudo dnf install wl-clipboard
 sudo pacman -S wl-clipboard
 ```
 
-:::tip Cómo check if you're on Wayland
+:::Consejo Cómo Verificar if you're on Wayland
 ```bash
 echo $XDG_SESSION_TYPE
 # "wayland" = Wayland, "x11" = X11, "tty" = no display server
@@ -121,15 +121,15 @@ echo $XDG_SESSION_TYPE
 
 ### WSL2
 
-**No extra setup required.** Hermes detects WSL2 automatically (via `/proc/version`) and uses `powershell.exe` to access the Windows clipboard through .NET's `System.Windows.Forms.Clipboard`. This is built into WSL2's Windows interop — `powershell.exe` is available by default.
+**No extra Configuración required.** Hermes detects WSL2 automatically (via `/proc/version`) and uses `powershell.exe` to access the Windows Portapapeles through .NET's `System.Windows.Forms.Portapapeles`. This is built into WSL2's Windows interop — `powershell.exe` is available by default.
 
-The clipboard data is transferred as base64-encoded PNG over stdout, so no file path conversion or temp files are needed.
+The Portapapeles data is transferred as base64-encoded PNG over stdout, so no archivo ruta conversion or temp files are needed.
 
-:::info WSLg Note
-If you're running WSLg (WSL2 with GUI support), Hermes tries the PowerShell path first, then falls back to `wl-paste`. WSLg's clipboard bridge only supports BMP format for images — Hermes auto-converts BMP to PNG using Pillow (if installed) or ImageMagick's `convert` command.
+:::Información WSLg Note
+If you're running WSLg (WSL2 with GUI support), Hermes tries the PowerShell ruta first, then falls back to `wl-paste`. WSLg's Portapapeles bridge only supports BMP format for images — Hermes auto-converts BMP to PNG using Pillow (if installed) or ImageMagick's `convert` comando.
 :::
 
-#### Verify WSL2 clipboard access
+#### Verify WSL2 Portapapeles access
 
 ```bash
 # 1. Check WSL detection
@@ -143,19 +143,19 @@ powershell.exe -NoProfile -Command "Add-Type -AssemblyName System.Windows.Forms;
 # Should print "True"
 ```
 
-## SSH & Remote Sesiones
+## ssh & Remote Sesiones
 
-**Clipboard paste does not work over SSH.** When you SSH into a remote machine, the Hermes CLI runs on the remote host. All clipboard tools (`xclip`, `wl-paste`, `powershell.exe`, `osascript`) read the clipboard of the machine they run on — which is the remote server, not your local machine. Your local clipboard is inaccessible from the remote side.
+**Portapapeles paste does not work over ssh.** When you ssh into a remote machine, the Hermes CLI runs on the remote host. All Portapapeles Herramientas (`xclip`, `wl-paste`, `powershell.exe`, `osascript`) read the Portapapeles of the machine they Ejecutar on — which is the remote server, not your local machine. Your local Portapapeles is inaccessible from the remote side.
 
-### Workarounds for SSH
+### Workarounds for ssh
 
-1. **Upload the image file** — Save the image locally, upload it to the remote server via `scp`, VSCode's file explorer (drag-and-drop), or any file transfer method. Then reference it by path. *(A `/attach <filepath>` command is planned for a future release.)*
+1. **Upload the image archivo** — Save the image locally, upload it to the remote server via `scp`, VSCode's archivo explorer (drag-and-drop), or any archivo transfer method. Then reference it by ruta. *(A `/attach <filepath>` comando is planned for a future release.)*
 
-2. **Use a URL** — If the image is accessible online, just paste the URL in your message. The agent can use `vision_analyze` to look at any image URL directly.
+2. **Usar a URL** — If the image is accessible online, just paste the URL in your message. The agent can Usar `vision_analyze` to look at any image URL directly.
 
-3. **X11 forwarding** — Connect with `ssh -X` to forward X11. This lets `xclip` on the remote machine access your local X11 clipboard. Requires an X server running locally (XQuartz on macOS, built-in on Linux X11 desktops). Slow for large images.
+3. **X11 forwarding** — Connect with `ssh -X` to forward X11. This lets `xclip` on the remote machine access your local X11 Portapapeles. Requires an X server running locally (XQuartz on macOS, built-in on Linux X11 desktops). Slow for large images.
 
-4. **Use a messaging platform** — Send images to Hermes via Telegram, Discord, Slack, or WhatsApp. These platforms handle image upload natively and are not affected by clipboard/terminal limitations.
+4. **Usar a messaging platform** — Send images to Hermes via Telegram, Discord, Slack, or WhatsApp. These platforms handle image upload natively and are not affected by Portapapeles/terminal limitations.
 
 ## Why Terminals Can't Paste Images
 
@@ -163,17 +163,17 @@ This is a common source of confusion, so here's the technical explanation:
 
 Terminals are **text-based** interfaces. When you press Ctrl+V (or Cmd+V), the terminal emulator:
 
-1. Reads the clipboard for **text content**
+1. Reads the Portapapeles for **text content**
 2. Wraps it in [bracketed paste](https://en.wikipedia.org/wiki/Bracketed-paste) escape sequences
 3. Sends it to the application through the terminal's text stream
 
-If the clipboard contains only an image (no text), the terminal has nothing to send. There is no standard terminal escape sequence for binary image data. The terminal simply does nothing.
+If the Portapapeles contains only an image (no text), the terminal has nothing to send. There is no standard terminal escape sequence for binary image data. The terminal simply does nothing.
 
-This is why Hermes uses a separate clipboard check — instead of receiving image data through the terminal paste event, it calls OS-level tools (`osascript`, `powershell.exe`, `xclip`, `wl-paste`) directly via subprocess to read the clipboard independently.
+This is why Hermes uses a separate Portapapeles Verificar — instead of receiving image data through the terminal paste event, it calls OS-level Herramientas (`osascript`, `powershell.exe`, `xclip`, `wl-paste`) directly via subproceso to read the Portapapeles independently.
 
 ## Supported Models
 
-Image paste works with any vision-capable model. The image is sent as a base64-encoded data URL in the OpenAI vision content format:
+Image paste works with any Visión-capable model. The image is sent as a base64-encoded data URL in the OpenAI Visión content format:
 
 ```json
 {
@@ -184,4 +184,4 @@ Image paste works with any vision-capable model. The image is sent as a base64-e
 }
 ```
 
-Most modern models support this format, including GPT-4 Visión, Claude (with vision), Gemini, and open-source multimodal models served through OpenRouter.
+Most modern models support this format, including GPT-4 Visión, Claude (with Visión), Gemini, and open-source multimodal models served through openrouter.

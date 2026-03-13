@@ -1,16 +1,16 @@
 ---
 sidebar_position: 6
-title: "Event Hooks"
-description: "Run custom code at key lifecycle points — log activity, send alerts, post to webhooks"
+title: "Event Ganchos"
+description: "Ejecutar custom code at key lifecycle points — log activity, send alerts, post to webhooks"
 ---
 
-# Event Hooks
+# Event Ganchos
 
-The hooks system lets you run custom code at key points in the agent lifecycle — session creation, slash commands, each tool-calling step, and more. Hooks fire automatically during gateway operation without blocking the main agent pipeline.
+The Ganchos system lets you Ejecutar custom code at key points in the agent lifecycle — session creation, slash commands, each herramienta-calling step, and more. Ganchos fire automatically during gateway operation without blocking the main agent tubería.
 
 ## Creating a Hook
 
-Each hook is a directory under `~/.hermes/hooks/` containing two files:
+Each hook is a directorio under `~/.hermes/Ganchos/` containing two files:
 
 ```
 ~/.hermes/hooks/
@@ -30,9 +30,9 @@ events:
   - agent:step
 ```
 
-The `events` list determines which events trigger your handler. You can subscribe to any combination of events, including wildcards like `command:*`.
+The `events` list determines which events trigger your Manejador. You can subscribe to any combination of events, including wildcards like `comando:*`.
 
-### handler.py
+### Manejador.py
 
 ```python
 import json
@@ -52,27 +52,27 @@ async def handle(event_type: str, context: dict):
         f.write(json.dumps(entry) + "\n")
 ```
 
-**Handler rules:**
+**Manejador rules:**
 - Must be named `handle`
 - Receives `event_type` (string) and `context` (dict)
 - Can be `async def` or regular `def` — both work
 - Errors are caught and logged, never crashing the agent
 
-## Available Events
+## eventos disponibles
 
 | Event | When it fires | Context keys |
 |-------|---------------|--------------|
 | `gateway:startup` | Gateway process starts | `platforms` (list of active platform names) |
-| `session:start` | New messaging session created | `platform`, `user_id`, `session_id`, `session_key` |
+| `session:Iniciar` | New messaging session created | `platform`, `user_id`, `session_id`, `session_key` |
 | `session:reset` | User ran `/new` or `/reset` | `platform`, `user_id`, `session_key` |
-| `agent:start` | Agent begins processing a message | `platform`, `user_id`, `session_id`, `message` |
-| `agent:step` | Each iteration of the tool-calling loop | `platform`, `user_id`, `session_id`, `iteration`, `tool_names` |
+| `agent:Iniciar` | Agent begins processing a message | `platform`, `user_id`, `session_id`, `message` |
+| `agent:step` | Each iteration of the herramienta-calling loop | `platform`, `user_id`, `session_id`, `iteration`, `tool_names` |
 | `agent:end` | Agent finishes processing | `platform`, `user_id`, `session_id`, `message`, `response` |
-| `command:*` | Any slash command executed | `platform`, `user_id`, `command`, `args` |
+| `comando:*` | Any slash comando executed | `platform`, `user_id`, `comando`, `args` |
 
-### Wildcard Matching
+### coincidencia de comodín
 
-Handlers registered for `command:*` fire for any `command:` event (`command:model`, `command:reset`, etc.). Monitor all slash commands with a single subscription.
+Handlers registered for `comando:*` fire for any `comando:` event (`comando:model`, `comando:reset`, etc.). Monitor all slash commands with a single subscription.
 
 ## Ejemplos
 
@@ -109,7 +109,7 @@ async def handle(event_type: str, context: dict):
             )
 ```
 
-### Command Uso Logger
+### comando Uso Logger
 
 Track which slash commands are used:
 
@@ -142,7 +142,7 @@ def handle(event_type: str, context: dict):
         f.write(json.dumps(entry) + "\n")
 ```
 
-### Session Start Webhook
+### Session Iniciar Webhook
 
 POST to an external service on new sessions:
 
@@ -171,12 +171,12 @@ async def handle(event_type: str, context: dict):
 
 ## How It Works
 
-1. On gateway startup, `HookRegistry.discover_and_load()` scans `~/.hermes/hooks/`
-2. Each subdirectory with `HOOK.yaml` + `handler.py` is loaded dynamically
+1. On gateway startup, `HookRegistry.discover_and_load()` scans `~/.hermes/Ganchos/`
+2. Each subdirectory with `HOOK.yaml` + `Manejador.py` is loaded dynamically
 3. Handlers are registered for their declared events
-4. At each lifecycle point, `hooks.emit()` fires all matching handlers
-5. Errors in any handler are caught and logged — a broken hook never crashes the agent
+4. At each lifecycle point, `Ganchos.emit()` fires all matching handlers
+5. Errors in any Manejador are caught and logged — a broken hook never crashes the agent
 
-:::info
-Hooks only fire in the **gateway** (Telegram, Discord, Slack, WhatsApp). The CLI does not currently load hooks.
+:::Información
+Ganchos only fire in the **gateway** (Telegram, Discord, Slack, WhatsApp). The CLI does not currently load Ganchos.
 :::

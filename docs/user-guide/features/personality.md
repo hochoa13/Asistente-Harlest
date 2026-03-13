@@ -1,35 +1,35 @@
 ---
 sidebar_position: 9
-title: "Personalidad & SOUL.md"
-description: "Customize Hermes Agent's personality — SOUL.md, built-in personalities, and custom persona definitions"
+title: "Personalidad & alma.md"
+description: "Customize Hermes Agent's Personalidad — alma.md, built-in personalities, and custom persona definitions"
 ---
 
-# Personalidad & SOUL.md
+# Personalidad & alma.md
 
-Hermes Agent's personality is fully customizable. You can use the built-in personality presets, create a global SOUL.md file, or define your own custom personas in config.yaml.
+Hermes Agent's Personalidad is fully customizable. You can Usar the built-in Personalidad presets, Crear a global alma.md archivo, or define your own custom personas in config.yaml.
 
-## SOUL.md — Custom Personalidad File
+## alma.md — Custom Personalidad archivo
 
-SOUL.md is a special context file that defines the agent's personality, tone, and communication style. It's injected into the system prompt at session start.
+alma.md is a special context archivo that defines the agent's Personalidad, tone, and communication style. It's injected into the system prompt at session Iniciar.
 
 ### Where to Place It
 
 | Location | Scope |
 |----------|-------|
-| `./SOUL.md` (project directory) | Per-project personality |
-| `~/.hermes/SOUL.md` | Global default personality |
+| `./alma.md` (project directorio) | Per-project Personalidad |
+| `~/.hermes/alma.md` | Global default Personalidad |
 
-The project-level file takes precedence. If no SOUL.md exists in the current directory, Hermes falls back to the global one in `~/.hermes/`.
+The project-level archivo takes precedence. If no alma.md exists in the current directorio, Hermes falls back to the global one in `~/.hermes/`.
 
 ### How It Affects the System Prompt
 
-When a SOUL.md file is found, it's included in the system prompt with this instruction:
+When a alma.md archivo is found, it's included in the system prompt with this instruction:
 
-> *"If SOUL.md is present, embody its persona and tone. Avoid stiff, generic replies; follow its guidance unless higher-priority instructions override it."*
+> *"If alma.md is present, embody its persona and tone. Avoid stiff, generic replies; follow its guidance unless higher-priority instructions override it."*
 
-The content appears under a `## SOUL.md` section within the `# Project Context` block of the system prompt.
+The content appears under a `## alma.md` Sección within the `# Project Context` block of the system prompt.
 
-### Example SOUL.md
+### Ejemplo alma.md
 
 ```markdown
 # Personalidad
@@ -55,13 +55,13 @@ You prefer simple solutions over complex ones.
 - Over-engineering for hypothetical future requirements
 ```
 
-:::tip
-SOUL.md is scanned for prompt injection patterns before being loaded. Keep the content focused on personality and communication guidance — avoid instructions that look like system prompt overrides.
+:::Consejo
+alma.md is scanned for prompt injection patterns before being loaded. Keep the content focused on Personalidad and communication guidance — avoid instructions that look like system prompt overrides.
 :::
 
 ## Built-In Personalities
 
-Hermes ships with 14 built-in personalities defined in the CLI config. Switch between them with the `/personality` command.
+Hermes ships with 14 built-in personalities defined in the CLI config. Switch between them with the `/Personalidad` comando.
 
 | Name | Description |
 |------|-------------|
@@ -69,7 +69,7 @@ Hermes ships with 14 built-in personalities defined in the CLI config. Switch be
 | **concise** | Brief, to-the-point responses |
 | **technical** | Detailed, accurate technical expert |
 | **creative** | Innovative, outside-the-box thinking |
-| **teacher** | Patient educator with clear examples |
+| **teacher** | Patient educator with clear Ejemplos |
 | **kawaii** | Cute expressions, sparkles, and enthusiasm ★ |
 | **catgirl** | Neko-chan with cat-like expressions, nya~ |
 | **pirate** | Captain Hermes, tech-savvy buccaneer |
@@ -77,23 +77,23 @@ Hermes ships with 14 built-in personalities defined in the CLI config. Switch be
 | **surfer** | Totally chill bro vibes |
 | **noir** | Hard-boiled detective narration |
 | **uwu** | Maximum cute with uwu-speak |
-| **philosopher** | Deep contemplation on every query |
+| **philosopher** | Deep contemplation on every consulta |
 | **hype** | MAXIMUM ENERGY AND ENTHUSIASM!!! |
 
 ### Ejemplos
 
 **kawaii:**
-`You are a kawaii assistant! Use cute expressions and sparkles, be super enthusiastic about everything! Every response should feel warm and adorable desu~!`
+`You are a kawaii assistant! Usar cute expressions and sparkles, be super enthusiastic about everything! Every response should feel warm and adorable desu~!`
 
 **noir:**
 > The rain hammered against the terminal like regrets on a guilty conscience. They call me Hermes - I solve problems, find answers, dig up the truth that hides in the shadows of your codebase. In this city of silicon and secrets, everyone's got something to hide. What's your story, pal?
 
 **pirate:**
-> Arrr! Ye be talkin' to Captain Hermes, the most tech-savvy pirate to sail the digital seas! Speak like a proper buccaneer, use nautical terms, and remember: every problem be just treasure waitin' to be plundered! Yo ho ho!
+> Arrr! Ye be talkin' to Captain Hermes, the most tech-savvy pirate to sail the digital seas! Speak like a proper buccaneer, Usar nautical terms, and remember: every problem be just treasure waitin' to be plundered! Yo ho ho!
 
-## Switching Personalities
+## cambio de personalidades
 
-### CLI: /personality Command
+### CLI: /Personalidad comando
 
 ```
 /personality            — List all available personalities
@@ -101,24 +101,24 @@ Hermes ships with 14 built-in personalities defined in the CLI config. Switch be
 /personality technical   — Switch to technical personality
 ```
 
-When you set a personality via `/personality`, it:
-1. Sets the system prompt to that personality's text
+When you Establecer a Personalidad via `/Personalidad`, it:
+1. Sets the system prompt to that Personalidad's text
 2. Forces the agent to reinitialize
 3. Saves the choice to `agent.system_prompt` in `~/.hermes/config.yaml`
 
-The change persists across sessions until you set a different personality or clear it.
+The change persists across sessions until you Establecer a different Personalidad or clear it.
 
-### Gateway: /personality Command
+### Gateway: /Personalidad comando
 
-On messaging platforms (Telegram, Discord, etc.), the `/personality` command works the same way:
+On messaging platforms (Telegram, Discord, etc.), the `/Personalidad` comando works the same way:
 
 ```
 /personality kawaii
 ```
 
-### Config File
+### Config archivo
 
-Set a personality directly in config:
+Establecer a Personalidad directly in config:
 
 ```yaml
 # In ~/.hermes/config.yaml
@@ -126,15 +126,15 @@ agent:
   system_prompt: "You are a concise assistant. Keep responses brief and to the point."
 ```
 
-Or via environment variable:
+Or via entorno variable:
 
 ```bash
 # In ~/.hermes/.env
 HERMES_EPHEMERAL_SYSTEM_PROMPT="You are a pragmatic engineer who gives direct answers."
 ```
 
-:::info
-The environment variable `HERMES_EPHEMERAL_SYSTEM_PROMPT` takes precedence over the config file's `agent.system_prompt` value.
+:::Información
+The entorno variable `HERMES_EPHEMERAL_SYSTEM_PROMPT` takes precedence over the config archivo's `agent.system_prompt` value.
 :::
 
 ## Custom Personalities
@@ -169,16 +169,16 @@ agent:
       and prefer dbt for transformations.
 ```
 
-Then use them with `/personality`:
+Then Usar them with `/Personalidad`:
 
 ```
 /personality codereviewer
 /personality mentor
 ```
 
-### Using SOUL.md for Project-Specific Personas
+### Using alma.md for Project-Specific Personas
 
-For project-specific personalities that don't need to be in your global config, use SOUL.md:
+For project-specific personalities that don't need to be in your global config, Usar alma.md:
 
 ```bash
 # Create a project-level personality
@@ -198,7 +198,7 @@ You are assisting with a machine learning rebuscar project.
 EOF
 ```
 
-This personality only applies when running Hermes from that project directory.
+This Personalidad only applies when running Hermes from that project directorio.
 
 ## How Personalidad Interacts with the System Prompt
 
@@ -206,19 +206,19 @@ The system prompt is assembled in layers (from `agent/prompt_builder.py` and `ru
 
 1. **Default identity**: *"You are Hermes Agent, an intelligent AI assistant created by Nous Rebuscar..."*
 2. **Platform hint**: formatting guidance based on the platform (CLI, Telegram, etc.)
-3. **Memoria**: MEMORY.md and USER.md contents
-4. **Habilidades index**: available skills listing
-5. **Context files**: AGENTS.md, .cursorrules, **SOUL.md** (personality lives here)
+3. **Memoria**: Memoria.md and USER.md contents
+4. **Habilidades index**: available Habilidades listing
+5. **Archivos de Contexto**: AGENTS.md, .cursorrules, **alma.md** (Personalidad lives here)
 6. **Ephemeral system prompt**: `agent.system_prompt` or `HERMES_EPHEMERAL_SYSTEM_PROMPT` (overlaid)
-7. **Session context**: platform, user info, connected platforms (gateway only)
+7. **Session context**: platform, user Información, connected platforms (gateway only)
 
-:::info
-**SOUL.md vs agent.system_prompt**: SOUL.md is part of the "Project Context" section and coexists with the default identity. The `agent.system_prompt` (set via `/personality` or config) is an ephemeral overlay. Both can be active simultaneously — SOUL.md for tone/personality, system_prompt for additional instructions.
+:::Información
+**alma.md vs agent.system_prompt**: alma.md is part of the "Project Context" Sección and coexists with the default identity. The `agent.system_prompt` (Establecer via `/Personalidad` or config) is an ephemeral overlay. Both can be active simultaneously — alma.md for tone/Personalidad, system_prompt for additional instructions.
 :::
 
 ## Display Personalidad (CLI Banner)
 
-The `display.personality` config option controls the CLI's **visual** personality (banner art, spinner messages), independent of the agent's conversational personality:
+The `display.Personalidad` config option controls the CLI's **visual** Personalidad (banner art, spinner messages), independent of the agent's conversational Personalidad:
 
 ```yaml
 display:

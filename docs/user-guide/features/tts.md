@@ -1,30 +1,30 @@
 ---
 sidebar_position: 9
-title: "Voice & TTS"
-description: "Text-to-speech and voice message transcription across all platforms"
+title: "voz & TTS"
+description: "Texto a Voz and voz message transcription across all platforms"
 ---
 
-# Voice & TTS
+# voz & TTS
 
-Hermes Agent supports both text-to-speech output and voice message transcription across all messaging platforms.
+Hermes Agent supports both Texto a Voz output and voz message transcription across all messaging platforms.
 
-## Text-to-Speech
+## Texto a Voz
 
-Convert text to speech with three providers:
+Convert text to Habla with three Proveedores:
 
-| Provider | Quality | Cost | API Key |
+| Provider | Quality | Cost | clave API |
 |----------|---------|------|---------|
 | **Edge TTS** (default) | Good | Free | None needed |
 | **ElevenLabs** | Excellent | Paid | `ELEVENLABS_API_KEY` |
 | **OpenAI TTS** | Good | Paid | `VOICE_TOOLS_OPENAI_KEY` |
 
-### Platform Delivery
+### entrega de plataforma
 
 | Platform | Delivery | Format |
 |----------|----------|--------|
-| Telegram | Voice bubble (plays inline) | Opus `.ogg` |
-| Discord | Audio file attachment | MP3 |
-| WhatsApp | Audio file attachment | MP3 |
+| Telegram | voz bubble (plays inline) | Opus `.ogg` |
+| Discord | Audio archivo attachment | MP3 |
+| WhatsApp | Audio archivo attachment | MP3 |
 | CLI | Saved to `~/.hermes/audio_cache/` | MP3 |
 
 ### Configuración
@@ -43,11 +43,11 @@ tts:
     voice: "alloy"              # alloy, echo, fable, onyx, nova, shimmer
 ```
 
-### Telegram Voice Bubbles & ffmpeg
+### Telegram voz Bubbles & ffmpeg
 
-Telegram voice bubbles require Opus/OGG audio format:
+Telegram voz bubbles require Opus/OGG Audio format:
 
-- **OpenAI and ElevenLabs** produce Opus natively — no extra setup
+- **OpenAI and ElevenLabs** produce Opus natively — no extra Configuración
 - **Edge TTS** (default) outputs MP3 and needs **ffmpeg** to convert:
 
 ```bash
@@ -61,15 +61,15 @@ brew install ffmpeg
 sudo dnf install ffmpeg
 ```
 
-Without ffmpeg, Edge TTS audio is sent as a regular audio file (playable, but shows as a rectangular player instead of a voice bubble).
+Without ffmpeg, Edge TTS Audio is sent as a regular Audio archivo (playable, but shows as a rectangular player instead of a voz bubble).
 
-:::tip
-If you want voice bubbles without installing ffmpeg, switch to the OpenAI or ElevenLabs provider.
+:::Consejo
+If you want voz bubbles without installing ffmpeg, switch to the OpenAI or ElevenLabs provider.
 :::
 
-## Voice Message Transcription
+## voz Message Transcription
 
-Voice messages sent on Telegram, Discord, WhatsApp, or Slack are automatically transcribed and injected as text into the conversation. The agent sees the transcript as normal text.
+voz messages sent on Telegram, Discord, WhatsApp, or Slack are automatically transcribed and injected as text into the conversation. The agent sees the transcript as normal text.
 
 | Provider | Model | Quality | Cost |
 |----------|-------|---------|------|

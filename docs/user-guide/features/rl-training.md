@@ -1,31 +1,31 @@
 ---
 sidebar_position: 13
 title: "Entrenamiento RL"
-description: "Reinforcement learning on agent behaviors with Tinker-Atropos — environment discovery, training, and evaluation"
+description: "Aprendizaje por Refuerzo on agent behaviors with Tinker-Atropos — descubrimiento de entorno, training, and evaluation"
 ---
 
 # Entrenamiento RL
 
-Hermes Agent includes an integrated RL (Reinforcement Learning) training pipeline built on **Tinker-Atropos**. This enables training language models on environment-specific tasks using GRPO (Group Relative Policy Optimization) with LoRA adapters, orchestrated entirely through the agent's tool interface.
+Hermes Agent includes an integrated RL (Aprendizaje por Refuerzo) training tubería built on **Tinker-Atropos**. This enables training language models on entorno-specific tasks using GRPO (Group Relative política Optimization) with adaptadores LoRA, orchestrated entirely through the agent's herramienta interface.
 
 ## Descripción General
 
-The RL training system consists of three components:
+The Entrenamiento RL system consists of three components:
 
-1. **Atropos** — A trajectory API server that coordinates environment interactions, manages rollout groups, and computes advantages
+1. **Atropos** — A trajectory API server that coordinates entorno interactions, manages rollout groups, and computes advantages
 2. **Tinker** — A training service that handles model weights, LoRA training, sampling/inference, and optimizer steps
 3. **Environments** — Python classes that define tasks, scoring, and reward functions (e.g., GSM8K math problems)
 
-The agent can discover environments, configure training parameters, launch training runs, and monitor metrics — all through a set of `rl_*` tools.
+The agent can discover environments, Configurar training Parámetros, launch training runs, and monitor metrics — all through a Establecer of `rl_*` Herramientas.
 
 ## Requisitos
 
-RL training requires:
+Entrenamiento RL requires:
 
 - **Python >= 3.11** (Tinker package requirement)
-- **TINKER_API_KEY** — API key for the Tinker training service
-- **WANDB_API_KEY** — API key for Weights & Biases metrics seguimiento
-- The `tinker-atropos` submodule (at `tinker-atropos/` relative to the Hermes root)
+- **TINKER_API_KEY** — clave API for the Tinker training service
+- **WANDB_API_KEY** — clave API for Weights & Biases metrics seguimiento
+- The `Tinker-Atropos` submodule (at `Tinker-Atropos/` relative to the Hermes root)
 
 ```bash
 # Set up API keys
@@ -33,22 +33,22 @@ hermes config set TINKER_API_KEY your-tinker-key
 hermes config set WANDB_API_KEY your-wandb-key
 ```
 
-When both keys are present and Python >= 3.11 is available, the `rl` toolset is automatically enabled.
+When both keys are present and Python >= 3.11 is available, the `rl` conjunto de herramientas is automatically enabled.
 
 ## Available Herramientas
 
-| Tool | Description |
+| herramienta | Description |
 |------|-------------|
 | `rl_list_environments` | Discover available RL environments |
-| `rl_select_environment` | Select an environment and load its config |
+| `rl_select_environment` | Select an entorno and load its config |
 | `rl_get_current_config` | View configurable and locked fields |
-| `rl_edit_config` | Modify configurable training parameters |
-| `rl_start_training` | Launch a training run (spawns 3 processes) |
+| `rl_edit_config` | Modify configurable training Parámetros |
+| `rl_start_training` | Launch a training Ejecutar (spawns 3 processes) |
 | `rl_check_status` | Monitor training progress and WandB metrics |
-| `rl_stop_training` | Stop a running training job |
-| `rl_get_results` | Get final metrics and model weights path |
+| `rl_stop_training` | Detener a running training job |
+| `rl_get_results` | Obtener final metrics and model weights ruta |
 | `rl_list_runs` | List all active and completed runs |
-| `rl_test_inference` | Quick inference test using OpenRouter |
+| `rl_test_inference` | Quick inference Probar using openrouter |
 
 ## Workflow
 
@@ -58,27 +58,27 @@ When both keys are present and Python >= 3.11 is available, the `rl` toolset is 
 List the available RL environments
 ```
 
-The agent calls `rl_list_environments()` which scans `tinker-atropos/tinker_atropos/environments/` using AST parsing to find Python classes inheriting from `BaseEnv`. Each environment defines:
+The agent calls `rl_list_environments()` which scans `Tinker-Atropos/tinker_atropos/environments/` using AST parsing to find Python classes inheriting from `BaseEnv`. Each entorno defines:
 
-- **Dataset loading** — where training data comes from (e.g., HuggingFace datasets)
+- **Dataset loading** — where datos de entrenamiento comes from (e.g., HuggingFace datasets)
 - **Prompt construction** — how to format items for the model
 - **Scoring/verification** — how to evaluate model outputs and assign rewards
 
-### 2. Select and Configure
+### 2. Select and Configurar
 
 ```
 Select the GSM8K environment and show me the configuration
 ```
 
-The agent calls `rl_select_environment("gsm8k_tinker")`, then `rl_get_current_config()` to see all parameters.
+The agent calls `rl_select_environment("gsm8k_tinker")`, then `rl_get_current_config()` to see all Parámetros.
 
 Configuración fields are divided into two categories:
 
 **Configurable fields** (can be modified):
 - `group_size` — Number of completions per item (default: 16)
 - `batch_size` — Training batch size (default: 128)
-- `wandb_name` — WandB run name (auto-set to `{env}-{timestamp}`)
-- Other environment-specific parameters
+- `wandb_name` — WandB Ejecutar name (auto-Establecer to `{env}-{timestamp}`)
+- Other entorno-specific Parámetros
 
 **Locked fields** (infrastructure settings, cannot be changed):
 - `tokenizer_name` — Model tokenizer (e.g., `Qwen/Qwen3-8B`)
@@ -90,7 +90,7 @@ Configuración fields are divided into two categories:
 - `learning_rate` — Learning rate (4e-5)
 - `max_token_trainer_length` — Max tokens for trainer (9000)
 
-### 3. Start Training
+### 3. Iniciar Training
 
 ```
 Start the training run
@@ -98,14 +98,14 @@ Start the training run
 
 The agent calls `rl_start_training()` which:
 
-1. Generates a YAML config file merging locked settings with configurable overrides
-2. Creates a unique run ID
+1. Generates a YAML config archivo merging locked settings with configurable overrides
+2. Creates a unique Ejecutar ID
 3. Spawns three processes:
-   - **Atropos API server** (`run-api`) — trajectory coordination
+   - **Atropos API server** (`Ejecutar-API`) — trajectory coordination
    - **Tinker trainer** (`launch_training.py`) — LoRA training + FastAPI inference server on port 8001
-   - **Environment** (`environment.py serve`) — the selected environment connecting to Atropos
+   - **entorno** (`entorno.py serve`) — the selected entorno connecting to Atropos
 
-The processes start with staggered delays (5s for API, 30s for trainer, 90s more for environment) to ensure proper initialization order.
+The processes Iniciar with staggered delays (5s for API, 30s for trainer, 90s more for entorno) to ensure proper initialization order.
 
 ### 4. Monitor Progress
 
@@ -118,13 +118,13 @@ The agent calls `rl_check_status(run_id)` which reports:
 - Process status (running/exited for each of the 3 processes)
 - Running time
 - WandB metrics (step, reward mean, percent correct, eval accuracy)
-- Log file locations for debugging
+- Log archivo locations for debugging
 
 :::note Rate Limiting
-Status checks are rate-limited to once every **30 minutes** per run ID. This prevents excessive polling during long-running training jobs that take hours.
+Status checks are rate-limited to once every **30 minutes** per Ejecutar ID. This prevents excessive polling during long-running training jobs that take hours.
 :::
 
-### 5. Stop or Get Results
+### 5. Detener or Obtener Results
 
 ```
 Stop the training run
@@ -132,17 +132,17 @@ Stop the training run
 Get the final results for run abc12345
 ```
 
-`rl_stop_training()` terminates all three processes in reverse order (environment → trainer → API). `rl_get_results()` retrieves final WandB metrics and training history.
+`rl_stop_training()` terminates all three processes in reverse order (entorno → trainer → API). `rl_get_results()` retrieves final WandB metrics and training history.
 
-## Inference Testing
+## prueba de inferencia
 
-Before committing to a full training run, you can test if an environment works correctly using `rl_test_inference`. This runs a few steps of inference and scoring using OpenRouter — no Tinker API needed, just an `OPENROUTER_API_KEY`.
+Before committing to a full training Ejecutar, you can Probar if an entorno works correctly using `rl_test_inference`. This runs a few steps of inference and scoring using openrouter — no Tinker API needed, just an `OPENROUTER_API_KEY`.
 
 ```
 Test the selected environment with inference
 ```
 
-Default configuration:
+Default Configuración:
 - **3 steps × 16 completions = 48 rollouts per model**
 - Tests 3 models at different scales for robustness:
   - `qwen/qwen3-8b` (small)
@@ -151,7 +151,7 @@ Default configuration:
 - Total: ~144 rollouts
 
 This validates:
-- Environment loads correctly
+- entorno loads correctly
 - Prompt construction works
 - Inference response parsing is robust across model scales
 - Verifier/scoring logic produces valid rewards
@@ -161,7 +161,7 @@ This validates:
 The trainer uses the [Tinker](https://tinker.computer) API for model training operations:
 
 - **ServiceClient** — Creates training and sampling clients
-- **Training client** — Handles forward-backward passes with importance sampling loss, optimizer steps (Adam), and weight checkpointing
+- **Training client** — Handles forward-backward passes with importance sampling loss, optimizer steps (Adam), and weight puntos de control
 - **Sampling client** — Provides inference using the latest trained weights
 
 The training loop:
@@ -193,18 +193,18 @@ The training loop:
 
 ## Creating Custom Environments
 
-To create a new RL environment:
+To Crear a new RL entorno:
 
-1. Create a Python file in `tinker-atropos/tinker_atropos/environments/`
+1. Crear a Python archivo in `Tinker-Atropos/tinker_atropos/environments/`
 2. Define a class that inherits from `BaseEnv`
 3. Implement the required methods:
-   - `load_dataset()` — Load your training data
+   - `load_dataset()` — Load your datos de entrenamiento
    - `get_next_item()` — Provide the next item to the model
    - `score_answer()` — Score model outputs and assign rewards
    - `collect_trajectories()` — Collect and return trajectories
 4. Optionally define a custom config class inheriting from `BaseEnvConfig`
 
-Study the existing `gsm8k_tinker.py` as a template. The agent can help you create new environments — it can read existing environment files, inspect HuggingFace datasets, and write new environment code.
+Study the existing `gsm8k_tinker.py` as a template. The agent can help you Crear new environments — it can read existing entorno files, inspect HuggingFace datasets, and write new entorno code.
 
 ## WandB Metrics
 
@@ -223,7 +223,7 @@ Training runs log to Weights & Biases with these key metrics:
 
 ## Log Files
 
-Each training run generates log files in `tinker-atropos/logs/`:
+Each training Ejecutar generates log files in `Tinker-Atropos/logs/`:
 
 ```
 logs/

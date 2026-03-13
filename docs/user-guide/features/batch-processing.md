@@ -1,18 +1,18 @@
 ---
 sidebar_position: 12
 title: "Procesamiento por Lotes"
-description: "Generate agent trajectories at scale — parallel processing, checkpointing, and toolset distributions"
+description: "Generate agent trajectories at scale — parallel processing, puntos de control, and conjunto de herramientas distributions"
 ---
 
 # Procesamiento por Lotes
 
-Batch processing lets you run the Hermes agent across hundreds or thousands of prompts in parallel, generating structured trajectory data. This is primarily used for **training data generation** — producing ShareGPT-format trajectories with tool usage statistics that can be used for fine-tuning or evaluation.
+Procesamiento por lotes lets you Ejecutar the Hermes agent across hundreds or thousands of prompts in parallel, generating structured trajectory data. This is primarily used for **generación de datos de entrenamiento** — producing ShareGPT-format trajectories with herramienta Uso statistics that can be used for fine-tuning or evaluation.
 
 ## Descripción General
 
-The batch runner (`batch_runner.py`) processes a JSONL dataset of prompts, running each through a full agent session with tool access. Each prompt gets its own isolated environment. The output is structured trajectory data with full conversation history, tool call statistics, and reasoning coverage metrics.
+The batch runner (`batch_runner.py`) processes a JSONL dataset of prompts, running each through a full agent session with herramienta access. Each prompt gets its own isolated entorno. The output is structured trajectory data with full conversation history, herramienta call statistics, and reasoning coverage metrics.
 
-## Quick Start
+## Quick Iniciar
 
 ```bash
 # Basic batch run
@@ -34,9 +34,9 @@ python batch_runner.py \
 python batch_runner.py --list_distributions
 ```
 
-## Dataset Format
+## formato de dataset
 
-The input dataset is a JSONL file (one JSON object per line). Each entry must have a `prompt` field:
+The input dataset is a JSONL archivo (one JSON object per line). Each entry must have a `prompt` field:
 
 ```jsonl
 {"prompt": "Write a Python function that finds the longest palindromic substring"}
@@ -45,56 +45,56 @@ The input dataset is a JSONL file (one JSON object per line). Each entry must ha
 ```
 
 Entries can optionally include:
-- `image` or `docker_image`: A container image to use for this prompt's sandbox (works with Docker, Modal, and Singularity backends)
-- `cwd`: Working directory override for the task's terminal session
+- `image` or `docker_image`: A container image to Usar for this prompt's sandbox segura (works with docker, modal, and singularity backends)
+- `cwd`: Working directorio override for the task's terminal session
 
-## Configuración Options
+## Configuración Opciones
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| `--dataset_file` | (required) | Path to JSONL dataset |
+| `--dataset_file` | (required) | ruta to JSONL dataset |
 | `--batch_size` | (required) | Prompts per batch |
-| `--run_name` | (required) | Name for this run (used for output dir and checkpointing) |
+| `--run_name` | (required) | Name for this Ejecutar (used for output dir and puntos de control) |
 | `--distribution` | `"default"` | Herramientaset distribution to sample from |
-| `--model` | `claude-sonnet-4-20250514` | Model to use |
-| `--base_url` | `https://openrouter.ai/api/v1` | API base URL |
-| `--api_key` | (env var) | API key for model |
-| `--max_turns` | `10` | Maximum tool-calling iterations per prompt |
+| `--model` | `claude-sonnet-4-20250514` | Model to Usar |
+| `--base_url` | `https://openrouter.ai/API/v1` | API base URL |
+| `--api_key` | (env var) | clave API for model |
+| `--max_turns` | `10` | Maximum herramienta-calling iterations per prompt |
 | `--num_workers` | `4` | Parallel worker processes |
-| `--reanudar` | `false` | Resume from checkpoint |
-| `--verbose` | `false` | Enable verbose logging |
+| `--reanudar` | `false` | Resume from punto de control |
+| `--verbose` | `false` | Habilitar verbose logging |
 | `--max_samples` | all | Only process first N samples from dataset |
 | `--max_tokens` | model default | Maximum tokens per model response |
 
-### Enrutamiento de Proveedor (OpenRouter)
+### Enrutamiento de Proveedor (openrouter)
 
 | Parameter | Description |
 |-----------|-------------|
-| `--providers_allowed` | Comma-separated providers to allow (e.g., `"anthropic,openai"`) |
-| `--providers_ignored` | Comma-separated providers to ignore (e.g., `"together,deepinfra"`) |
+| `--providers_allowed` | Comma-separated Proveedores to allow (e.g., `"anthropic,openai"`) |
+| `--providers_ignored` | Comma-separated Proveedores to ignorar (e.g., `"together,deepinfra"`) |
 | `--providers_order` | Comma-separated preferred provider order |
 | `--provider_sort` | Sort by `"price"`, `"throughput"`, or `"latency"` |
 
-### Reasoning Control
+### Reasoning control
 
 | Parameter | Description |
 |-----------|-------------|
 | `--reasoning_effort` | Effort level: `xhigh`, `high`, `medium`, `low`, `minimal`, `none` |
-| `--reasoning_disabled` | Completoly disable reasoning/thinking tokens |
+| `--reasoning_disabled` | Completoly Deshabilitar reasoning/thinking tokens |
 
-### Advanced Options
+### Advanced Opciones
 
 | Parameter | Description |
 |-----------|-------------|
 | `--ephemeral_system_prompt` | System prompt used during execution but NOT saved to trajectories |
 | `--log_prefix_chars` | Characters to show in log previews (default: 100) |
-| `--prefill_messages_file` | Path to JSON file with prefill messages for few-shot priming |
+| `--prefill_messages_file` | ruta to JSON archivo with prefill messages for few-shot priming |
 
 ## Herramientaset Distributions
 
-Each prompt gets a randomly sampled set of toolsets from a **distribution**. This ensures training data covers diverse tool combinations. Use `--list_distributions` to see all available distributions.
+Each prompt gets a randomly sampled Establecer of Conjuntos de herramientas from a **distribution**. This ensures datos de entrenamiento covers diverse herramienta combinations. Usar `--list_distributions` to see all available distributions.
 
-Distributions define probability weights for each toolset combination. For example, a "default" distribution might assign high probability to `["terminal", "file", "web"]` and lower probability to web-only or file-only combinations.
+Distributions define probability weights for each conjunto de herramientas combination. Por ejemplo, a "default" distribution might assign high probability to `["terminal", "archivo", "web"]` and lower probability to web-only or archivo-only combinations.
 
 ## Output Format
 
@@ -110,7 +110,7 @@ data/my_run/
 └── statistics.json       # Aggregate tool usage stats
 ```
 
-### Trajectory Format
+### formato de trayectoria
 
 Each line in `trajectories.jsonl` is a JSON object:
 
@@ -144,13 +144,13 @@ Each line in `trajectories.jsonl` is a JSON object:
 }
 ```
 
-The `conversations` field uses a ShareGPT-like format with `from` and `value` fields. Tool stats are normalized to include all possible tools with zero defaults, ensuring consistent schema across entries for HuggingFace datasets compatibility.
+The `conversations` field uses a ShareGPT-like format with `from` and `value` fields. herramienta stats are normalized to include all possible Herramientas with zero defaults, ensuring consistent esquema across entries for HuggingFace datasets compatibility.
 
-## Checkpointing
+## puntos de control
 
-The batch runner has robust checkpointing for fault tolerance:
+The batch runner has robust puntos de control for fault tolerance:
 
-- **Checkpoint file:** Saved after each batch completes, seguimiento which prompt indices are done
+- **punto de control archivo:** Saved after each batch completes, seguimiento which prompt indices are done
 - **Content-based reanudar:** On `--reanudar`, the runner scans existing batch files and matches completed prompts by their actual text content (not just indices), enabling recovery even if the dataset order changes
 - **Failed prompts:** Only successfully completed prompts are marked as done — failed prompts will be retried on reanudar
 - **Batch merging:** On completion, all batch files (including from previous runs) are merged into a single `trajectories.jsonl`
@@ -168,25 +168,25 @@ The batch runner has robust checkpointing for fault tolerance:
 The batch runner applies automatic quality filtering:
 
 - **No-reasoning filter:** Samples where zero assistant turns contain reasoning (no `<REASONING_SCRATCHPAD>` or native thinking tokens) are discarded
-- **Corrupted entry filter:** Entries with hallucinated tool names (not in the valid tool list) are filtered out during the final merge
-- **Reasoning statistics:** Tracks percentage of turns with/without reasoning across the entire run
+- **Corrupted entry filter:** Entries with hallucinated herramienta names (not in the valid herramienta list) are filtered out during the final merge
+- **Reasoning statistics:** Tracks percentage of turns with/without reasoning across the entire Ejecutar
 
 ## Statistics
 
 After completion, the runner prints comprehensive statistics:
 
-- **Tool usage:** Call counts, success/failure rates per tool
+- **herramienta Uso:** Call counts, success/failure rates per herramienta
 - **Reasoning coverage:** Percentage of assistant turns with reasoning
 - **Samples discarded:** Count of samples filtered for lacking reasoning
 - **Duration:** Total processing time
 
 Statistics are also saved to `statistics.json` for programmatic analysis.
 
-## Use Cases
+## Usar Cases
 
-### Training Data Generation
+### generación de datos de entrenamiento
 
-Generate diverse tool-use trajectories for fine-tuning:
+Generate diverse herramienta-Usar trajectories for fine-tuning:
 
 ```bash
 python batch_runner.py \
@@ -201,7 +201,7 @@ python batch_runner.py \
 
 ### Model Evaluation
 
-Evaluate how well a model uses tools across standardized prompts:
+Evaluate how well a model uses Herramientas across standardized prompts:
 
 ```bash
 python batch_runner.py \
@@ -223,4 +223,4 @@ For benchmarks requiring specific environments, each prompt can specify its own 
 {"prompt": "Set up a Node.js Express server", "image": "node:20-alpine", "cwd": "/app"}
 ```
 
-The batch runner verifies Docker images are accessible before running each prompt.
+The batch runner verifies docker images are accessible before running each prompt.

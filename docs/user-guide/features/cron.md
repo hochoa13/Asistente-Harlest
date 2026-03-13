@@ -1,18 +1,18 @@
 ---
 sidebar_position: 5
 title: "Scheduled Tasks (Cron)"
-description: "Schedule automated tasks with natural language — cron jobs, delivery options, and the gateway scheduler"
+description: "Schedule automated tasks with natural language — Cron jobs, opciones de entrega, and the programador de puerta de enlace"
 ---
 
 # Scheduled Tasks (Cron)
 
-Schedule tasks to run automatically with natural language or cron expressions. The agent can self-schedule using the `schedule_cronjob` tool from any platform.
+Schedule tasks to Ejecutar automatically with natural language or expresiones Cron. The agent can self-schedule using the `schedule_cronjob` herramienta from any platform.
 
 ## Creating Scheduled Tasks
 
 ### In the CLI
 
-Use the `/cron` slash command:
+Usar the `/Cron` slash comando:
 
 ```
 /cron add 30m "Remind me to check the build"
@@ -30,7 +30,7 @@ Simply ask the agent on any platform:
 Every morning at 9am, check Hacker News for AI news and send me a summary on Telegram.
 ```
 
-The agent will use the `schedule_cronjob` tool to set it up.
+The agent will Usar the `schedule_cronjob` herramienta to Establecer it up.
 
 ## How It Works
 
@@ -44,50 +44,50 @@ hermes cron list           # View scheduled jobs
 hermes cron status         # Check if gateway is running
 ```
 
-### The Gateway Scheduler
+### The programador de puerta de enlace
 
 The scheduler runs as a background thread inside the gateway process. On each tick (every 60 seconds):
 
-1. It loads all jobs from `~/.hermes/cron/jobs.json`
+1. It loads all jobs from `~/.hermes/Cron/jobs.json`
 2. Checks each enabled job's `next_run_at` against the current time
 3. For each due job, spawns a fresh `AIAgent` session with the job's prompt
-4. The agent runs to completion with full tool access
+4. The agent runs to completion with full herramienta access
 5. The final response is delivered to the configured target
-6. The job's run count is incremented and next run time computed
+6. The job's Ejecutar count is incremented and next Ejecutar time computed
 7. Jobs that hit their repeat limit are auto-removed
 
-A **file-based lock** (`~/.hermes/cron/.tick.lock`) prevents duplicate execution if multiple processes overlap (e.g., gateway + manual tick).
+A **archivo-based lock** (`~/.hermes/Cron/.tick.lock`) prevents duplicate execution if multiple processes overlap (e.g., gateway + manual tick).
 
-:::info
-Even if no messaging platforms are configured, the gateway stays running for cron. A file lock prevents duplicate execution if multiple processes overlap.
+:::Información
+Even if no messaging platforms are configured, the gateway stays running for Cron. A archivo lock prevents duplicate execution if multiple processes overlap.
 :::
 
-## Delivery Options
+## opciones de entrega
 
-When scheduling jobs, you specify where the output goes:
+When Programación jobs, you specify where the output goes:
 
-| Option | Description | Example |
+| Option | Description | Ejemplo |
 |--------|-------------|---------|
 | `"origin"` | Back to where the job was created | Default on messaging platforms |
-| `"local"` | Save to local files only (`~/.hermes/cron/output/`) | Default on CLI |
-| `"telegram"` | Telegram home channel | Uses `TELEGRAM_HOME_CHANNEL` env var |
-| `"discord"` | Discord home channel | Uses `DISCORD_HOME_CHANNEL` env var |
-| `"telegram:123456"` | Specific Telegram chat by ID | For directing output to a specific chat |
-| `"discord:987654"` | Specific Discord channel by ID | For directing output to a specific channel |
+| `"local"` | Save to local files only (`~/.hermes/Cron/output/`) | Default on CLI |
+| `"Telegram"` | Telegram home channel | Uses `TELEGRAM_HOME_CHANNEL` env var |
+| `"Discord"` | Discord home channel | Uses `DISCORD_HOME_CHANNEL` env var |
+| `"Telegram:123456"` | Specific Telegram chat by ID | For directing output to a specific chat |
+| `"Discord:987654"` | Specific Discord channel by ID | For directing output to a specific channel |
 
-**How `"origin"` works:** When a job is created from a messaging platform, Hermes records the source platform and chat ID. When the job runs and deliver is `"origin"`, the output is sent back to that exact platform and chat. If origin info isn't available (e.g., job created from CLI), delivery falls back to local.
+**How `"origin"` works:** When a job is created from a messaging platform, Hermes records the source platform and chat ID. When the job runs and deliver is `"origin"`, the output is sent back to that exact platform and chat. If origin Información isn't available (e.g., job created from CLI), delivery falls back to local.
 
-**How platform names work:** When you specify a bare platform name like `"telegram"`, Hermes first checks if the job's origin matches that platform and uses the origin chat ID. Otherwise, it falls back to the platform's home channel configured via environment variable (e.g., `TELEGRAM_HOME_CHANNEL`).
+**How platform names work:** When you specify a bare platform name like `"Telegram"`, Hermes first checks if the job's origin matches that platform and uses the origin chat ID. Otherwise, it falls back to the platform's home channel configured via entorno variable (e.g., `TELEGRAM_HOME_CHANNEL`).
 
-The agent's final response is automatically delivered — you do **not** need to include `send_message` in the cron prompt.
+The agent's final response is automatically delivered — you do **not** need to include `send_message` in the Cron prompt.
 
 The agent knows your connected platforms and home channels — it'll choose sensible defaults.
 
-## Schedule Formats
+## formatos de programación
 
 ### Relative Delays (One-Shot)
 
-Run once after a delay:
+Ejecutar once after a delay:
 
 ```
 30m     → Run once in 30 minutes
@@ -99,7 +99,7 @@ Supported units: `m`/`min`/`minutes`, `h`/`hr`/`hours`, `d`/`day`/`days`.
 
 ### Intervals (Recurring)
 
-Run repeatedly at fixed intervals:
+Ejecutar repeatedly at fixed intervals:
 
 ```
 every 30m    → Every 30 minutes
@@ -107,9 +107,9 @@ every 2h     → Every 2 hours
 every 1d     → Every day
 ```
 
-### Cron Expressions
+### expresiones Cron
 
-Standard 5-field cron syntax for precise scheduling:
+Standard 5-field Cron syntax for precise Programación:
 
 ```
 0 9 * * *       → Daily at 9:00 AM
@@ -138,24 +138,24 @@ Special characters:
 ```
 
 :::note
-Cron expressions require the `croniter` Python package. Install with `pip install croniter` if not already available.
+expresiones Cron require the `croniter` Python package. Instalar with `pip Instalar croniter` if not already available.
 :::
 
 ### ISO Timestamps
 
-Run once at a specific date/time:
+Ejecutar once at a specific date/time:
 
 ```
 2026-03-15T09:00:00    → One-time at March 15, 2026 9:00 AM
 ```
 
-## Repeat Behavior
+## comportamiento de repetición
 
 The `repeat` parameter controls how many times a job runs:
 
-| Schedule Type | Default Repeat | Behavior |
+| Schedule escribir | Default Repeat | Behavior |
 |--------------|----------------|----------|
-| One-shot (`30m`, timestamp) | 1 (run once) | Runs once, then auto-deleted |
+| One-shot (`30m`, timestamp) | 1 (Ejecutar once) | Runs once, then auto-deleted |
 | Interval (`every 2h`) | Forever (`null`) | Runs indefinitely until removed |
 | Cron expression | Forever (`null`) | Runs indefinitely until removed |
 
@@ -219,7 +219,7 @@ schedule_cronjob(
 )
 ```
 
-### Periodic Disk Uso Check
+### Periodic Disk Uso Verificar
 
 ```python
 schedule_cronjob(
@@ -243,31 +243,31 @@ hermes cron status         # Check if the scheduler is running
 ```
 
 The agent can also manage jobs conversationally:
-- `list_cronjobs` — Shows all jobs with IDs, schedules, repeat status, and next run times
-- `remove_cronjob` — Removes a job by ID (use `list_cronjobs` to find the ID)
+- `list_cronjobs` — Shows all jobs with IDs, schedules, repeat status, and next Ejecutar times
+- `remove_cronjob` — Removes a job by ID (Usar `list_cronjobs` to find the ID)
 
 ## Job Storage
 
-Jobs are stored as JSON in `~/.hermes/cron/jobs.json`. Output from job runs is saved to `~/.hermes/cron/output/{job_id}/{timestamp}.md`.
+Jobs are stored as JSON in `~/.hermes/Cron/jobs.json`. Output from job runs is saved to `~/.hermes/Cron/output/{job_id}/{timestamp}.md`.
 
-The storage uses atomic file writes (temp file + rename) to prevent corruption from concurrent access.
+The storage uses atomic archivo writes (temp archivo + rename) to prevent corruption from concurrent access.
 
 ## Self-Contained Prompts
 
-:::warning Important
-Cron job prompts run in a **completely fresh agent session** with zero memory of any prior conversation. The prompt must contain **everything** the agent needs:
+:::Advertencia Importante
+Cron job prompts Ejecutar in a **completely fresh agent session** with zero Memoria of any prior conversation. The prompt must contain **everything** the agent needs:
 
 - Full context and background
-- Specific file paths, URLs, server addresses
+- Specific archivo paths, URLs, server addresses
 - Clear instructions and success criteria
-- Any credentials or configuration details
+- Any credenciales or Configuración details
 
-**BAD:** `"Check on that server issue"`
-**GOOD:** `"SSH into server 192.168.1.100 as user 'deploy', check if nginx is running with 'systemctl status nginx', and verify https://example.com returns HTTP 200."`
+**BAD:** `"Verificar on that server issue"`
+**GOOD:** `"ssh into server 192.168.1.100 as user 'deploy', Verificar if nginx is running with 'systemctl status nginx', and verify https://Ejemplo.com returns HTTP 200."`
 :::
 
 ## Security
 
-:::warning
-Scheduled task prompts are scanned for instruction-override patterns (prompt injection). Jobs matching threat patterns like credential exfiltration, SSH backdoor attempts, or prompt injection are blocked at creation time. Content with invisible Unicode characters (zero-width spaces, directional overrides) is also rejected.
+:::Advertencia
+Scheduled task prompts are scanned for instruction-override patterns (prompt injection). Jobs matching threat patterns like credential exfiltration, ssh backdoor attempts, or prompt injection are blocked at creation time. Content with invisible Unicode characters (zero-width spaces, directional overrides) is also rejected.
 :::

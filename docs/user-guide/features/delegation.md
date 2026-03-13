@@ -1,12 +1,12 @@
 ---
 sidebar_position: 7
-title: "Subagent Delegación"
+title: "Subagente Delegación"
 description: "Spawn isolated child agents for parallel workstreams with delegate_task"
 ---
 
-# Subagent Delegación
+# Subagente Delegación
 
-The `delegate_task` tool spawns child AIAgent instances with isolated context, restricted toolsets, and their own terminal sessions. Each child gets a fresh conversation and works independently — only its final summary enters the parent's context.
+The `delegate_task` herramienta spawns child AIAgent instances with isolated context, restricted Conjuntos de herramientas, and their own terminal sessions. Each child gets a fresh conversation and works independently — only its final summary enters the parent's context.
 
 ## Single Task
 
@@ -20,7 +20,7 @@ delegate_task(
 
 ## Parallel Batch
 
-Up to 3 concurrent subagents:
+Up to 3 concurrent subagentes:
 
 ```python
 delegate_task(tasks=[
@@ -30,13 +30,13 @@ delegate_task(tasks=[
 ])
 ```
 
-## How Subagent Context Works
+## How contexto del subagente Works
 
-:::warning Critical: Subagents Know Nothing
-Subagents start with a **completely fresh conversation**. They have zero knowledge of the parent's conversation history, prior tool calls, or anything discussed before delegation. The subagent's only context comes from the `goal` and `context` fields you provide.
+:::Advertencia Critical: subagentes Know Nothing
+subagentes Iniciar with a **completely fresh conversation**. They have zero knowledge of the parent's conversation history, prior Llamadas de Herramientas, or anything discussed before Delegación. The Subagente's only context comes from the `goal` and `context` fields you provide.
 :::
 
-This means you must pass **everything** the subagent needs:
+This means you must pass **everything** the Subagente needs:
 
 ```python
 # BAD - subagent has no idea what "the error" is
@@ -53,7 +53,7 @@ delegate_task(
 )
 ```
 
-The subagent receives a focused system prompt built from your goal and context, instructing it to complete the task and provide a structured summary of what it did, what it found, any files modified, and any issues encountered.
+The Subagente receives a focused system prompt built from your goal and context, instructing it to complete the task and provide a structured summary of what it did, what it found, any files modified, and any issues encountered.
 
 ## Practical Ejemplos
 
@@ -97,7 +97,7 @@ delegate_task(
 )
 ```
 
-### Multi-File Refactoring
+### Multi-archivo Refactoring
 
 Delegate a large refactoring task that would flood the parent's context:
 
@@ -117,21 +117,21 @@ delegate_task(
 )
 ```
 
-## Batch Mode Detalles
+## Modo de Lote Detalles
 
-When you provide a `tasks` array, subagents run in **parallel** using a thread pool:
+When you provide a `tasks` array, subagentes Ejecutar in **parallel** using a thread pool:
 
 - **Maximum concurrency:** 3 tasks (the `tasks` array is truncated to 3 if longer)
 - **Thread pool:** Uses `ThreadPoolExecutor` with `MAX_CONCURRENT_CHILDREN = 3` workers
-- **Progress display:** In CLI mode, a tree-view shows tool calls from each subagent in real-time with per-task completion lines. In gateway mode, progress is batched and relayed to the parent's progress callback
+- **Progress display:** In CLI mode, a tree-view shows Llamadas de Herramientas from each Subagente in real-time with per-task completion lines. In gateway mode, progress is batched and relayed to the parent's progress callback
 - **Result ordering:** Results are sorted by task index to match input order regardless of completion order
 - **Interrupt propagation:** Interrupting the parent (e.g., sending a new message) interrupts all active children
 
-Single-task delegation runs directly without thread pool overhead.
+Single-task Delegación runs directly without thread pool overhead.
 
 ## Model Override
 
-You can use a different model for subagents — useful for delegating simple tasks to cheaper/faster models:
+You can Usar a different model for subagentes — useful for delegating simple tasks to cheaper/faster models:
 
 ```python
 delegate_task(
@@ -142,30 +142,30 @@ delegate_task(
 )
 ```
 
-If omitted, subagents use the same model as the parent.
+If omitted, subagentes Usar the same model as the parent.
 
-## Herramientaset Selection Tips
+## Herramientaset Selection Consejos
 
-The `toolsets` parameter controls what tools the subagent has access to. Choose based on the task:
+The `Conjuntos de herramientas` parameter controls what Herramientas the Subagente has access to. Choose based on the task:
 
-| Herramientaset Pattern | Use Case |
+| Herramientaset Pattern | Usar Case |
 |----------------|----------|
-| `["terminal", "file"]` | Code work, debugging, file editing, builds |
+| `["terminal", "archivo"]` | Code work, debugging, archivo editing, builds |
 | `["web"]` | Rebuscar, fact-checking, documentation lookup |
-| `["terminal", "file", "web"]` | Full-stack tasks (default) |
-| `["file"]` | Read-only analysis, code review without execution |
+| `["terminal", "archivo", "web"]` | Full-stack tasks (default) |
+| `["archivo"]` | Read-only analysis, code review without execution |
 | `["terminal"]` | System administration, process gestión |
 
-Certain toolsets are **always blocked** for subagents regardless of what you specify:
-- `delegation` — no recursive delegation (prevents infinite spawning)
-- `clarify` — subagents cannot interact with the user
-- `memory` — no writes to shared persistent memory
+Certain Conjuntos de herramientas are **always blocked** for subagentes regardless of what you specify:
+- `Delegación` — no recursive Delegación (prevents infinite spawning)
+- `clarify` — subagentes cannot interact with the user
+- `Memoria` — no writes to shared persistent Memoria
 - `code_execution` — children should reason step-by-step
 - `send_message` — no cross-platform side effects (e.g., sending Telegram messages)
 
-## Max Iterations
+## Iteraciones máximas
 
-Each subagent has an iteration limit (default: 50) that controls how many tool-calling turns it can take:
+Each Subagente has an iteration limit (default: 50) that controls how many herramienta-calling turns it can take:
 
 ```python
 delegate_task(
@@ -177,30 +177,30 @@ delegate_task(
 
 ## Depth Limit
 
-Delegación has a **depth limit of 2** — a parent (depth 0) can spawn children (depth 1), but children cannot delegate further. This prevents runaway recursive delegation chains.
+Delegación has a **depth limit of 2** — a parent (depth 0) can spawn children (depth 1), but children cannot delegate further. This prevents runaway recursive Delegación chains.
 
 ## Key Properties
 
-- Each subagent gets its **own terminal session** (separate from the parent)
-- **No nested delegation** — children cannot delegate further (no grandchildren)
-- Subagents **cannot** call: `delegate_task`, `clarify`, `memory`, `send_message`, `execute_code`
+- Each Subagente gets its **own terminal session** (separate from the parent)
+- **No nested Delegación** — children cannot delegate further (no grandchildren)
+- subagentes **cannot** call: `delegate_task`, `clarify`, `Memoria`, `send_message`, `execute_code`
 - **Interrupt propagation** — interrupting the parent interrupts all active children
-- Only the final summary enters the parent's context, keeping token usage efficient
-- Subagents inherit the parent's **API key and provider configuration**
+- Only the final summary enters the parent's context, keeping token Uso efficient
+- subagentes inherit the parent's **clave API and provider Configuración**
 
 ## Delegación vs execute_code
 
 | Factor | delegate_task | execute_code |
 |--------|--------------|-------------|
-| **Reasoning** | Full LLM reasoning loop | Just Python code execution |
+| **Reasoning** | Full LLM reasoning loop | Just Python Ejecución de Código |
 | **Context** | Fresh isolated conversation | No conversation, just script |
-| **Tool access** | All non-blocked tools with reasoning | 7 tools via RPC, no reasoning |
-| **Parallelism** | Up to 3 concurrent subagents | Single script |
+| **herramienta access** | All non-blocked Herramientas with reasoning | 7 Herramientas via RPC, no reasoning |
+| **Parallelism** | Up to 3 concurrent subagentes | Single script |
 | **Best for** | Complex tasks needing judgment | Mechanical multi-step pipelines |
-| **Token cost** | Higher (full LLM loop) | Lower (only stdout returned) |
-| **User interaction** | None (subagents can't clarify) | None |
+| **token cost** | Higher (full LLM loop) | Lower (only stdout returned) |
+| **User interaction** | None (subagentes can't clarify) | None |
 
-**Rule of thumb:** Use `delegate_task` when the subtask requires reasoning, judgment, or multi-step problem solving. Use `execute_code` when you need mechanical data processing or scripted workflows.
+**Rule of thumb:** Usar `delegate_task` when the subtask requires reasoning, judgment, or multi-step problem solving. Usar `execute_code` when you need mechanical data processing or scripted workflows.
 
 ## Configuración
 
@@ -211,6 +211,6 @@ delegation:
   default_toolsets: ["terminal", "file", "web"]  # Default toolsets
 ```
 
-:::tip
-The agent handles delegation automatically based on the task complexity. You don't need to explicitly ask it to delegate — it will do so when it makes sense.
+:::Consejo
+The agent handles Delegación automatically based on the task complexity. You don't need to explicitly ask it to delegate — it will do so when it makes sense.
 :::

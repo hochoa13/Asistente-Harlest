@@ -1,12 +1,12 @@
 ---
 sidebar_position: 1
 title: "Herramientas & Herramientasets"
-description: "Descripción General of Hermes Agent's tools — what's available, how toolsets work, and terminal backends"
+description: "Descripción General of Hermes Agent's Herramientas — what's available, how Conjuntos de herramientas work, and backends de terminal"
 ---
 
 # Herramientas & Herramientasets
 
-Herramientas are functions that extend the agent's capabilities. They're organized into logical **toolsets** that can be enabled or disabled per platform.
+Herramientas are functions that extend the agent's capabilities. They're organized into logical **Conjuntos de herramientas** that can be enabled or disabled per platform.
 
 ## Available Herramientas
 
@@ -14,21 +14,21 @@ Herramientas are functions that extend the agent's capabilities. They're organiz
 |----------|-------|-------------|
 | **Web** | `web_buscar`, `web_extract` | Search the web, extract page content |
 | **Terminal** | `terminal`, `process` | Execute commands (local/docker/singularity/modal/daytona/ssh backends), manage background processes |
-| **File** | `read_file`, `write_file`, `patch`, `buscar_files` | Read, write, edit, and buscar files |
-| **Navegador** | `browser_navigate`, `browser_click`, `browser_type`, `browser_console`, etc. | Full browser automation via Navegadorbase |
-| **Visión** | `vision_analyze` | Image analysis via multimodal models |
+| **archivo** | `read_file`, `write_file`, `patch`, `buscar_files` | Read, write, edit, and buscar files |
+| **Navegador** | `browser_navigate`, `browser_click`, `browser_type`, `browser_console`, etc. | Full Navegador automation via Navegadorbase |
+| **Visión** | `vision_analyze` | Análisis de Imágenes via multimodal models |
 | **Image Gen** | `image_generate` | Generate images (FLUX via FAL) |
-| **TTS** | `text_to_speech` | Text-to-speech (Edge TTS / ElevenLabs / OpenAI) |
+| **TTS** | `text_to_speech` | Texto a Voz (Edge TTS / ElevenLabs / OpenAI) |
 | **Reasoning** | `mixture_of_agents` | Multi-model reasoning |
-| **Habilidades** | `skills_list`, `skill_view`, `skill_manage` | Find, view, create, and manage skills |
+| **Habilidades** | `skills_list`, `skill_view`, `skill_manage` | Find, view, Crear, and manage Habilidades |
 | **Todo** | `todo` | Read/write task list for multi-step planning |
-| **Memoria** | `memory` | Persistent notes + user profile across sessions |
+| **Memoria** | `Memoria` | Persistent notes + user profile across sessions |
 | **Session Search** | `session_buscar` | Search + summarize past conversations (FTS5) |
 | **Cronjob** | `schedule_cronjob`, `list_cronjobs`, `remove_cronjob` | Scheduled task gestión |
-| **Ejecución de Código** | `execute_code` | Run Python scripts that call tools via RPC sandbox |
-| **Delegación** | `delegate_task` | Spawn subagents with isolated context |
+| **Ejecución de Código** | `execute_code` | Ejecutar Python scripts that call Herramientas via RPC sandbox segura |
+| **Delegación** | `delegate_task` | Spawn subagentes with isolated context |
 | **Clarify** | `clarify` | Ask the user multiple-choice or open-ended questions |
-| **MCP** | Auto-discovered | External tools from MCP servers |
+| **MCP** | Auto-discovered | External Herramientas from MCP servers |
 
 ## Using Herramientasets
 
@@ -43,17 +43,17 @@ hermes tools
 hermes tools
 ```
 
-**Available toolsets:** `web`, `terminal`, `file`, `browser`, `vision`, `image_gen`, `moa`, `skills`, `tts`, `todo`, `memory`, `session_buscar`, `cronjob`, `code_execution`, `delegation`, `clarify`, and more.
+**Available Conjuntos de herramientas:** `web`, `terminal`, `archivo`, `Navegador`, `Visión`, `image_gen`, `moa`, `Habilidades`, `TTS`, `todo`, `Memoria`, `session_buscar`, `cronjob`, `code_execution`, `Delegación`, `clarify`, and more.
 
-## Terminal Backends
+## backends de terminal
 
-The terminal tool can execute commands in different environments:
+The terminal herramienta can execute commands in different environments:
 
-| Backend | Description | Use Case |
+| Backend | Description | Usar Case |
 |---------|-------------|----------|
-| `local` | Run on your machine (default) | Development, trusted tasks |
+| `local` | Ejecutar on your machine (default) | Development, trusted tasks |
 | `docker` | Isolated containers | Security, reproducibility |
-| `ssh` | Remote server | Sandboxing, keep agent away from its own code |
+| `ssh` | Remote server | Aislamiento en sandbox segura, keep agent away from its own code |
 | `singularity` | HPC containers | Cluster computing, rootless |
 | `modal` | Cloud execution | Serverless, scale |
 
@@ -67,7 +67,7 @@ terminal:
   timeout: 180      # Command timeout in seconds
 ```
 
-### Docker Backend
+### docker Backend
 
 ```yaml
 terminal:
@@ -75,7 +75,7 @@ terminal:
   docker_image: python:3.11-slim
 ```
 
-### SSH Backend
+### ssh Backend
 
 Recommended for security — agent can't modify its own code:
 
@@ -90,7 +90,7 @@ TERMINAL_SSH_USER=myuser
 TERMINAL_SSH_KEY=~/.ssh/id_rsa
 ```
 
-### Singularity/Apptainer
+### singularity/Apptainer
 
 ```bash
 # Pre-build SIF for parallel workers
@@ -101,7 +101,7 @@ hermes config set terminal.backend singularity
 hermes config set terminal.singularity_image ~/python.sif
 ```
 
-### Modal (Serverless Cloud)
+### modal (Serverless Cloud)
 
 ```bash
 uv pip install "swe-rex[modal]"
@@ -111,7 +111,7 @@ hermes config set terminal.backend modal
 
 ### Container Resources
 
-Configure CPU, memory, disk, and persistence for all container backends:
+Configurar CPU, Memoria, disk, and persistence for all container backends:
 
 ```yaml
 terminal:
@@ -126,9 +126,9 @@ When `container_persistent: true`, installed packages, files, and config survive
 
 ### Container Security
 
-All container backends run with security hardening:
+All container backends Ejecutar with security hardening:
 
-- Read-only root filesystem (Docker)
+- Read-only root filesystem (docker)
 - All Linux capabilities dropped
 - No privilege escalation
 - PID limits (256 processes)
@@ -137,7 +137,7 @@ All container backends run with security hardening:
 
 ## Background Process Management
 
-Start background processes and manage them:
+Iniciar background processes and manage them:
 
 ```python
 terminal(command="pytest -v tests/", background=true)
@@ -152,12 +152,12 @@ process(action="kill", session_id="proc_abc123")   # Terminate
 process(action="write", session_id="proc_abc123", data="y")  # Send input
 ```
 
-PTY mode (`pty=true`) enables interactive CLI tools like Codex and Claude Code.
+PTY mode (`pty=true`) enables interactive CLI Herramientas like Codex and Claude Code.
 
 ## Sudo Support
 
-If a command needs sudo, you'll be prompted for your password (cached for the session). Or set `SUDO_PASSWORD` in `~/.hermes/.env`.
+If a comando needs sudo, you'll be prompted for your password (cached for the session). Or Establecer `SUDO_PASSWORD` in `~/.hermes/.env`.
 
-:::warning
-On messaging platforms, if sudo fails, the output includes a tip to add `SUDO_PASSWORD` to `~/.hermes/.env`.
+:::Advertencia
+On messaging platforms, if sudo fails, the output includes a Consejo to add `SUDO_PASSWORD` to `~/.hermes/.env`.
 :::
