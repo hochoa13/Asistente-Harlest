@@ -1,10 +1,10 @@
 ---
 sidebar_position: 5
-title: "Environments, Benchmarks & Data Generation"
-description: "Building RL training environments, running evaluation benchmarks, and generating SFT data with the Hermes-Agent Atropos integration"
+title: "Entornos, Benchmarks y Generación de Datos"
+description: "Construcción de entornos de entrenamiento RL, ejecutar benchmarks de evaluación, and generar datos SFT with the integración Hermes-Agent Atropos"
 ---
 
-# Environments, Benchmarks & Data Generation
+# Entornos, Benchmarks y Generación de Datos
 
 Hermes Agent includes a full environment framework that connects its tool-calling capabilities to the [Atropos](https://github.com/NousResearch/atropos) RL training framework. This enables three workflows:
 
@@ -12,7 +12,7 @@ Hermes Agent includes a full environment framework that connects its tool-callin
 2. **Benchmarks** — Evaluate models on standardised agentic benchmarks
 3. **Data Generation** — Generate SFT training data from agent rollouts
 
-All three share the same core: an **environment** class that defines tasks, runs an agent loop, and scores the output.
+All three share the same core: an **environment** class that defines tasks, runs an ciclo del agente, and scores the output.
 
 :::tip Quick Links
 - **Want to run benchmarks?** Jump to [Available Benchmarks](#available-benchmarks)
@@ -20,7 +20,7 @@ All three share the same core: an **environment** class that defines tasks, runs
 - **Want to create a new environment?** See [Creating Environments](#creating-environments)
 :::
 
-## Architecture
+## Arquitectura
 
 The environment system is built on a three-layer inheritance chain:
 
@@ -67,7 +67,7 @@ The foundation from `atroposlib`. Provides:
 
 The hermes-agent layer (`environments/hermes_base_env.py`). Adds:
 - **Terminal backend configuration** — sets `TERMINAL_ENV` for sandboxed execution (local, Docker, Modal, Daytona, SSH, Singularity)
-- **Tool resolution** — `_resolve_tools_for_group()` calls hermes-agent's `get_tool_definitions()` to get the right tool schemas based on enabled/disabled toolsets
+- **Tool resolution** — `_resolve_tools_for_group()` calls hermes-agent's `get_tool_definitions()` to get the right tool esquemas based on enabled/disabled conjuntos de herramientas
 - **Agent loop integration** — `collect_trajectory()` runs `HermesAgentLoop` and scores the result
 - **Two-phase operation** — Phase 1 (OpenAI server) for eval/SFT, Phase 2 (VLLM ManagedServer) for full RL with logprobs
 - **Async safety patches** — monkey-patches Modal backend to work inside Atropos's event loop
@@ -90,7 +90,7 @@ Your environment inherits from `HermesAgentBaseEnv` and implements five methods:
 
 `HermesAgentLoop` (`environments/agent_loop.py`) is the reusable multi-turn agent engine. It runs the same tool-calling pattern as hermes-agent's main loop:
 
-1. Send messages + tool schemas to the API via `server.chat_completion()`
+1. Send messages + tool esquemas to the API via `server.chat_completion()`
 2. If the response contains `tool_calls`, dispatch each via `handle_function_call()`
 3. Append tool results to the conversation, go back to step 1
 4. If no `tool_calls`, the agent is done
@@ -344,7 +344,7 @@ class MyEnv(HermesAgentBaseEnv):
     @classmethod
     def config_init(cls):
         env_config = MyEnvConfig(
-            enabled_toolsets=["terminal", "file"],
+            enabled_conjuntos de herramientas=["terminal", "file"],
             terminal_backend="modal",
             max_agent_turns=30,
         )
@@ -388,7 +388,7 @@ For benchmarks, follow the pattern used by TerminalBench2, TBLite, and YC-Bench:
 1. **Create under** `environments/benchmarks/your-benchmark/`
 2. **Set eval-only config**: `eval_handling=STOP_TRAIN`, `steps_per_eval=1`, `total_steps=1`
 3. **Stub training methods**: `collect_trajectories()` returns `(None, [])`, `score()` returns `None`
-4. **Implement** `rollout_and_score_eval(eval_item)` — the per-item agent loop + scoring
+4. **Implement** `rollout_and_score_eval(eval_item)` — the per-item ciclo del agente + scoring
 5. **Implement** `evaluate()` — orchestrates all runs, computes aggregate metrics
 6. **Add streaming JSONL** for crash-safe result persistence
 7. **Add cleanup**: `KeyboardInterrupt` handling, `cleanup_all_environments()`, `_tool_executor.shutdown()`
@@ -396,14 +396,14 @@ For benchmarks, follow the pattern used by TerminalBench2, TBLite, and YC-Bench:
 
 See `environments/benchmarks/yc_bench/yc_bench_env.py` for a clean, well-documented reference implementation.
 
-## Configuration Reference
+## Configuración Reference
 
 ### HermesAgentEnvConfig Fields
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `enabled_toolsets` | `List[str]` | `None` (all) | Which hermes toolsets to enable |
-| `disabled_toolsets` | `List[str]` | `None` | Toolsets to filter out |
+| `enabled_conjuntos de herramientas` | `List[str]` | `None` (all) | Which hermes conjuntos de herramientas to enable |
+| `disabled_conjuntos de herramientas` | `List[str]` | `None` | Toolsets to filter out |
 | `distribution` | `str` | `None` | Probabilistic toolset distribution name |
 | `max_agent_turns` | `int` | `30` | Max LLM calls per rollout |
 | `agent_temperature` | `float` | `1.0` | Sampling temperature |
@@ -417,13 +417,13 @@ See `environments/benchmarks/yc_bench/yc_bench_env.py` for a clean, well-documen
 | `extra_body` | `Dict` | `None` | Extra params for OpenAI API (e.g., OpenRouter provider prefs) |
 | `eval_handling` | `Enum` | `STOP_TRAIN` | `STOP_TRAIN`, `LIMIT_TRAIN`, `NONE` |
 
-### YAML Configuration
+### YAML Configuración
 
 Environments can be configured via YAML files passed with `--config`:
 
 ```yaml
 env:
-  enabled_toolsets: ["terminal", "file"]
+  enabled_conjuntos de herramientas: ["terminal", "file"]
   max_agent_turns: 60
   max_token_length: 32000
   agent_temperature: 0.8

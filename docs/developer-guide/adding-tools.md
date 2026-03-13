@@ -1,10 +1,10 @@
 ---
 sidebar_position: 2
-title: "Adding Tools"
-description: "How to add a new tool to Hermes Agent — schemas, handlers, registration, and toolsets"
+title: "Agregando Herramientas"
+description: "Cómo agregar una nueva herramienta to Hermes Agent — esquemas, manejadores, registro, and conjuntos de herramientas"
 ---
 
-# Adding Tools
+# Agregando Herramientas
 
 Before writing a tool, ask yourself: **should this be a [skill](creating-skills.md) instead?**
 
@@ -12,12 +12,12 @@ Make it a **Skill** when the capability can be expressed as instructions + shell
 
 Make it a **Tool** when it requires end-to-end integration with API keys, custom processing logic, binary data handling, or streaming (browser automation, TTS, vision analysis).
 
-## Overview
+## Descripción General
 
 Adding a tool touches **3 files**:
 
 1. **`tools/your_tool.py`** — handler, schema, check function, `registry.register()` call
-2. **`toolsets.py`** — add tool name to `_HERMES_CORE_TOOLS` (or a specific toolset)
+2. **`conjuntos de herramientas.py`** — add tool name to `_HERMES_CORE_TOOLS` (or a specific toolset)
 3. **`model_tools.py`** — add `"tools.your_tool"` to the `_discover_tools()` list
 
 ## Step 1: Create the Tool File
@@ -107,7 +107,7 @@ registry.register(
 
 ## Step 2: Add to a Toolset
 
-In `toolsets.py`, add the tool name:
+In `conjuntos de herramientas.py`, add the tool name:
 
 ```python
 # If it should be available on all platforms (CLI + messaging):
@@ -178,9 +178,9 @@ registry.register(
 
 ## Agent-Loop Intercepted Tools
 
-Some tools (`todo`, `memory`, `session_search`, `delegate_task`) need access to per-session agent state. These are intercepted by `run_agent.py` before reaching the registry. The registry still holds their schemas, but `dispatch()` returns a fallback error if the intercept is bypassed.
+Some tools (`todo`, `memory`, `session_search`, `delegate_task`) need access to per-session agent state. These are intercepted by `run_agent.py` before reaching the registry. The registry still holds their esquemas, but `dispatch()` returns a fallback error if the intercept is bypassed.
 
-## Optional: Setup Wizard Integration
+## Optional: Configuración Wizard Integration
 
 If your tool requires an API key, add it to `hermes_cli/config.py`:
 
@@ -199,8 +199,8 @@ OPTIONAL_ENV_VARS = {
 
 ## Checklist
 
-- [ ] Tool file created with handler, schema, check function, and registration
-- [ ] Added to appropriate toolset in `toolsets.py`
+- [ ] Tool file created with handler, schema, check function, and registro
+- [ ] Added to appropriate toolset in `conjuntos de herramientas.py`
 - [ ] Discovery import added to `model_tools.py`
 - [ ] Handler returns JSON strings, errors returned as `{"error": "..."}`
 - [ ] Optional: API key added to `OPTIONAL_ENV_VARS` in `hermes_cli/config.py`

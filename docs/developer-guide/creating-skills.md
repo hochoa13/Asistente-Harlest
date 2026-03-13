@@ -1,10 +1,10 @@
 ---
 sidebar_position: 3
-title: "Creating Skills"
-description: "How to create skills for Hermes Agent — SKILL.md format, guidelines, and publishing"
+title: "Creando Habilidades"
+description: "Cómo crear habilidades for Hermes Agent — formato SKILL.md, directrices, and publicación"
 ---
 
-# Creating Skills
+# Creando Habilidades
 
 Skills are the preferred way to add new capabilities to Hermes Agent. They're easier to create than tools, require no code changes to the agent, and can be shared with the community.
 
@@ -14,13 +14,13 @@ Make it a **Skill** when:
 - The capability can be expressed as instructions + shell commands + existing tools
 - It wraps an external CLI or API that the agent can call via `terminal` or `web_extract`
 - It doesn't need custom Python integration or API key management baked into the agent
-- Examples: arXiv search, git workflows, Docker management, PDF processing, email via CLI tools
+- Ejemplos: arXiv search, git workflows, Docker management, PDF processing, email via CLI tools
 
 Make it a **Tool** when:
 - It requires end-to-end integration with API keys, auth flows, or multi-component configuration
 - It needs custom processing logic that must execute precisely every time
 - It handles binary data, streaming, or real-time events
-- Examples: browser automation, TTS, vision analysis
+- Ejemplos: browser automation, TTS, vision analysis
 
 ## Skill Directory Structure
 
@@ -112,7 +112,7 @@ For XML/JSON parsing or complex logic, include helper scripts in `scripts/` — 
 Run the skill and verify the agent follows the instructions correctly:
 
 ```bash
-hermes chat --toolsets skills -q "Use the X skill to do Y"
+hermes chat --conjuntos de herramientas skills -q "Use the X skill to do Y"
 ```
 
 ## Where Should the Skill Live?

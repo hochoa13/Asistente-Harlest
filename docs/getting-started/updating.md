@@ -1,14 +1,14 @@
 ---
 sidebar_position: 3
-title: "Updating & Uninstalling"
-description: "How to update Hermes Agent to the latest version or uninstall it"
+title: "Actualizando y Desinstalando"
+description: "Cómo actualizar Hermes Agent to the última versión or desinstalar it"
 ---
 
-# Updating & Uninstalling
+# Actualizando y Desinstalando
 
 ## Updating
 
-Update to the latest version with a single command:
+Update to the última versión with a single command:
 
 ```bash
 hermes update
@@ -57,10 +57,10 @@ hermes config migrate   # Interactively add any missing options
 ## Uninstalling
 
 ```bash
-hermes uninstall
+hermes desinstalar
 ```
 
-The uninstaller gives you the option to keep your configuration files (`~/.hermes/`) for a future reinstall.
+The desinstalarer gives you the option to keep your configuration files (`~/.hermes/`) for a future reinstall.
 
 ### Manual Uninstall
 

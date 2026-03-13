@@ -1,10 +1,10 @@
 ---
 sidebar_position: 4
-title: "Contributing"
-description: "How to contribute to Hermes Agent — dev setup, code style, PR process"
+title: "Contribuyendo"
+description: "Cómo contribuir to Hermes Agent — configuración de desarrollo, estilo de código, proceso de PR"
 ---
 
-# Contributing
+# Contribuyendo
 
 Thank you for contributing to Hermes Agent! This guide covers setting up your dev environment, understanding the codebase, and getting your PR merged.
 
@@ -16,11 +16,11 @@ We value contributions in this order:
 2. **Cross-platform compatibility** — macOS, different Linux distros, WSL2
 3. **Security hardening** — shell injection, prompt injection, path traversal
 4. **Performance and robustness** — retry logic, error handling, graceful degradation
-5. **New skills** — broadly useful ones (see [Creating Skills](creating-skills.md))
+5. **New skills** — broadly useful ones (see [Creando Habilidades](creating-skills.md))
 6. **New tools** — rarely needed; most capabilities should be skills
-7. **Documentation** — fixes, clarifications, new examples
+7. **Documentación** — fixes, clarifications, new examples
 
-## Development Setup
+## Desarrollo Configuración
 
 ### Prerequisites
 
@@ -50,7 +50,7 @@ uv pip install -e "./tinker-atropos"
 npm install
 ```
 
-### Configure for Development
+### Configure for Desarrollo
 
 ```bash
 mkdir -p ~/.hermes/{cron,sessions,logs,memories,skills}
@@ -147,7 +147,7 @@ Hermes has terminal access. Security matters.
 | **Code execution sandbox** | Child process runs with API keys stripped |
 | **Container hardening** | Docker: all capabilities dropped, no privilege escalation, PID limits |
 
-### Contributing Security-Sensitive Code
+### Contribuyendo Security-Sensitive Code
 
 - Always use `shlex.quote()` when interpolating user input into shell commands
 - Resolve symlinks with `os.path.realpath()` before access control checks
@@ -162,7 +162,7 @@ Hermes has terminal access. Security matters.
 ```
 fix/description        # Bug fixes
 feat/description       # New features
-docs/description       # Documentation
+docs/description       # Documentación
 test/description       # Tests
 refactor/description   # Code restructuring
 ```
@@ -194,14 +194,14 @@ We use [Conventional Commits](https://www.conventionalcommits.org/):
 |------|---------|
 | `fix` | Bug fixes |
 | `feat` | New features |
-| `docs` | Documentation |
+| `docs` | Documentación |
 | `test` | Tests |
 | `refactor` | Code restructuring |
 | `chore` | Build, CI, dependency updates |
 
 Scopes: `cli`, `gateway`, `tools`, `skills`, `agent`, `install`, `whatsapp`, `security`
 
-Examples:
+Ejemplos:
 ```
 fix(cli): prevent crash in save_config_value when model is a string
 feat(gateway): add WhatsApp multi-user session isolation

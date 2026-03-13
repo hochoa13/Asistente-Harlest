@@ -1,15 +1,15 @@
 ---
 sidebar_position: 3
-title: 'Learning Path'
-description: 'Choose your learning path through the Hermes Agent documentation based on your experience level and goals.'
+title: 'Ruta de Aprendizaje'
+description: 'Elige tu ruta de aprendizaje through the Hermes Agent documentation based on your nivel de experiencia and goals.'
 ---
 
-# Learning Path
+# Ruta de Aprendizaje
 
-Hermes Agent can do a lot — CLI assistant, Telegram/Discord bot, task automation, RL training, and more. This page helps you figure out where to start and what to read based on your experience level and what you're trying to accomplish.
+Hermes Agent can do a lot — CLI assistant, Telegram/Discord bot, task automation, RL training, and more. This page helps you figure out where to start and what to read based on your nivel de experiencia and what you're trying to accomplish.
 
 :::tip Start Here
-If you haven't installed Hermes Agent yet, begin with the [Installation guide](/docs/getting-started/installation) and then run through the [Quickstart](/docs/getting-started/quickstart). Everything below assumes you have a working installation.
+If you haven't installed Hermes Agent yet, begin with the [Instalación guide](/docs/getting-started/installation) and then run through the [Quickstart](/docs/getting-started/quickstart). Everything below assumes you have a working installation.
 :::
 
 ## How to Use This Page
@@ -22,9 +22,9 @@ If you haven't installed Hermes Agent yet, begin with the [Installation guide](/
 
 | Level | Goal | Recommended Reading | Time Estimate |
 |---|---|---|---|
-| **Beginner** | Get up and running, have basic conversations, use built-in tools | [Installation](/docs/getting-started/installation) → [Quickstart](/docs/getting-started/quickstart) → [CLI Usage](/docs/user-guide/cli) → [Configuration](/docs/user-guide/configuration) | ~1 hour |
+| **Beginner** | Get up and running, have basic conversations, use built-in tools | [Instalación](/docs/getting-started/installation) → [Quickstart](/docs/getting-started/quickstart) → [CLI Usage](/docs/user-guide/cli) → [Configuración](/docs/user-guide/configuration) | ~1 hour |
 | **Intermediate** | Set up messaging bots, use advanced features like memory, cron jobs, and skills | [Sessions](/docs/user-guide/sessions) → [Messaging](/docs/user-guide/messaging) → [Tools](/docs/user-guide/features/tools) → [Skills](/docs/user-guide/features/skills) → [Memory](/docs/user-guide/features/memory) → [Cron](/docs/user-guide/features/cron) | ~2–3 hours |
-| **Advanced** | Build custom tools, create skills, train models with RL, contribute to the project | [Architecture](/docs/developer-guide/architecture) → [Adding Tools](/docs/developer-guide/adding-tools) → [Creating Skills](/docs/developer-guide/creating-skills) → [RL Training](/docs/user-guide/features/rl-training) → [Contributing](/docs/developer-guide/contributing) | ~4–6 hours |
+| **Avanzado** | Build custom tools, create skills, train models with RL, contribute to the project | [Arquitectura](/docs/developer-guide/architecture) → [Agregando Herramientas](/docs/developer-guide/adding-tools) → [Creando Habilidades](/docs/developer-guide/creating-skills) → [RL Training](/docs/user-guide/features/rl-training) → [Contribuyendo](/docs/developer-guide/contributing) | ~4–6 hours |
 
 ## By Use Case
 
@@ -34,7 +34,7 @@ Pick the scenario that matches what you want to do. Each one links you to the re
 
 Use Hermes Agent as an interactive terminal assistant for writing, reviewing, and running code.
 
-1. [Installation](/docs/getting-started/installation)
+1. [Instalación](/docs/getting-started/installation)
 2. [Quickstart](/docs/getting-started/quickstart)
 3. [CLI Usage](/docs/user-guide/cli)
 4. [Code Execution](/docs/user-guide/features/code-execution)
@@ -49,11 +49,11 @@ Pass files directly into your conversation with context files. Hermes Agent can 
 
 Deploy Hermes Agent as a bot on your favorite messaging platform.
 
-1. [Installation](/docs/getting-started/installation)
-2. [Configuration](/docs/user-guide/configuration)
-3. [Messaging Overview](/docs/user-guide/messaging)
-4. [Telegram Setup](/docs/user-guide/messaging/telegram)
-5. [Discord Setup](/docs/user-guide/messaging/discord)
+1. [Instalación](/docs/getting-started/installation)
+2. [Configuración](/docs/user-guide/configuration)
+3. [Messaging Descripción General](/docs/user-guide/messaging)
+4. [Telegram Configuración](/docs/user-guide/messaging/telegram)
+5. [Discord Configuración](/docs/user-guide/messaging/discord)
 6. [Security](/docs/user-guide/security)
 
 For full project examples, see:
@@ -78,12 +78,12 @@ Cron jobs let Hermes Agent run tasks on a schedule — daily summaries, periodic
 
 Extend Hermes Agent with your own tools and reusable skill packages.
 
-1. [Tools Overview](/docs/user-guide/features/tools)
-2. [Skills Overview](/docs/user-guide/features/skills)
+1. [Tools Descripción General](/docs/user-guide/features/tools)
+2. [Skills Descripción General](/docs/user-guide/features/skills)
 3. [MCP (Model Context Protocol)](/docs/user-guide/features/mcp)
-4. [Architecture](/docs/developer-guide/architecture)
-5. [Adding Tools](/docs/developer-guide/adding-tools)
-6. [Creating Skills](/docs/developer-guide/creating-skills)
+4. [Arquitectura](/docs/developer-guide/architecture)
+5. [Agregando Herramientas](/docs/developer-guide/adding-tools)
+6. [Creando Habilidades](/docs/developer-guide/creating-skills)
 
 :::tip
 Tools are individual functions the agent can call. Skills are bundles of tools, prompts, and configuration packaged together. Start with tools, graduate to skills.
@@ -94,10 +94,10 @@ Tools are individual functions the agent can call. Skills are bundles of tools, 
 Use reinforcement learning to fine-tune model behavior with Hermes Agent's built-in RL training pipeline.
 
 1. [Quickstart](/docs/getting-started/quickstart)
-2. [Configuration](/docs/user-guide/configuration)
+2. [Configuración](/docs/user-guide/configuration)
 3. [RL Training](/docs/user-guide/features/rl-training)
 4. [Provider Routing](/docs/user-guide/features/provider-routing)
-5. [Architecture](/docs/developer-guide/architecture)
+5. [Arquitectura](/docs/developer-guide/architecture)
 
 :::tip
 RL training works best when you already understand the basics of how Hermes Agent handles conversations and tool calls. Run through the Beginner path first if you're new.
@@ -107,10 +107,10 @@ RL training works best when you already understand the basics of how Hermes Agen
 
 Integrate Hermes Agent into your own Python applications programmatically.
 
-1. [Installation](/docs/getting-started/installation)
+1. [Instalación](/docs/getting-started/installation)
 2. [Quickstart](/docs/getting-started/quickstart)
 3. [Python Library Guide](/docs/guides/python-library)
-4. [Architecture](/docs/developer-guide/architecture)
+4. [Arquitectura](/docs/developer-guide/architecture)
 5. [Tools](/docs/user-guide/features/tools)
 6. [Sessions](/docs/user-guide/sessions)
 
@@ -139,7 +139,7 @@ Not sure what's available? Here's a quick directory of major features:
 Based on where you are right now:
 
 - **Just finished installing?** → Head to the [Quickstart](/docs/getting-started/quickstart) to run your first conversation.
-- **Completed the Quickstart?** → Read [CLI Usage](/docs/user-guide/cli) and [Configuration](/docs/user-guide/configuration) to customize your setup.
+- **Completed the Quickstart?** → Read [CLI Usage](/docs/user-guide/cli) and [Configuración](/docs/user-guide/configuration) to customize your setup.
 - **Comfortable with the basics?** → Explore [Tools](/docs/user-guide/features/tools), [Skills](/docs/user-guide/features/skills), and [Memory](/docs/user-guide/features/memory) to unlock the full power of the agent.
 - **Setting up for a team?** → Read [Security](/docs/user-guide/security) and [Sessions](/docs/user-guide/sessions) to understand access control and conversation management.
 - **Ready to build?** → Jump into the [Developer Guide](/docs/developer-guide/architecture) to understand the internals and start contributing.

@@ -1,10 +1,10 @@
 ---
 sidebar_position: 1
-title: "Architecture"
-description: "Hermes Agent internals — project structure, agent loop, key classes, and design patterns"
+title: "Arquitectura"
+description: "Internals de Hermes Agent — estructura del proyecto, ciclo del agente, clases clave, and patrones de diseño"
 ---
 
-# Architecture
+# Arquitectura
 
 This guide covers the internal architecture of Hermes Agent for developers contributing to the project.
 
@@ -15,7 +15,7 @@ hermes-agent/
 ├── run_agent.py              # AIAgent class — core conversation loop, tool dispatch
 ├── cli.py                    # HermesCLI class — interactive TUI, prompt_toolkit
 ├── model_tools.py            # Tool orchestration (thin layer over tools/registry.py)
-├── toolsets.py               # Tool groupings and presets
+├── conjuntos de herramientas.py               # Tool groupings and presets
 ├── hermes_state.py           # SQLite session database with FTS5 full-text search
 ├── batch_runner.py           # Parallel batch processing for trajectory generation
 │
@@ -40,11 +40,11 @@ hermes-agent/
 │   └── skills_hub.py             # Skills Hub CLI + /skills slash command handler
 │
 ├── tools/                    # Tool implementations (self-registering)
-│   ├── registry.py               # Central tool registry (schemas, handlers, dispatch)
+│   ├── registry.py               # Central tool registry (esquemas, manejadores, dispatch)
 │   ├── approval.py               # Dangerous command detection + per-session approval
 │   ├── terminal_tool.py          # Terminal orchestration (sudo, env lifecycle, backends)
 │   ├── file_operations.py        # File tool implementations (read, write, search, patch)
-│   ├── file_tools.py             # File tool registration
+│   ├── file_tools.py             # File tool registro
 │   ├── web_tools.py              # web_search, web_extract
 │   ├── vision_tools.py           # Image analysis via multimodal models
 │   ├── delegate_tool.py          # Subagent spawning and parallel task execution
@@ -77,7 +77,7 @@ hermes-agent/
 
 ## Core Loop
 
-The main agent loop lives in `run_agent.py`:
+The main ciclo del agente lives in `run_agent.py`:
 
 ```
 User message → AIAgent._run_agent_loop()
@@ -99,7 +99,7 @@ while turns < max_turns:
     response = client.chat.completions.create(
         model=model,
         messages=messages,
-        tools=tool_schemas,
+        tools=tool_esquemas,
     )
 
     if response.tool_calls:
@@ -121,8 +121,8 @@ class AIAgent:
         api_key: str = None,
         base_url: str = None,  # Resolved internally based on provider
         max_iterations: int = 60,
-        enabled_toolsets: list = None,
-        disabled_toolsets: list = None,
+        enabled_conjuntos de herramientas: list = None,
+        disabled_conjuntos de herramientas: list = None,
         verbose_logging: bool = False,
         quiet_mode: bool = False,
         tool_progress_callback: callable = None,
@@ -130,7 +130,7 @@ class AIAgent:
         ...
 
     def chat(self, message: str) -> str:
-        # Main entry point - runs the agent loop
+        # Main entry point - runs the ciclo del agente
         ...
 ```
 
@@ -146,7 +146,7 @@ model_tools.py  (imports tools/registry + triggers tool discovery)
 run_agent.py, cli.py, batch_runner.py, environments/
 ```
 
-Each tool file co-locates its schema, handler, and registration. `model_tools.py` is a thin orchestration layer.
+Each tool file co-locates its schema, handler, and registro. `model_tools.py` is a thin orchestration layer.
 
 ## Key Design Patterns
 
@@ -156,7 +156,7 @@ Each tool file calls `registry.register()` at import time. `model_tools.py` trig
 
 ### Toolset Grouping
 
-Tools are grouped into toolsets (`web`, `terminal`, `file`, `browser`, etc.) that can be enabled/disabled per platform.
+Tools are grouped into conjuntos de herramientas (`web`, `terminal`, `file`, `browser`, etc.) that can be enabled/disabled per platform.
 
 ### Session Persistence
 
@@ -184,7 +184,7 @@ messages = [
 ]
 ```
 
-## CLI Architecture
+## CLI Arquitectura
 
 The interactive CLI (`cli.py`) uses:
 
@@ -199,7 +199,7 @@ Key UX behaviors:
 - Prompt shows `⚕ ❯` when working, `❯` when idle
 - Multi-line paste support with automatic formatting
 
-## Messaging Gateway Architecture
+## Messaging Gateway Arquitectura
 
 The gateway (`gateway/run.py`) uses `GatewayRunner` to:
 
@@ -211,7 +211,7 @@ The gateway (`gateway/run.py`) uses `GatewayRunner` to:
 
 Each platform adapter conforms to `BasePlatformAdapter`.
 
-## Configuration System
+## Configuración System
 
 - `~/.hermes/config.yaml` — All settings
 - `~/.hermes/.env` — API keys and secrets
