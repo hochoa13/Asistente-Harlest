@@ -1,260 +1,248 @@
 ---
 sidebar_position: 7
 title: "Sesiones"
-description: "Persistencia de sesión, reanudar, buscar, gestión, and por plataforma session seguimiento"
+description: "Persistencia de sesión, reanudación, búsqueda, gestión y seguimiento de sesiones por plataforma"
 ---
 
 # Sesiones
 
-Hermes Agent automatically saves every conversation as a session. Sesiones enable conversation reanudar, cross-session buscar, and full conversation history gestión.
+Hermes Agent guarda automáticamente cada conversación como una sesión. Las sesiones permiten reanudar conversaciones, búsqueda entre sesiones e historial completo de conversación gestión.
 
-## How Sesiones Work
+## Cómo Funcionan las Sesiones
 
-Every conversation — whether from the CLI, Telegram, Discord, WhatsApp, or Slack — is stored as a session with full message history. Sesiones are tracked in two complementary systems:
+Cada conversación — ya sea desde la CLI, Telegram, Discord, WhatsApp o Slack — se almacena como una sesión con historial completo de mensajes. Las sesiones se rastrean en dos sistemas complementarios:
 
-1. **SQLite database** (`~/.hermes/state.db`) — structured session metadata with FTS5 full-text buscar
-2. **JSONL transcripts** (`~/.hermes/sessions/`) — raw conversation transcripts including tool calls (gateway)
+1. **Base de datos SQLite** (`~/.hermes/state.db`) — metadatos estructurados de sesión con búsqueda de texto completo FTS5
+2. **Transcripciones JSONL** (`~/.hermes/sessions/`) — transcripciones de conversación sin procesar, incluidas llamadas de herramientas (puerta de enlace)
 
-The SQLite database stores:
-- Session ID, source platform, user ID
-- **Session title** (unique, human-readable name)
-- Model name and configuration
-- System prompt snapshot
-- Full message history (role, content, tool calls, tool results)
-- Token counts (input/output)
-- Timestamps (started_at, ended_at)
-- Parent session ID (for compression-triggered session splitting)
+La base de datos SQLite almacena:
+- ID de sesión, plataforma de origen, ID de usuario
+- **Título de sesión** (nombre único y legible para humanos)
+- Nombre del modelo y configuración
+- Instantánea del prompt del sistema
+- Historial completo de mensajes (rol, contenido, llamadas de herramientas, resultados de herramientas)
+- Conteos de tokens (entrada/salida)
+- Marcas de tiempo (iniciado_en, finalizado_en)
+- ID de sesión padre (para división de sesión desencadenada por compresión)
 
-### Session Sources
+### Fuentes de Sesión
 
-Each session is tagged with its source platform:
+Cada sesión está etiquetada con su plataforma de origen:
 
-| Source | Description |
+| Origen | Descripción |
 |--------|-------------|
-| `cli` | Interactive CLI (`hermes` or `hermes chat`) |
-| `telegram` | Telegram messenger |
-| `discord` | Discord server/DM |
-| `whatsapp` | WhatsApp messenger |
-| `slack` | Slack workspace |
+| `cli` | CLI interactiva (`hermes` o `hermes chat`) |
+| `telegram` | Mensajería Telegram |
+| `discord` | Servidor Discord/MD |
+| `whatsapp` | Mensajería WhatsApp |
+| `slack` | Espacio de trabajo Slack |
 
-## CLI Session Resume
+### Reanudación de Sesión Anterior
 
-Resume previous conversations from the CLI using `--continue` or `--reanudar`:
-
-### Continue Last Session
+Para continuar una conversación anterior desde la CLI, use:
 
 ```bash
-# Resume the most recent CLI session
-hermes --continue
-hermes -c
-
-# Or with the chat subcommand
-hermes chat --continue
-hermes chat -c
+hermes resume
 ```
 
-This looks up the most recent `cli` session from the SQLite database and loads its full conversation history.
+Busca la sesión más reciente de `cli` desde la base de datos SQLite y carga todo su historial de conversación.
 
-### Resume by Name
+### Reanudar por Nombre
 
-If you've given a session a title (see [Session Naming](#session-naming) below), you can reanudar it by name:
+Si ha asignado un título a una sesión, puede reanudarlo por nombre:
 
 ```bash
-# Resume a named session
-hermes -c "my project"
+# Reanudar una sesión nombrada
+hermes resume "mi proyecto"
 
-# If there are lineage variants (my project, my project #2, my project #3),
-# this automatically reanudars the most recent one
-hermes -c "my project"   # → reanudars "my project #3"
+# Si hay variantes de linaje (mi proyecto, mi proyecto #2, mi proyecto #3),
+# automáticamente reanuda la más reciente
+hermes resume "mi proyecto"   # → reanuda "mi proyecto #3"
 ```
 
-### Resume Specific Session
+### Reanudar Sesión Específica
 
 ```bash
-# Resume a specific session by ID
-hermes --reanudar 20250305_091523_a1b2c3d4
-hermes -r 20250305_091523_a1b2c3d4
+# Reanudar una sesión específica por ID
+hermes sessions resume 20250305_091523_a1b2c3d4
 
-# Resume by title
-hermes --reanudar "refactoring auth"
-
-# Or with the chat subcommand
-hermes chat --reanudar 20250305_091523_a1b2c3d4
+# Reanudar por título
+hermes sessions resume "refactorización auth"
 ```
 
-Session IDs are shown when you exit a CLI session, and can be found with `hermes sessions list`.
+Los ID de sesión se muestran cuando sale de una sesión CLI, y se pueden encontrar con `hermes list`.
 
-### Conversation Recap on Resume
+### Resumen de Conversación al Reanudar
 
-When you reanudar a session, Hermes displays a compact recap of the previous conversation in a styled panel before the input prompt:
+Cuando se reanuda una sesión, Hermes muestra un resumen compacto de la conversación anterior en un panel con estilo antes del indicador de entrada:
 
 ```text
-╭─────────────────────────── Previous Conversation ────────────────────────────╮
-│   ● You: What is Python?                                                     │
-│   ◆ Hermes: Python is a high-level programming language.                     │
-│   ● You: How do I install it?                                                │
-│   ◆ Hermes: [3 tool calls: web_buscar, web_extract, terminal]                │
-│   ◆ Hermes: You can download Python from python.org...                       │
-╰──────────────────────────────────────────────────────────────────────────────╯
+╭──────────────────────── Conversación Anterior ──────────────────────╮
+│   ● Usted: ¿Qué es Python?                                          │
+│   ◆ Hermes: Python es un lenguaje de programación de alto nivel.    │
+│   ● Usted: ¿Cómo lo instalo?                                        │
+│   ◆ Hermes: [3 llamadas de herramientas: buscar, extraer, terminal]│
+│   ◆ Hermes: Puedes descargar Python desde python.org...            │
+╰────────────────────────────────────────────────────────────────────╯
 ```
 
-The recap:
-- Shows **user messages** (gold `●`) and **assistant responses** (green `◆`)
-- **Truncates** long messages (300 chars for user, 200 chars / 3 lines for assistant)
-- **Collapses tool calls** to a count with tool names (e.g., `[3 tool calls: terminal, web_buscar]`)
-- **Hides** system messages, tool results, and internal reasoning
-- **Caps** at the last 10 exchanges with a "... N earlier messages ..." indicator
-- Uses **dim styling** to distinguish from the active conversation
+El resumen:
+- Muestra **mensajes del usuario** (●oro) y **respuestas del asistente** (◆ verde)
+- **Trunca** mensajes largos (300 caracteres para usuario, 200 caracteres / 3 líneas para asistente)
+- **Colapsa** llamadas de herramientas a un conteo con nombres de herramientas (p. ej., `[3 llamadas de herramientas: terminal, buscar_web]`)
+- **Oculta** mensajes del sistema, resultados de herramientas y razonamiento interno
+- **Limita** a los últimos 10 intercambios con un indicador "... N mensajes anteriores ..."
+- Usa **estilo atenuado** para distinguirse de la conversación activa
 
-To disable the recap and keep the minimal one-liner behavior, set in `~/.hermes/config.yaml`:
+Para deshabilitar el resumen y mantener el comportamiento de una línea minimal, establezca en `~/.hermes/config.yaml`:
 
 ```yaml
 display:
-  reanudar_display: minimal   # default: full
+  reanudar_display: minimal   # predeterminado: full
 ```
 
 :::tip
-Session IDs follow the format `YYYYMMDD_HHMMSS_<8-char-hex>`, e.g. `20250305_091523_a1b2c3d4`. You can reanudar by ID or by title — both work with `-c` and `-r`.
+Los ID de sesión siguen el formato `YYYYMMDD_HHMMSS_<8-char-hex>`, p. ej. `20250305_091523_a1b2c3d4`. Puede reanudar por ID o por título — ambos funcionan con `resume`.
 :::
 
-## Session Naming
+## Nombrado de Sesiones
 
-Give sessions human-readable titles so you can find and reanudar them easily.
+Dé a las sesiones títulos legibles para que pueda encontrarlas y reanudelas fácilmente.
 
-### Setting a Title
+### Establecer un Título
 
-Use the `/title` slash command inside any chat session (CLI or gateway):
+Use el comando de barra `/title` dentro de cualquier sesión de chat (CLI o puerta de enlace):
 
 ```
-/title my rebuscar project
+/title mi proyecto de búsqueda
 ```
 
-The title is applied immediately. If the session hasn't been created in the database yet (e.g., you run `/title` before sending your first message), it's queued and applied once the session starts.
+El título se aplica inmediatamente. Si la sesión aún no se ha creado en la base de datos (por ejemplo, ejecuta `/title` antes de enviar su primer mensaje), se pone en cola y se aplica una vez que comienza la sesión.
 
-You can also rename existing sessions from the command line:
+También puede renombrar sesiones existentes desde la línea de comandos:
 
 ```bash
-hermes sessions rename 20250305_091523_a1b2c3d4 "refactoring auth module"
+hermes sessions rename 20250305_091523_a1b2c3d4 "refactorización módulo auth"
 ```
 
-### Title Rules
+### Reglas de Título
 
-- **Unique** — no two sessions can share the same title
-- **Max 100 characters** — keeps listing output clean
-- **Sanitized** — control characters, zero-width chars, and RTL overrides are stripped automatically
-- **Normal Unicode is fine** — emoji, CJK, accented characters all work
+- **Único** — dos sesiones no pueden compartir el mismo título
+- **Máx. 100 caracteres** — mantiene la salida de listado limpia
+- **Sanitizado** — los caracteres de control, caracteres de ancho cero y anulaciones RTL se eliminan automáticamente
+- **Unicode normal está bien** — emoji, CJK, caracteres acentuados, todo funciona
 
-### Auto-Lineage on Compression
+### Linaje Automático en Compresión
 
-When a session's context is compressed (manually via `/compress` or automatically), Hermes creates a new continuation session. If the original had a title, the new session automatically gets a numbered title:
+Cuando el contexto de una sesión se comprime (manualmente vía `/compress` o automáticamente), Hermes crea una nueva sesión de continuación. Si la original tenía un título, la nueva sesión obtiene automáticamente un título numerado:
 
 ```
-"my project" → "my project #2" → "my project #3"
+"mi proyecto" → "mi proyecto #2" → "mi proyecto #3"
 ```
 
-When you reanudar by name (`hermes -c "my project"`), it automatically picks the most recent session in the lineage.
+Cuando reanuda por nombre (`hermes resume "mi proyecto"`), automáticamente elige la sesión más reciente de la linaje.
 
-### /title in Messaging Platforms
+### /title en Plataformas de Mensajería
 
-The `/title` command works in all gateway platforms (Telegram, Discord, Slack, WhatsApp):
+El comando `/title` funciona en todas las plataformas de puerta de enlace (Telegram, Discord, Slack, WhatsApp):
 
-- `/title My Rebuscar` — set the session title
-- `/title` — show the current title
+- `/title Mi Búsqueda` — establecer el título de la sesión
+- `/title` — mostrar el título actual
 
-## Session Management Commands
+## Comandos de Gestión de Sesión
 
-Hermes provides a full set of session gestión commands via `hermes sessions`:
+Hermes proporciona un conjunto completo de comandos de gestión de sesión vía `hermes sessions`:
 
-### List Sesiones
+### Listar Sesiones
 
 ```bash
-# List recent sessions (default: last 20)
+# Listar sesiones recientes (predeterminado: 20 últimas)
 hermes sessions list
 
-# Filter by platform
+# Filtrar por plataforma
 hermes sessions list --source telegram
 
-# Show more sessions
+# Mostrar más sesiones
 hermes sessions list --limit 50
 ```
 
-When sessions have titles, the output shows titles, previews, and relative timestamps:
+Cuando las sesiones tienen títulos, la salida muestra títulos, vistas previas y marcas de tiempo relativas:
 
 ```
-Title                  Preview                                  Last Active   ID
+Título                 Vista Previa                             Última Actividad   ID
 ────────────────────────────────────────────────────────────────────────────────────────────────
-refactoring auth       Help me refactor the auth module please   2h ago        20250305_091523_a
-my project #3          Can you check the test failures?          yesterday     20250304_143022_e
-—                      What's the weather in Las Vegas?          3d ago        20250303_101500_f
+refactorización auth   Ayúdame a refactorizar el módulo auth   hace 2h            20250305_091523_a
+mi proyecto #3         ¿Puedes revisar los fallos de prueba?  ayer               20250304_143022_e
+—                      ¿Cuál es el clima en Las Vegas?         hace 3d            20250303_101500_f
 ```
 
-When no sessions have titles, a simpler format is used:
+Cuando no hay sesiones con títulos, se usa un formato más simple:
 
 ```
-Preview                                            Last Active   Src    ID
-──────────────────────────────────────────────────────────────────────────────────────
-Help me refactor the auth module please             2h ago        cli    20250305_091523_a
-What's the weather in Las Vegas?                    3d ago        tele   20250303_101500_f
+Vista Previa                                         Última Actividad   Origen    ID
+──────────────────────────────────────────────────────────────────────────────────────────────
+Ayúdame a refactorizar el módulo auth               hace 2h            cli       20250305_091523_a
+¿Cuál es el clima en Las Vegas?                     hace 3d            tele      20250303_101500_f
 ```
 
-### Export Sesiones
+### Exportar Sesiones
 
 ```bash
-# Export all sessions to a JSONL file
-hermes sessions export backup.jsonl
+# Exportar todas las sesiones a un archivo JSONL
+hermes sessions export copia_seguridad.jsonl
 
-# Export sessions from a specific platform
-hermes sessions export telegram-history.jsonl --source telegram
+# Exportar sesiones de una plataforma específica
+hermes sessions export historial_telegram.jsonl --source telegram
 
-# Export a single session
-hermes sessions export session.jsonl --session-id 20250305_091523_a1b2c3d4
+# Exportar una sesión específica
+hermes sessions export sesion.jsonl --session-id 20250305_091523_a1b2c3d4
 ```
 
-Exported files contain one JSON object per line with full session metadata and all messages.
+Los archivos exportados contienen un objeto JSON por línea con todos los metadatos de sesión y mensajes.
 
-### Delete a Session
+### Eliminar una Sesión
 
 ```bash
-# Delete a specific session (with confirmation)
+# Eliminar una sesión específica (con confirmación)
 hermes sessions delete 20250305_091523_a1b2c3d4
 
-# Delete without confirmation
+# Eliminar sin confirmación
 hermes sessions delete 20250305_091523_a1b2c3d4 --yes
 ```
 
-### Rename a Session
+### Renombrar una Sesión
 
 ```bash
-# Set or change a session's title
-hermes sessions rename 20250305_091523_a1b2c3d4 "debugging auth flow"
+# Establecer o cambiar el título de una sesión
+hermes sessions rename 20250305_091523_a1b2c3d4 "depuración flujo auth"
 
-# Multi-word titles don't need quotes in the CLI
-hermes sessions rename 20250305_091523_a1b2c3d4 debugging auth flow
+# Los títulos de varias palabras no necesitan comillas en la CLI
+hermes sessions rename 20250305_091523_a1b2c3d4 depuración flujo auth
 ```
 
-If the title is already in use by another session, an error is shown.
+Si el título ya está siendo utilizado por otra sesión, se muestra un error.
 
-### Prune Old Sesiones
+### Purgar Sesiones Antiguas
 
 ```bash
-# Delete ended sessions older than 90 days (default)
+# Eliminar sesiones finalizadas más antiguas que 90 días (predeterminado)
 hermes sessions prune
 
-# Custom age threshold
+# Umbral de edad personalizado
 hermes sessions prune --older-than 30
 
-# Only prune sessions from a specific platform
+# Solo purgar sesiones de una plataforma específica
 hermes sessions prune --source telegram --older-than 60
 
-# Skip confirmation
+# Omitir confirmación
 hermes sessions prune --older-than 30 --yes
 ```
 
 :::info
-Pruning only deletes **ended** sessions (sessions that have been explicitly ended or auto-reset). Active sessions are never pruned.
+La purgación solo elimina sesiones **finalizadas** (sesiones que se han terminado explícitamente o se han restablecido automáticamente). Las sesiones activas nunca se purguan.
 :::
 
-### Session Statistics
+### Estadísticas de Sesión
 
 ```bash
 hermes sessions stats
@@ -263,114 +251,114 @@ hermes sessions stats
 Output:
 
 ```
-Total sessions: 142
-Total messages: 3847
-  cli: 89 sessions
-  telegram: 38 sessions
-  discord: 15 sessions
-Database size: 12.4 MB
+Sesiones totales: 142
+Mensajes totales: 3847
+  cli: 89 sesiones
+  telegram: 38 sesiones
+  discord: 15 sesiones
+Tamaño de base de datos: 12.4 MB
 ```
 
-For deeper analytics — token usage, cost estimates, tool breakdown, and activity patterns — use [`hermes insights`](/docs/reference/cli-commands#insights).
+Para análisis más profundos — uso de tokens, estimaciones de costos, desglose de herramientas y patrones de actividad — use [`hermes insights`](/docs/reference/cli-commands#insights).
 
-## Session Search Tool
+## Herramienta de Búsqueda de Sesión
 
-The agent has a built-in `session_buscar` tool that performs full-text buscar across all past conversations using SQLite's FTS5 engine.
+El agente tiene una herramienta `session_buscar` integrada que realiza búsqueda de texto completo en todas las conversaciones pasadas usando el motor FTS5 de SQLite.
 
-### How It Works
+### Cómo Funciona
 
-1. FTS5 buscares matching messages ranked by relevance
-2. Groups results by session, takes the top N unique sessions (default 3)
-3. Loads each session's conversation, truncates to ~100K chars centered on matches
-4. Sends to a fast summarization model for focused summaries
-5. Returns per-session summaries with metadata and surrounding context
+1. FTS5 busca mensajes coincidentes clasificados por relevancia
+2. Agrupa resultados por sesión, toma las N sesiones únicas principales (predeterminado 3)
+3. Carga el historial de conversación de cada sesión, trunca a ~100K caracteres centrado en los resultados
+4. Envía a un modelo de resumen rápido para resúmenes enfocados
+5. Devuelve resúmenes por sesión con metadatos y contexto circundante
 
-### FTS5 Query Syntax
+### Sintaxis de Consulta FTS5
 
-The buscar supports standard FTS5 query syntax:
+La búsqueda admite la sintaxis de consulta estándar FTS5:
 
-- Simple keywords: `docker deployment`
-- Phrases: `"exact phrase"`
-- Boolean: `docker OR kubernetes`, `python NOT java`
-- Prefix: `deploy*`
+- Palabras clave simples: `docker deployment`
+- Frases: `"frase exacta"`
+- Booleano: `docker OR kubernetes`, `python NOT java`
+- Prefijo: `deploy*`
 
-### When It's Used
+### Cuándo Se Usa
 
-The agent is prompted to use session buscar automatically:
+Se le solicita automáticamente al agente que use búsqueda de sesión:
 
-> *"When the user references something from a past conversation or you suspect relevant prior context exists, use session_buscar to recall it before asking them to repeat themselves."*
+> *"Cuando el usuario hace referencia a algo de una conversación pasada o sospecha que existe contexto previo relevante, use session_buscar para recuperarlo antes de pedirle que se repita".*
 
-## Per-Platform Session Tracking
+## Seguimiento de Sesión por Plataforma
 
-### Gateway Sesiones
+### Sesiones de Puerta de Enlace
 
-On messaging platforms, sessions are keyed by a deterministic session key built from the message source:
+En plataformas de mensajería, las sesiones se codifican mediante una clave de sesión determinista construida a partir de la fuente de mensaje:
 
-| Chat Type | Key Format | Example |
+| Tipo de Chat | Formato de Clave | Ejemplo |
 |-----------|-----------|---------|
-| Telegram DM | `agent:main:telegram:dm` | One session per bot |
-| Discord DM | `agent:main:discord:dm` | One session per bot |
-| WhatsApp DM | `agent:main:whatsapp:dm:<chat_id>` | Per-user (multi-user) |
-| Group chat | `agent:main:<platform>:group:<chat_id>` | Per-group |
-| Channel | `agent:main:<platform>:channel:<chat_id>` | Per-channel |
+| MD de Telegram | `agent:main:telegram:dm` | Una sesión por bot |
+| MD de Discord | `agent:main:discord:dm` | Una sesión por bot |
+| MD de WhatsApp | `agent:main:whatsapp:dm:<chat_id>` | Por usuario (multiusuario) |
+| Chat de grupo | `agent:main:<platform>:group:<chat_id>` | Por grupo |
+| Canal | `agent:main:<platform>:channel:<chat_id>` | Por canal |
 
 :::info
-WhatsApp DMs include the chat ID in the session key because multiple users can DM the bot. Other platforms use a single DM session since the bot is configured per-user via allowlists.
+Los MD de WhatsApp incluyen el ID de chat en la clave de sesión porque múltiples usuarios pueden enviar MD al bot. Otras plataformas usan una sola sesión MD ya que el bot está configurado por usuario a través de listas de permitir.
 :::
 
-### Session Reset Policies
+### Políticas de Restablecimiento de Sesión
 
-Gateway sessions are automatically reset based on configurable policies:
+Las sesiones de puerta de enlace se restablecen automáticamente según políticas configurables:
 
-- **idle** — reset after N minutes of inactivity
-- **daily** — reset at a specific hour each day
-- **both** — reset on whichever comes first (idle or daily)
-- **none** — never auto-reset
+- **inactivo** — restablecer después de N minutos de inactividad
+- **diario** — restablecer a una hora específica cada día
+- **ambos** — restablecer en el que venga primero (inactivo o diario)
+- **ninguno** — nunca restabler automáticamente
 
-Before a session is auto-reset, the agent is given a turn to save any important memories or skills from the conversation.
+Antes de que una sesión se restablezca automáticamente, se le da al agente un turno para guardar cualquier memoria o habilidad importante de la conversación.
 
-Sesiones with **active background processes** are never auto-reset, regardless of policy.
+Las sesiones con **procesos de fondo activos** nunca se restablecen automáticamente, independientemente de la política.
 
-## Storage Locations
+## Ubicaciones de Almacenamiento
 
-| What | Path | Description |
+| Qué | Ruta | Descripción |
 |------|------|-------------|
-| SQLite database | `~/.hermes/state.db` | All session metadata + messages with FTS5 |
-| Gateway transcripts | `~/.hermes/sessions/` | JSONL transcripts per session + sessions.json index |
-| Gateway index | `~/.hermes/sessions/sessions.json` | Maps session keys to active session IDs |
+| Base de datos SQLite | `~/.hermes/state.db` | Todos los metadatos de sesión + mensajes con FTS5 |
+| Transcripciones de puerta de enlace | `~/.hermes/sessions/` | Transcripciones JSONL por sesión + índice sessions.json |
+| Índice de puerta de enlace | `~/.hermes/sessions/sessions.json` | Asigna claves de sesión a ID de sesión activos |
 
-The SQLite database uses WAL mode for concurrent readers and a single writer, which suits the gateway's multi-platform architecture well.
+La base de datos SQLite usa modo WAL para lectores concurrentes y un escritor único, lo cual se adapta bien a la arquitectura de múltiples plataformas de la puerta de enlace.
 
-### Database Schema
+### Esquema de Base de Datos
 
-Key tables in `state.db`:
+Tablas clave en `state.db`:
 
-- **sessions** — session metadata (id, source, user_id, model, title, timestamps, token counts). Titles have a unique index (NULL titles allowed, only non-NULL must be unique).
-- **messages** — full message history (role, content, tool_calls, tool_name, token_count)
-- **messages_fts** — FTS5 virtual table for full-text buscar across message content
+- **sesiones** — metadatos de sesión (id, origen, user_id, modelo, título, marcas de tiempo, conteos de tokens). Los títulos tienen un índice único (los títulos NULL están permitidos, solo los títulos NO NULL deben ser únicos).
+- **mensajes** — historial completo de mensajes (rol, contenido, llamadas_herramientas, nombre_herramienta, conteo_tokens)
+- **mensajes_fts** — tabla virtual FTS5 para búsqueda de texto completo en el contenido de mensajes
 
-## Session Expiry and Cleanup
+## Caducidad de Sesión y Limpieza
 
-### Automatic Cleanup
+### Limpieza Automática
 
-- Gateway sessions auto-reset based on the configured reset policy
-- Before reset, the agent saves memories and skills from the expiring session
-- Ended sessions remain in the database until pruned
+- Las sesiones de puerta de enlace se restablecen automáticamente según la política de restablecimiento configurada
+- Antes del restablecimiento, el agente guarda memorias y habilidades de la sesión que expira
+- Las sesiones finalizadas permanecen en la base de datos hasta que se purguen
 
-### Manual Cleanup
+### Limpieza Manual
 
 ```bash
-# Prune sessions older than 90 days
+# Purgar sesiones más antiguas que 90 días
 hermes sessions prune
 
-# Delete a specific session
+# Eliminar una sesión específica
 hermes sessions delete <session_id>
 
-# Export before pruning (backup)
-hermes sessions export backup.jsonl
+# Exportar antes de purgar (copia de seguridad)
+hermes sessions export copia_seguridad.jsonl
 hermes sessions prune --older-than 30 --yes
 ```
 
 :::tip
-The database grows slowly (typical: 10-15 MB for hundreds of sessions). Pruning is mainly useful for removing old conversations you no longer need for buscar recall.
+La base de datos crece lentamente (típico: 10-15 MB para cientos de sesiones). La purgación es principalmente útil para eliminar conversaciones antiguas que ya no necesita para recuperación de búsqueda.
 :::
