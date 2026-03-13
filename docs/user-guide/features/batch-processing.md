@@ -1,14 +1,14 @@
 ---
 sidebar_position: 12
-title: "Batch Processing"
+title: "Procesamiento por Lotes"
 description: "Generate agent trajectories at scale — parallel processing, checkpointing, and toolset distributions"
 ---
 
-# Batch Processing
+# Procesamiento por Lotes
 
 Batch processing lets you run the Hermes agent across hundreds or thousands of prompts in parallel, generating structured trajectory data. This is primarily used for **training data generation** — producing ShareGPT-format trajectories with tool usage statistics that can be used for fine-tuning or evaluation.
 
-## Overview
+## Descripción General
 
 The batch runner (`batch_runner.py`) processes a JSONL dataset of prompts, running each through a full agent session with tool access. Each prompt gets its own isolated environment. The output is structured trajectory data with full conversation history, tool call statistics, and reasoning coverage metrics.
 
@@ -28,7 +28,7 @@ python batch_runner.py \
     --dataset_file=data/prompts.jsonl \
     --batch_size=10 \
     --run_name=my_first_run \
-    --resume
+    --reanudar
 
 # List available toolset distributions
 python batch_runner.py --list_distributions
@@ -48,25 +48,25 @@ Entries can optionally include:
 - `image` or `docker_image`: A container image to use for this prompt's sandbox (works with Docker, Modal, and Singularity backends)
 - `cwd`: Working directory override for the task's terminal session
 
-## Configuration Options
+## Configuración Options
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
 | `--dataset_file` | (required) | Path to JSONL dataset |
 | `--batch_size` | (required) | Prompts per batch |
 | `--run_name` | (required) | Name for this run (used for output dir and checkpointing) |
-| `--distribution` | `"default"` | Toolset distribution to sample from |
+| `--distribution` | `"default"` | Herramientaset distribution to sample from |
 | `--model` | `claude-sonnet-4-20250514` | Model to use |
 | `--base_url` | `https://openrouter.ai/api/v1` | API base URL |
 | `--api_key` | (env var) | API key for model |
 | `--max_turns` | `10` | Maximum tool-calling iterations per prompt |
 | `--num_workers` | `4` | Parallel worker processes |
-| `--resume` | `false` | Resume from checkpoint |
+| `--reanudar` | `false` | Resume from checkpoint |
 | `--verbose` | `false` | Enable verbose logging |
 | `--max_samples` | all | Only process first N samples from dataset |
 | `--max_tokens` | model default | Maximum tokens per model response |
 
-### Provider Routing (OpenRouter)
+### Enrutamiento de Proveedor (OpenRouter)
 
 | Parameter | Description |
 |-----------|-------------|
@@ -80,7 +80,7 @@ Entries can optionally include:
 | Parameter | Description |
 |-----------|-------------|
 | `--reasoning_effort` | Effort level: `xhigh`, `high`, `medium`, `low`, `minimal`, `none` |
-| `--reasoning_disabled` | Completely disable reasoning/thinking tokens |
+| `--reasoning_disabled` | Completoly disable reasoning/thinking tokens |
 
 ### Advanced Options
 
@@ -90,7 +90,7 @@ Entries can optionally include:
 | `--log_prefix_chars` | Characters to show in log previews (default: 100) |
 | `--prefill_messages_file` | Path to JSON file with prefill messages for few-shot priming |
 
-## Toolset Distributions
+## Herramientaset Distributions
 
 Each prompt gets a randomly sampled set of toolsets from a **distribution**. This ensures training data covers diverse tool combinations. Use `--list_distributions` to see all available distributions.
 
@@ -150,9 +150,9 @@ The `conversations` field uses a ShareGPT-like format with `from` and `value` fi
 
 The batch runner has robust checkpointing for fault tolerance:
 
-- **Checkpoint file:** Saved after each batch completes, tracking which prompt indices are done
-- **Content-based resume:** On `--resume`, the runner scans existing batch files and matches completed prompts by their actual text content (not just indices), enabling recovery even if the dataset order changes
-- **Failed prompts:** Only successfully completed prompts are marked as done — failed prompts will be retried on resume
+- **Checkpoint file:** Saved after each batch completes, seguimiento which prompt indices are done
+- **Content-based reanudar:** On `--reanudar`, the runner scans existing batch files and matches completed prompts by their actual text content (not just indices), enabling recovery even if the dataset order changes
+- **Failed prompts:** Only successfully completed prompts are marked as done — failed prompts will be retried on reanudar
 - **Batch merging:** On completion, all batch files (including from previous runs) are merged into a single `trajectories.jsonl`
 
 ### How Resume Works

@@ -1,19 +1,19 @@
 ---
 sidebar_position: 8
-title: "Context Files"
+title: "Archivos de Contexto"
 description: "Project context files — AGENTS.md, SOUL.md, and .cursorrules — automatically injected into every conversation"
 ---
 
-# Context Files
+# Archivos de Contexto
 
 Hermes Agent automatically discovers and loads project context files from your working directory. These files are injected into the system prompt at the start of every session, giving the agent persistent knowledge about your project's conventions, architecture, and preferences.
 
-## Supported Context Files
+## Supported Archivos de Contexto
 
 | File | Purpose | Discovery |
 |------|---------|-----------|
 | **AGENTS.md** | Project instructions, conventions, architecture | Recursive (walks subdirectories) |
-| **SOUL.md** | Personality and tone customization | CWD → `~/.hermes/SOUL.md` fallback |
+| **SOUL.md** | Personalidad and tone customization | CWD → `~/.hermes/SOUL.md` fallback |
 | **.cursorrules** | Cursor IDE coding conventions | CWD only |
 | **.cursor/rules/*.mdc** | Cursor IDE rule modules | CWD only |
 
@@ -69,7 +69,7 @@ This is a Next.js 14 web application with a Python FastAPI backend.
 
 ## SOUL.md
 
-`SOUL.md` controls the agent's personality, tone, and communication style. See the [Personality](/docs/user-guide/features/personality) page for full details.
+`SOUL.md` controls the agent's personality, tone, and communication style. See the [Personalidad](/docs/user-guide/features/personality) page for full details.
 
 **Discovery order:**
 
@@ -86,7 +86,7 @@ Hermes is compatible with Cursor IDE's `.cursorrules` file and `.cursor/rules/*.
 
 This means your existing Cursor conventions automatically apply when using Hermes.
 
-## How Context Files Are Loaded
+## How Archivos de Contexto Are Loaded
 
 Context files are loaded by `build_context_files_prompt()` in `agent/prompt_builder.py`:
 
@@ -157,9 +157,9 @@ When a file exceeds 20,000 characters, the truncation message reads:
 [...truncated AGENTS.md: kept 14000+4000 of 25000 chars. Use file tools to read the full file.]
 ```
 
-## Tips for Effective Context Files
+## Tips for Effective Archivos de Contexto
 
-:::tip Best practices for AGENTS.md
+:::tip Mejores prácticas for AGENTS.md
 1. **Keep it concise** — stay well under 20K chars; the agent reads it every turn
 2. **Structure with headers** — use `##` sections for architecture, conventions, important notes
 3. **Include concrete examples** — show preferred code patterns, API shapes, naming conventions
@@ -176,7 +176,7 @@ For monorepos, put subdirectory-specific instructions in nested AGENTS.md files:
 <!-- frontend/AGENTS.md -->
 # Frontend Context
 
-- Use `pnpm` not `npm` for package management
+- Use `pnpm` not `npm` for package gestión
 - Components go in `src/components/`, pages in `src/app/`
 - Use Tailwind CSS, never inline styles
 - Run tests with `pnpm test`
@@ -186,7 +186,7 @@ For monorepos, put subdirectory-specific instructions in nested AGENTS.md files:
 <!-- backend/AGENTS.md -->
 # Backend Context
 
-- Use `poetry` for dependency management
+- Use `poetry` for dependency gestión
 - Run the dev server with `poetry run uvicorn main:app --reload`
 - All endpoints need OpenAPI docstrings
 - Database models are in `models/`, schemas in `schemas/`

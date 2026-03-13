@@ -1,22 +1,22 @@
 ---
 sidebar_position: 2
-title: "Skills System"
-description: "On-demand knowledge documents — progressive disclosure, agent-managed skills, and the Skills Hub"
+title: "Habilidades System"
+description: "On-demand knowledge documents — progressive disclosure, agent-managed skills, and the Habilidades Hub"
 ---
 
-# Skills System
+# Habilidades System
 
-Skills are on-demand knowledge documents the agent can load when needed. They follow a **progressive disclosure** pattern to minimize token usage and are compatible with the [agentskills.io](https://agentskills.io/specification) open standard.
+Habilidades are on-demand knowledge documents the agent can load when needed. They follow a **progressive disclosure** pattern to minimize token usage and are compatible with the [agentskills.io](https://agentskills.io/specification) open standard.
 
 All skills live in **`~/.hermes/skills/`** — a single directory that serves as the source of truth. On fresh install, bundled skills are copied from the repo. Hub-installed and agent-created skills also go here. The agent can modify or delete any skill.
 
-## Using Skills
+## Using Habilidades
 
 Every installed skill is automatically available as a slash command:
 
 ```bash
 # In the CLI or any messaging platform:
-/gif-search funny cats
+/gif-buscar funny cats
 /axolotl help me fine-tune Llama 3 on my dataset
 /github-pr-workflow create a PR for the auth refactor
 
@@ -33,7 +33,7 @@ hermes chat --toolsets skills -q "Show me the axolotl skill"
 
 ## Progressive Disclosure
 
-Skills use a token-efficient loading pattern:
+Habilidades use a token-efficient loading pattern:
 
 ```
 Level 0: skills_list()           → [{name, description, category}, ...]   (~3k tokens)
@@ -72,12 +72,12 @@ Trigger conditions for this skill.
 - Known failure modes and fixes
 
 ## Verification
-How to confirm it worked.
+Cómo confirm it worked.
 ```
 
-### Platform-Specific Skills
+### Platform-Specific Habilidades
 
-Skills can restrict themselves to specific operating systems using the `platforms` field:
+Habilidades can restrict themselves to specific operating systems using the `platforms` field:
 
 | Value | Matches |
 |-------|---------|
@@ -92,16 +92,16 @@ platforms: [macos, linux]     # macOS and Linux
 
 When set, the skill is automatically hidden from the system prompt, `skills_list()`, and slash commands on incompatible platforms. If omitted, the skill loads on all platforms.
 
-### Conditional Activation (Fallback Skills)
+### Conditional Activation (Fallback Habilidades)
 
-Skills can automatically show or hide themselves based on which tools are available in the current session. This is most useful for **fallback skills** — free or local alternatives that should only appear when a premium tool is unavailable.
+Habilidades can automatically show or hide themselves based on which tools are available in the current session. This is most useful for **fallback skills** — free or local alternatives that should only appear when a premium tool is unavailable.
 
 ```yaml
 metadata:
   hermes:
     fallback_for_toolsets: [web]      # Show ONLY when these toolsets are unavailable
     requires_toolsets: [terminal]     # Show ONLY when these toolsets are available
-    fallback_for_tools: [web_search]  # Show ONLY when these specific tools are unavailable
+    fallback_for_tools: [web_buscar]  # Show ONLY when these specific tools are unavailable
     requires_tools: [terminal]        # Show ONLY when these specific tools are available
 ```
 
@@ -112,9 +112,9 @@ metadata:
 | `requires_toolsets` | Skill is **hidden** when the listed toolsets are unavailable. Shown when they're present. |
 | `requires_tools` | Same, but checks individual tools. |
 
-**Example:** The built-in `duckduckgo-search` skill uses `fallback_for_toolsets: [web]`. When you have `FIRECRAWL_API_KEY` set, the web toolset is available and the agent uses `web_search` — the DuckDuckGo skill stays hidden. If the API key is missing, the web toolset is unavailable and the DuckDuckGo skill automatically appears as a fallback.
+**Example:** The built-in `duckduckgo-buscar` skill uses `fallback_for_toolsets: [web]`. When you have `FIRECRAWL_API_KEY` set, the web toolset is available and the agent uses `web_buscar` — the DuckDuckGo skill stays hidden. If the API key is missing, the web toolset is unavailable and the DuckDuckGo skill automatically appears as a fallback.
 
-Skills without any conditional fields behave exactly as before — they're always shown.
+Habilidades without any conditional fields behave exactly as before — they're always shown.
 
 ## Skill Directory Structure
 
@@ -132,18 +132,18 @@ Skills without any conditional fields behave exactly as before — they're alway
 │   └── deploy-k8s/                # Agent-created skill
 │       ├── SKILL.md
 │       └── references/
-├── .hub/                          # Skills Hub state
+├── .hub/                          # Habilidades Hub state
 │   ├── lock.json
 │   ├── quarantine/
 │   └── audit.log
 └── .bundled_manifest              # Tracks seeded bundled skills
 ```
 
-## Agent-Managed Skills (skill_manage tool)
+## Agent-Managed Habilidades (skill_manage tool)
 
 The agent can create, update, and delete its own skills via the `skill_manage` tool. This is the agent's **procedural memory** — when it figures out a non-trivial workflow, it saves the approach as a skill for future reuse.
 
-### When the Agent Creates Skills
+### When the Agent Creates Habilidades
 
 - After completing a complex task (5+ tool calls) successfully
 - When it hit errors or dead ends and found the working path
@@ -165,14 +165,14 @@ The agent can create, update, and delete its own skills via the `skill_manage` t
 The `patch` action is preferred for updates — it's more token-efficient than `edit` because only the changed text appears in the tool call.
 :::
 
-## Skills Hub
+## Habilidades Hub
 
-Browse, search, install, and manage skills from online registries and official optional skills:
+Browse, buscar, install, and manage skills from online registries and official optional skills:
 
 ```bash
 hermes skills browse                     # Browse all hub skills (official first)
 hermes skills browse --source official   # Browse only official optional skills
-hermes skills search kubernetes          # Search all sources
+hermes skills buscar kubernetes          # Search all sources
 hermes skills install openai/skills/k8s  # Install with security scan
 hermes skills inspect openai/skills/k8s  # Preview before installing
 hermes skills list --source hub          # List hub-installed skills
@@ -200,7 +200,7 @@ All the same commands work with `/skills` prefix:
 
 ```
 /skills browse
-/skills search kubernetes
+/skills buscar kubernetes
 /skills install openai/skills/skill-creator
 /skills list
 ```

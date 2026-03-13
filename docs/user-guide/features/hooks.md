@@ -74,7 +74,7 @@ async def handle(event_type: str, context: dict):
 
 Handlers registered for `command:*` fire for any `command:` event (`command:model`, `command:reset`, etc.). Monitor all slash commands with a single subscription.
 
-## Examples
+## Ejemplos
 
 ### Telegram Alert on Long Tasks
 
@@ -109,7 +109,7 @@ async def handle(event_type: str, context: dict):
             )
 ```
 
-### Command Usage Logger
+### Command Uso Logger
 
 Track which slash commands are used:
 

@@ -1,4 +1,4 @@
-# Filesystem Checkpoints
+# Filesystem Puntos de Control
 
 Hermes can automatically snapshot your working directory before making file changes, giving you a safety net to roll back if something goes wrong.
 
@@ -8,7 +8,7 @@ When enabled, Hermes takes a **one-time snapshot** at the start of each conversa
 
 Under the hood, checkpoints use a **shadow git repository** stored at `~/.hermes/checkpoints/`. This is completely separate from your project's git — no `.git` directory is created in your project, and your own git history is never touched.
 
-## Enabling Checkpoints
+## Enabling Puntos de Control
 
 ### Per-session (CLI flag)
 
@@ -39,7 +39,7 @@ Use the `/rollback` slash command:
 Example output:
 
 ```
-📸 Checkpoints for /home/user/project:
+📸 Puntos de Control for /home/user/project:
 
   1. abc1234  2026-03-10 14:22  before write_file
   2. def5678  2026-03-10 14:15  before patch
@@ -52,7 +52,7 @@ When you restore, Hermes automatically takes a **pre-rollback snapshot** first �
 
 ## What Gets Checkpointed
 
-Checkpoints capture the entire working directory (the project root), excluding common large/sensitive patterns:
+Puntos de Control capture the entire working directory (the project root), excluding common large/sensitive patterns:
 
 - `node_modules/`, `dist/`, `build/`
 - `.env`, `.env.*`
@@ -63,7 +63,7 @@ Checkpoints capture the entire working directory (the project root), excluding c
 
 ## Performance
 
-Checkpoints are designed to be lightweight:
+Puntos de Control are designed to be lightweight:
 
 - **Once per turn** — only the first file operation triggers a snapshot, not every write
 - **Skips large directories** — directories with >50,000 files are skipped automatically
@@ -76,7 +76,7 @@ When you write to a file like `src/components/Button.tsx`, Hermes walks up the d
 
 ## Platforms
 
-Checkpoints work on both:
+Puntos de Control work on both:
 - **CLI** — uses your current working directory
 - **Gateway** (Telegram, Discord, etc.) — uses `MESSAGING_CWD`
 
@@ -85,7 +85,7 @@ The `/rollback` command is available on all platforms.
 ## FAQ
 
 **Does this conflict with my project's git?**
-No. Checkpoints use a completely separate shadow git repository via `GIT_DIR` environment variables. Your project's `.git/` is never touched.
+No. Puntos de Control use a completely separate shadow git repository via `GIT_DIR` environment variables. Your project's `.git/` is never touched.
 
 **How much disk space do checkpoints use?**
 Git is very efficient at storing diffs. For most projects, checkpoint data is negligible. Old checkpoints are pruned when `max_snapshots` is exceeded.
@@ -94,4 +94,4 @@ Git is very efficient at storing diffs. For most projects, checkpoint data is ne
 No — git must be available on your PATH. If it's not installed, checkpoints silently disable.
 
 **Can I roll back across sessions?**
-Yes! Checkpoints persist in `~/.hermes/checkpoints/` and survive across sessions. You can roll back to a checkpoint from yesterday.
+Yes! Puntos de Control persist in `~/.hermes/checkpoints/` and survive across sessions. You can roll back to a checkpoint from yesterday.

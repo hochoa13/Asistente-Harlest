@@ -27,7 +27,7 @@ Convert text to speech with three providers:
 | WhatsApp | Audio file attachment | MP3 |
 | CLI | Saved to `~/.hermes/audio_cache/` | MP3 |
 
-### Configuration
+### Configuración
 
 ```yaml
 # In ~/.hermes/config.yaml
@@ -79,7 +79,7 @@ Voice messages sent on Telegram, Discord, WhatsApp, or Slack are automatically t
 
 Requires `VOICE_TOOLS_OPENAI_KEY` in `~/.hermes/.env`.
 
-### Configuration
+### Configuración
 
 ```yaml
 # In ~/.hermes/config.yaml

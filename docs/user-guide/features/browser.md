@@ -1,17 +1,17 @@
 ---
-title: Browser Automation
-description: Control cloud browsers with Browserbase integration for web interaction, form filling, scraping, and more.
-sidebar_label: Browser
+title: Navegador Automation
+description: Control cloud browsers with Navegadorbase integration for web interaction, form filling, scraping, and more.
+sidebar_label: Navegador
 sidebar_position: 5
 ---
 
-# Browser Automation
+# Navegador Automation
 
-Hermes Agent includes a full browser automation toolset powered by [Browserbase](https://browserbase.com), enabling the agent to navigate websites, interact with page elements, fill forms, and extract information — all running in cloud-hosted browsers with built-in anti-bot stealth features.
+Hermes Agent includes a full browser automation toolset powered by [Navegadorbase](https://browserbase.com), enabling the agent to navigate websites, interact with page elements, fill forms, and extract information — all running in cloud-hosted browsers with built-in anti-bot stealth features.
 
-## Overview
+## Descripción General
 
-The browser tools use the `agent-browser` CLI with Browserbase cloud execution. Pages are represented as **accessibility trees** (text-based snapshots), making them ideal for LLM agents. Interactive elements get ref IDs (like `@e1`, `@e2`) that the agent uses for clicking and typing.
+The browser tools use the `agent-browser` CLI with Navegadorbase cloud execution. Pages are represented as **accessibility trees** (text-based snapshots), making them ideal for LLM agents. Interactive elements get ref IDs (like `@e1`, `@e2`) that the agent uses for clicking and typing.
 
 Key capabilities:
 
@@ -19,9 +19,9 @@ Key capabilities:
 - **Built-in stealth** — random fingerprints, CAPTCHA solving, residential proxies
 - **Session isolation** — each task gets its own browser session
 - **Automatic cleanup** — inactive sessions are closed after a timeout
-- **Vision analysis** — screenshot + AI analysis for visual understanding
+- **Visión analysis** — screenshot + AI analysis for visual understanding
 
-## Setup
+## Configuración
 
 ### Required Environment Variables
 
@@ -46,7 +46,7 @@ BROWSERBASE_ADVANCED_STEALTH=false
 BROWSERBASE_KEEP_ALIVE=true
 
 # Custom session timeout in milliseconds (default: project default)
-# Examples: 600000 (10min), 1800000 (30min)
+# Ejemplos: 600000 (10min), 1800000 (30min)
 BROWSERBASE_SESSION_TIMEOUT=600000
 
 # Inactivity timeout before auto-cleanup in seconds (default: 300)
@@ -65,18 +65,18 @@ npm install
 The `browser` toolset must be included in your config's `toolsets` list or enabled via `hermes config set toolsets '["hermes-cli", "browser"]'`.
 :::
 
-## Available Tools
+## Available Herramientas
 
 ### `browser_navigate`
 
-Navigate to a URL. Must be called before any other browser tool. Initializes the Browserbase session.
+Navigate to a URL. Must be called before any other browser tool. Initializes the Navegadorbase session.
 
 ```
-Navigate to https://github.com/NousResearch
+Navigate to https://github.com/NousRebuscar
 ```
 
 :::tip
-For simple information retrieval, prefer `web_search` or `web_extract` — they are faster and cheaper. Use browser tools when you need to **interact** with a page (click buttons, fill forms, handle dynamic content).
+For simple information retrieval, prefer `web_buscar` or `web_extract` — they are faster and cheaper. Use browser tools when you need to **interact** with a page (click buttons, fill forms, handle dynamic content).
 :::
 
 ### `browser_snapshot`
@@ -84,7 +84,7 @@ For simple information retrieval, prefer `web_search` or `web_extract` — they 
 Get a text-based snapshot of the current page's accessibility tree. Returns interactive elements with ref IDs like `@e1`, `@e2` for use with `browser_click` and `browser_type`.
 
 - **`full=false`** (default): Compact view showing only interactive elements
-- **`full=true`**: Complete page content
+- **`full=true`**: Completo page content
 
 Snapshots over 8000 characters are automatically summarized by an LLM.
 
@@ -101,7 +101,7 @@ Click @e5 to press the "Sign In" button
 Type text into an input field. Clears the field first, then types the new text.
 
 ```
-Type "hermes agent" into the search field @e3
+Type "hermes agent" into the buscar field @e3
 ```
 
 ### `browser_scroll`
@@ -154,9 +154,9 @@ Use `clear=True` to clear the console after reading, so subsequent calls only sh
 
 ### `browser_close`
 
-Close the browser session and release resources. Call this when done to free up Browserbase session quota.
+Close the browser session and release resources. Call this when done to free up Navegadorbase session quota.
 
-## Practical Examples
+## Practical Ejemplos
 
 ### Filling Out a Web Form
 
@@ -173,7 +173,7 @@ Agent workflow:
 7. browser_close()
 ```
 
-### Researching Dynamic Content
+### Rebuscaring Dynamic Content
 
 ```
 User: What are the top trending repos on GitHub right now?
@@ -194,11 +194,11 @@ browser:
   record_sessions: true  # default: false
 ```
 
-When enabled, recording starts automatically on the first `browser_navigate` and saves to `~/.hermes/browser_recordings/` when the session closes. Works in both local and cloud (Browserbase) modes. Recordings older than 72 hours are automatically cleaned up.
+When enabled, recording starts automatically on the first `browser_navigate` and saves to `~/.hermes/browser_recordings/` when the session closes. Works in both local and cloud (Navegadorbase) modes. Recordings older than 72 hours are automatically cleaned up.
 
-## Stealth Features
+## Stealth Características
 
-Browserbase provides automatic stealth capabilities:
+Navegadorbase provides automatic stealth capabilities:
 
 | Feature | Default | Notes |
 |---------|---------|-------|
@@ -213,18 +213,18 @@ If paid features aren't available on your plan, Hermes automatically falls back 
 
 ## Session Management
 
-- Each task gets an isolated browser session via Browserbase
-- Sessions are automatically cleaned up after inactivity (default: 5 minutes)
+- Each task gets an isolated browser session via Navegadorbase
+- Sesiones are automatically cleaned up after inactivity (default: 5 minutes)
 - A background thread checks every 30 seconds for stale sessions
 - Emergency cleanup runs on process exit to prevent orphaned sessions
-- Sessions are released via the Browserbase API (`REQUEST_RELEASE` status)
+- Sesiones are released via the Navegadorbase API (`REQUEST_RELEASE` status)
 
 ## Limitations
 
-- **Requires Browserbase account** — no local browser fallback
+- **Requires Navegadorbase account** — no local browser fallback
 - **Requires `agent-browser` CLI** — must be installed via npm
 - **Text-based interaction** — relies on accessibility tree, not pixel coordinates
 - **Snapshot size** — large pages may be truncated or LLM-summarized at 8000 characters
-- **Session timeout** — sessions expire based on your Browserbase plan settings
-- **Cost** — each session consumes Browserbase credits; use `browser_close` when done
+- **Session timeout** — sessions expire based on your Navegadorbase plan settings
+- **Cost** — each session consumes Navegadorbase credits; use `browser_close` when done
 - **No file downloads** — cannot download files from the browser

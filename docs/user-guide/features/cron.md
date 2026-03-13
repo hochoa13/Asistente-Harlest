@@ -171,7 +171,7 @@ schedule_cronjob(
 
 When a job hits its repeat limit, it is automatically removed from the job list.
 
-## Real-World Examples
+## Real-World Ejemplos
 
 ### Daily Standup Report
 
@@ -219,13 +219,13 @@ schedule_cronjob(
 )
 ```
 
-### Periodic Disk Usage Check
+### Periodic Disk Uso Check
 
 ```python
 schedule_cronjob(
     prompt="Check disk usage with 'df -h' and report any partitions above 80% usage. Also check Docker disk usage with 'docker system df' if Docker is installed.",
     schedule="0 8 * * *",
-    name="Disk Usage Report",
+    name="Disk Uso Report",
     deliver="origin"
 )
 ```

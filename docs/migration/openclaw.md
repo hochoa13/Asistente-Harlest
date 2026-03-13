@@ -1,4 +1,4 @@
-# Migrating from OpenClaw to Hermes Agent
+# Migrando desde OpenClaw a Hermes Agent
 
 This guide covers how to import your OpenClaw settings, memories, skills, and API keys into Hermes Agent.
 
@@ -23,14 +23,14 @@ hermes claw migrate --yes                # Skip confirmation prompt
 |------|-------------|
 | `--source PATH` | Path to OpenClaw directory (default: `~/.openclaw`) |
 | `--dry-run` | Preview only — no files are modified |
-| `--preset {user-data,full}` | Migration preset (default: `full`). `user-data` excludes secrets |
+| `--preset {user-data,full}` | Migración preset (default: `full`). `user-data` excludes secrets |
 | `--overwrite` | Overwrite existing files (default: skip conflicts) |
 | `--migrate-secrets` | Include allowlisted secrets (auto-enabled with `full` preset) |
 | `--workspace-target PATH` | Copy workspace instructions (AGENTS.md) to this absolute path |
-| `--skill-conflict {skip,overwrite,rename}` | How to handle skill name conflicts (default: `skip`) |
+| `--skill-conflict {skip,overwrite,rename}` | Cómo handle skill name conflicts (default: `skip`) |
 | `--yes`, `-y` | Skip confirmation prompts |
 
-### 3. Agent-Guided (interactive, with previews)
+### 3. Agent-Guíad (interactive, with previews)
 
 Ask the agent to run the migration for you:
 
@@ -51,9 +51,9 @@ The agent will use the `openclaw-migration` skill to:
 | Item | Source | Destination |
 |------|--------|-------------|
 | SOUL.md | `~/.openclaw/workspace/SOUL.md` | `~/.hermes/SOUL.md` |
-| Memory entries | `~/.openclaw/workspace/MEMORY.md` | `~/.hermes/memories/MEMORY.md` |
+| Memoria entries | `~/.openclaw/workspace/MEMORY.md` | `~/.hermes/memories/MEMORY.md` |
 | User profile | `~/.openclaw/workspace/USER.md` | `~/.hermes/memories/USER.md` |
-| Skills | `~/.openclaw/workspace/skills/` | `~/.hermes/skills/openclaw-imports/` |
+| Habilidades | `~/.openclaw/workspace/skills/` | `~/.hermes/skills/openclaw-imports/` |
 | Command allowlist | `~/.openclaw/workspace/exec_approval_patterns.yaml` | Merged into `~/.hermes/config.yaml` |
 | Messaging settings | `~/.openclaw/config.yaml` (TELEGRAM_ALLOWED_USERS, MESSAGING_CWD) | `~/.hermes/.env` |
 | TTS assets | `~/.openclaw/workspace/tts/` | `~/.hermes/tts/` |
@@ -74,15 +74,15 @@ Only these 6 allowlisted secrets are ever imported. Other credentials are skippe
 By default, the migration **will not overwrite** existing Hermes data:
 
 - **SOUL.md** — skipped if one already exists in `~/.hermes/`
-- **Memory entries** — skipped if memories already exist (to avoid duplicates)
-- **Skills** — skipped if a skill with the same name already exists
+- **Memoria entries** — skipped if memories already exist (to avoid duplicates)
+- **Habilidades** — skipped if a skill with the same name already exists
 - **API keys** — skipped if the key is already set in `~/.hermes/.env`
 
 To overwrite conflicts, use `--overwrite`. The migration creates backups before overwriting.
 
 For skills, you can also use `--skill-conflict rename` to import conflicting skills under a new name (e.g., `skill-name-imported`).
 
-## Migration Report
+## Migración Report
 
 Every migration (including dry runs) produces a report showing:
 - **Migrated items** — what was successfully imported
@@ -92,7 +92,7 @@ Every migration (including dry runs) produces a report showing:
 
 For execute runs, the full report is saved to `~/.hermes/migration/openclaw/<timestamp>/`.
 
-## Troubleshooting
+## Solución de Problemas
 
 ### "OpenClaw directory not found"
 The migration looks for `~/.openclaw` by default. If your OpenClaw is installed elsewhere, use `--source`:
@@ -100,11 +100,11 @@ The migration looks for `~/.openclaw` by default. If your OpenClaw is installed 
 hermes claw migrate --source /path/to/.openclaw
 ```
 
-### "Migration script not found"
-The migration script ships with Hermes Agent. If you installed via pip (not git clone), the `optional-skills/` directory may not be present. Install the skill from the Skills Hub:
+### "Migración script not found"
+The migration script ships with Hermes Agent. If you installed via pip (not git clone), the `optional-skills/` directory may not be present. Install the skill from the Habilidades Hub:
 ```bash
 hermes skills install openclaw-migration
 ```
 
-### Memory overflow
+### Memoria overflow
 If your OpenClaw MEMORY.md or USER.md exceeds Hermes' character limits, excess entries are exported to an overflow file in the migration report directory. You can manually review and add the most important ones.

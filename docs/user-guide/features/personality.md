@@ -1,14 +1,14 @@
 ---
 sidebar_position: 9
-title: "Personality & SOUL.md"
+title: "Personalidad & SOUL.md"
 description: "Customize Hermes Agent's personality — SOUL.md, built-in personalities, and custom persona definitions"
 ---
 
-# Personality & SOUL.md
+# Personalidad & SOUL.md
 
 Hermes Agent's personality is fully customizable. You can use the built-in personality presets, create a global SOUL.md file, or define your own custom personas in config.yaml.
 
-## SOUL.md — Custom Personality File
+## SOUL.md — Custom Personalidad File
 
 SOUL.md is a special context file that defines the agent's personality, tone, and communication style. It's injected into the system prompt at session start.
 
@@ -32,7 +32,7 @@ The content appears under a `## SOUL.md` section within the `# Project Context` 
 ### Example SOUL.md
 
 ```markdown
-# Personality
+# Personalidad
 
 You are a pragmatic senior engineer with strong opinions about code quality.
 You prefer simple solutions over complex ones.
@@ -80,7 +80,7 @@ Hermes ships with 14 built-in personalities defined in the CLI config. Switch be
 | **philosopher** | Deep contemplation on every query |
 | **hype** | MAXIMUM ENERGY AND ENTHUSIASM!!! |
 
-### Examples
+### Ejemplos
 
 **kawaii:**
 `You are a kawaii assistant! Use cute expressions and sparkles, be super enthusiastic about everything! Every response should feel warm and adorable desu~!`
@@ -183,7 +183,7 @@ For project-specific personalities that don't need to be in your global config, 
 ```bash
 # Create a project-level personality
 cat > ./SOUL.md << 'EOF'
-You are assisting with a machine learning research project.
+You are assisting with a machine learning rebuscar project.
 
 ## Tone
 - Academic but accessible
@@ -192,7 +192,7 @@ You are assisting with a machine learning research project.
 - Prefer PyTorch over TensorFlow
 
 ## Workflow
-- Suggest experiment tracking (W&B, MLflow) for any training run
+- Suggest experiment seguimiento (W&B, MLflow) for any training run
 - Always ask about compute constraints before suggesting model sizes
 - Recommend data validation before training
 EOF
@@ -200,14 +200,14 @@ EOF
 
 This personality only applies when running Hermes from that project directory.
 
-## How Personality Interacts with the System Prompt
+## How Personalidad Interacts with the System Prompt
 
 The system prompt is assembled in layers (from `agent/prompt_builder.py` and `run_agent.py`):
 
-1. **Default identity**: *"You are Hermes Agent, an intelligent AI assistant created by Nous Research..."*
+1. **Default identity**: *"You are Hermes Agent, an intelligent AI assistant created by Nous Rebuscar..."*
 2. **Platform hint**: formatting guidance based on the platform (CLI, Telegram, etc.)
-3. **Memory**: MEMORY.md and USER.md contents
-4. **Skills index**: available skills listing
+3. **Memoria**: MEMORY.md and USER.md contents
+4. **Habilidades index**: available skills listing
 5. **Context files**: AGENTS.md, .cursorrules, **SOUL.md** (personality lives here)
 6. **Ephemeral system prompt**: `agent.system_prompt` or `HERMES_EPHEMERAL_SYSTEM_PROMPT` (overlaid)
 7. **Session context**: platform, user info, connected platforms (gateway only)
@@ -216,7 +216,7 @@ The system prompt is assembled in layers (from `agent/prompt_builder.py` and `ru
 **SOUL.md vs agent.system_prompt**: SOUL.md is part of the "Project Context" section and coexists with the default identity. The `agent.system_prompt` (set via `/personality` or config) is an ephemeral overlay. Both can be active simultaneously — SOUL.md for tone/personality, system_prompt for additional instructions.
 :::
 
-## Display Personality (CLI Banner)
+## Display Personalidad (CLI Banner)
 
 The `display.personality` config option controls the CLI's **visual** personality (banner art, spinner messages), independent of the agent's conversational personality:
 

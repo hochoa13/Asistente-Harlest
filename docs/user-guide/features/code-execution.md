@@ -1,10 +1,10 @@
 ---
 sidebar_position: 8
-title: "Code Execution"
+title: "Ejecución de Código"
 description: "Sandboxed Python execution with RPC tool access — collapse multi-step workflows into a single turn"
 ---
 
-# Code Execution (Programmatic Tool Calling)
+# Ejecución de Código (Programmatic Tool Calling)
 
 The `execute_code` tool lets the agent write Python scripts that call Hermes tools programmatically, collapsing multi-step workflows into a single LLM turn. The script runs in a sandboxed child process on the agent host, communicating via Unix domain socket RPC.
 
@@ -18,16 +18,16 @@ The `execute_code` tool lets the agent write Python scripts that call Hermes too
 
 ```python
 # The agent can write scripts like:
-from hermes_tools import web_search, web_extract
+from hermes_tools import web_buscar, web_extract
 
-results = web_search("Python 3.13 features", limit=5)
+results = web_buscar("Python 3.13 features", limit=5)
 for r in results["data"]["web"]:
     content = web_extract([r["url"]])
     # ... filter and process ...
 print(summary)
 ```
 
-**Available tools in sandbox:** `web_search`, `web_extract`, `read_file`, `write_file`, `search_files`, `patch`, `terminal` (foreground only).
+**Available tools in sandbox:** `web_buscar`, `web_extract`, `read_file`, `write_file`, `buscar_files`, `patch`, `terminal` (foreground only).
 
 ## When the Agent Uses This
 
@@ -39,16 +39,16 @@ The agent uses `execute_code` when there are:
 
 The key benefit: intermediate tool results never enter the context window — only the final `print()` output comes back, dramatically reducing token usage.
 
-## Practical Examples
+## Practical Ejemplos
 
 ### Data Processing Pipeline
 
 ```python
-from hermes_tools import search_files, read_file
+from hermes_tools import buscar_files, read_file
 import json
 
 # Find all config files and extract database settings
-matches = search_files("database", path=".", file_glob="*.yaml", limit=20)
+matches = buscar_files("database", path=".", file_glob="*.yaml", limit=20)
 configs = []
 for match in matches.get("matches", []):
     content = read_file(match["path"])
@@ -57,14 +57,14 @@ for match in matches.get("matches", []):
 print(json.dumps(configs, indent=2))
 ```
 
-### Multi-Step Web Research
+### Multi-Step Web Rebuscar
 
 ```python
-from hermes_tools import web_search, web_extract
+from hermes_tools import web_buscar, web_extract
 import json
 
 # Search, extract, and summarize in one turn
-results = web_search("Rust async runtime comparison 2025", limit=5)
+results = web_buscar("Rust async runtime comparison 2025", limit=5)
 summaries = []
 for r in results["data"]["web"]:
     page = web_extract([r["url"]])
@@ -82,10 +82,10 @@ print(json.dumps(summaries, indent=2))
 ### Bulk File Refactoring
 
 ```python
-from hermes_tools import search_files, read_file, patch
+from hermes_tools import buscar_files, read_file, patch
 
 # Find all Python files using deprecated API and fix them
-matches = search_files("old_api_call", path="src/", file_glob="*.py")
+matches = buscar_files("old_api_call", path="src/", file_glob="*.py")
 fixed = 0
 for match in matches.get("matches", []):
     result = patch(
@@ -146,7 +146,7 @@ code_execution:
 
 ## How Tool Calls Work Inside Scripts
 
-When your script calls a function like `web_search("query")`:
+When your script calls a function like `web_buscar("query")`:
 
 1. The call is serialized to JSON and sent over a Unix domain socket to the parent process
 2. The parent dispatches through the standard `handle_function_call` handler
@@ -184,7 +184,7 @@ The script runs in a temporary directory that is cleaned up after execution. The
 | Simple shell command | ❌ | ✅ |
 | Filtering/processing large tool outputs | ✅ | ❌ |
 | Running a build or test suite | ❌ | ✅ |
-| Looping over search results | ✅ | ❌ |
+| Looping over buscar results | ✅ | ❌ |
 | Interactive/background processes | ❌ | ✅ |
 | Needs API keys in environment | ❌ | ✅ |
 

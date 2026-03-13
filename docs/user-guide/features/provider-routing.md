@@ -1,23 +1,23 @@
 ---
-title: Provider Routing
+title: Enrutamiento de Proveedor
 description: Configure OpenRouter provider preferences to optimize for cost, speed, or quality.
-sidebar_label: Provider Routing
+sidebar_label: Enrutamiento de Proveedor
 sidebar_position: 7
 ---
 
-# Provider Routing
+# Enrutamiento de Proveedor
 
 When using [OpenRouter](https://openrouter.ai) as your LLM provider, Hermes Agent supports **provider routing** — fine-grained control over which underlying AI providers handle your requests and how they're prioritized.
 
 OpenRouter routes requests to many providers (e.g., Anthropic, Google, AWS Bedrock, Together AI). Provider routing lets you optimize for cost, speed, quality, or enforce specific provider requirements.
 
-## Configuration
+## Configuración
 
 Add a `provider_routing` section to your `~/.hermes/config.yaml`:
 
 ```yaml
 provider_routing:
-  sort: "price"           # How to rank providers
+  sort: "price"           # Cómo rank providers
   only: []                # Whitelist: only use these providers
   ignore: []              # Blacklist: never use these providers
   order: []               # Explicit provider priority order
@@ -98,7 +98,7 @@ provider_routing:
   data_collection: "deny"
 ```
 
-## Practical Examples
+## Practical Ejemplos
 
 ### Optimize for Cost
 

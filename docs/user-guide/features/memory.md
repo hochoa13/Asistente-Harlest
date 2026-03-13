@@ -1,10 +1,10 @@
 ---
 sidebar_position: 3
-title: "Persistent Memory"
-description: "How Hermes Agent remembers across sessions — MEMORY.md, USER.md, and session search"
+title: "Persistent Memoria"
+description: "How Hermes Agent remembers across sessions — MEMORY.md, USER.md, and session buscar"
 ---
 
-# Persistent Memory
+# Persistent Memoria
 
 Hermes Agent has bounded, curated memory that persists across sessions. This lets it remember your preferences, your projects, your environment, and things it has learned.
 
@@ -23,7 +23,7 @@ Both are stored in `~/.hermes/memories/` and are injected into the system prompt
 Character limits keep memory focused. When memory is full, the agent consolidates or replaces entries to make room for new information.
 :::
 
-## How Memory Appears in the System Prompt
+## How Memoria Appears in the System Prompt
 
 At the start of every session, memory entries are loaded from disk and rendered into the system prompt as a frozen block:
 
@@ -40,13 +40,13 @@ User prefers concise responses, dislikes verbose explanations
 
 The format includes:
 - A header showing which store (MEMORY or USER PROFILE)
-- Usage percentage and character counts so the agent knows capacity
+- Uso percentage and character counts so the agent knows capacity
 - Individual entries separated by `§` (section sign) delimiters
 - Entries can be multiline
 
 **Frozen snapshot pattern:** The system prompt injection is captured once at session start and never changes mid-session. This is intentional — it preserves the LLM's prefix cache for performance. When the agent adds/removes memory entries during a session, the changes are persisted to disk immediately but won't appear in the system prompt until the next session starts. Tool responses always show the live state.
 
-## Memory Tool Actions
+## Memoria Tool Actions
 
 The agent uses the `memory` tool with these actions:
 
@@ -78,8 +78,8 @@ For information the agent needs to remember about the environment, workflows, an
 - Environment facts (OS, tools, project structure)
 - Project conventions and configuration
 - Tool quirks and workarounds discovered
-- Completed task diary entries
-- Skills and techniques that worked
+- Completod task diary entries
+- Habilidades and techniques that worked
 
 ### `user` — User Profile
 
@@ -101,34 +101,34 @@ The agent saves automatically — you don't need to ask. It saves when it learns
 - **Environment facts:** "This server runs Debian 12 with PostgreSQL 16" → save to `memory`
 - **Corrections:** "Don't use `sudo` for Docker commands, user is in docker group" → save to `memory`
 - **Conventions:** "Project uses tabs, 120-char line width, Google-style docstrings" → save to `memory`
-- **Completed work:** "Migrated database from MySQL to PostgreSQL on 2026-01-15" → save to `memory`
+- **Completod work:** "Migrated database from MySQL to PostgreSQL on 2026-01-15" → save to `memory`
 - **Explicit requests:** "Remember that my API key rotation happens monthly" → save to `memory`
 
 ### Skip These
 
 - **Trivial/obvious info:** "User asked about Python" — too vague to be useful
-- **Easily re-discovered facts:** "Python 3.12 supports f-string nesting" — can web search this
+- **Easily re-discovered facts:** "Python 3.12 supports f-string nesting" — can web buscar this
 - **Raw data dumps:** Large code blocks, log files, data tables — too big for memory
 - **Session-specific ephemera:** Temporary file paths, one-off debugging context
 - **Information already in context files:** SOUL.md and AGENTS.md content
 
 ## Capacity Management
 
-Memory has strict character limits to keep system prompts bounded:
+Memoria has strict character limits to keep system prompts bounded:
 
 | Store | Limit | Typical entries |
 |-------|-------|----------------|
 | memory | 2,200 chars | 8-15 entries |
 | user | 1,375 chars | 5-10 entries |
 
-### What Happens When Memory is Full
+### What Happens When Memoria is Full
 
 When you try to add an entry that would exceed the limit, the tool returns an error:
 
 ```json
 {
   "success": false,
-  "error": "Memory at 2,100/2,200 chars. Adding this entry (250 chars) would exceed the limit. Replace or remove existing entries first.",
+  "error": "Memoria at 2,100/2,200 chars. Adding this entry (250 chars) would exceed the limit. Replace or remove existing entries first.",
   "current_entries": ["..."],
   "usage": "2,100/2,200"
 }
@@ -142,7 +142,7 @@ The agent should then:
 
 **Best practice:** When memory is above 80% capacity (visible in the system prompt header), consolidate entries before adding new ones. For example, merge three separate "project uses X" entries into one comprehensive project description entry.
 
-### Practical Examples of Good Memory Entries
+### Practical Ejemplos of Good Memoria Entries
 
 **Compact, information-dense entries work best:**
 
@@ -170,13 +170,13 @@ The memory system automatically rejects exact duplicate entries. If you try to a
 
 ## Security Scanning
 
-Memory entries are scanned for injection and exfiltration patterns before being accepted, since they're injected into the system prompt. Content matching threat patterns (prompt injection, credential exfiltration, SSH backdoors) or containing invisible Unicode characters is blocked.
+Memoria entries are scanned for injection and exfiltration patterns before being accepted, since they're injected into the system prompt. Content matching threat patterns (prompt injection, credential exfiltration, SSH backdoors) or containing invisible Unicode characters is blocked.
 
 ## Session Search
 
-Beyond MEMORY.md and USER.md, the agent can search its past conversations using the `session_search` tool:
+Beyond MEMORY.md and USER.md, the agent can buscar its past conversations using the `session_buscar` tool:
 
-- All CLI and messaging sessions are stored in SQLite (`~/.hermes/state.db`) with FTS5 full-text search
+- All CLI and messaging sessions are stored in SQLite (`~/.hermes/state.db`) with FTS5 full-text buscar
 - Search queries return relevant past conversations with Gemini Flash summarization
 - The agent can find things it discussed weeks ago, even if they're not in its active memory
 
@@ -184,19 +184,19 @@ Beyond MEMORY.md and USER.md, the agent can search its past conversations using 
 hermes sessions list    # Browse past sessions
 ```
 
-### session_search vs memory
+### session_buscar vs memory
 
-| Feature | Persistent Memory | Session Search |
+| Feature | Persistent Memoria | Session Search |
 |---------|------------------|----------------|
 | **Capacity** | ~1,300 tokens total | Unlimited (all sessions) |
-| **Speed** | Instant (in system prompt) | Requires search + LLM summarization |
+| **Speed** | Instant (in system prompt) | Requires buscar + LLM summarization |
 | **Use case** | Key facts always available | Finding specific past conversations |
 | **Management** | Manually curated by agent | Automatic — all sessions stored |
-| **Token cost** | Fixed per session (~1,300 tokens) | On-demand (searched when needed) |
+| **Token cost** | Fixed per session (~1,300 tokens) | On-demand (buscared when needed) |
 
-**Memory** is for critical facts that should always be in context. **Session search** is for "did we discuss X last week?" queries where the agent needs to recall specifics from past conversations.
+**Memoria** is for critical facts that should always be in context. **Session buscar** is for "did we discuss X last week?" queries where the agent needs to recall specifics from past conversations.
 
-## Configuration
+## Configuración
 
 ```yaml
 # In ~/.hermes/config.yaml
@@ -207,12 +207,12 @@ memory:
   user_char_limit: 1375     # ~500 tokens
 ```
 
-## Honcho Integration (Cross-Session User Modeling)
+## Honcho Integración (Cross-Session User Modeling)
 
-For deeper, AI-generated user understanding that works across sessions and platforms, you can enable [Honcho Memory](./honcho.md). Honcho runs alongside built-in memory in `hybrid` mode (the default) — `MEMORY.md` and `USER.md` stay as-is, and Honcho adds a persistent user modeling layer on top.
+For deeper, AI-generated user understanding that works across sessions and platforms, you can enable [Honcho Memoria](./honcho.md). Honcho runs alongside built-in memory in `hybrid` mode (the default) — `MEMORY.md` and `USER.md` stay as-is, and Honcho adds a persistent user modeling layer on top.
 
 ```bash
 hermes honcho setup
 ```
 
-See the [Honcho Memory](./honcho.md) docs for full configuration, tools, and CLI reference.
+See the [Honcho Memoria](./honcho.md) docs for full configuration, tools, and CLI reference.

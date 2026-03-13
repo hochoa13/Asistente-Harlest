@@ -1,14 +1,14 @@
 ---
 sidebar_position: 13
-title: "RL Training"
+title: "Entrenamiento RL"
 description: "Reinforcement learning on agent behaviors with Tinker-Atropos — environment discovery, training, and evaluation"
 ---
 
-# RL Training
+# Entrenamiento RL
 
 Hermes Agent includes an integrated RL (Reinforcement Learning) training pipeline built on **Tinker-Atropos**. This enables training language models on environment-specific tasks using GRPO (Group Relative Policy Optimization) with LoRA adapters, orchestrated entirely through the agent's tool interface.
 
-## Overview
+## Descripción General
 
 The RL training system consists of three components:
 
@@ -18,13 +18,13 @@ The RL training system consists of three components:
 
 The agent can discover environments, configure training parameters, launch training runs, and monitor metrics — all through a set of `rl_*` tools.
 
-## Requirements
+## Requisitos
 
 RL training requires:
 
 - **Python >= 3.11** (Tinker package requirement)
 - **TINKER_API_KEY** — API key for the Tinker training service
-- **WANDB_API_KEY** — API key for Weights & Biases metrics tracking
+- **WANDB_API_KEY** — API key for Weights & Biases metrics seguimiento
 - The `tinker-atropos` submodule (at `tinker-atropos/` relative to the Hermes root)
 
 ```bash
@@ -35,7 +35,7 @@ hermes config set WANDB_API_KEY your-wandb-key
 
 When both keys are present and Python >= 3.11 is available, the `rl` toolset is automatically enabled.
 
-## Available Tools
+## Available Herramientas
 
 | Tool | Description |
 |------|-------------|
@@ -72,7 +72,7 @@ Select the GSM8K environment and show me the configuration
 
 The agent calls `rl_select_environment("gsm8k_tinker")`, then `rl_get_current_config()` to see all parameters.
 
-Configuration fields are divided into two categories:
+Configuración fields are divided into two categories:
 
 **Configurable fields** (can be modified):
 - `group_size` — Number of completions per item (default: 16)
@@ -156,7 +156,7 @@ This validates:
 - Inference response parsing is robust across model scales
 - Verifier/scoring logic produces valid rewards
 
-## Tinker API Integration
+## Tinker API Integración
 
 The trainer uses the [Tinker](https://tinker.computer) API for model training operations:
 

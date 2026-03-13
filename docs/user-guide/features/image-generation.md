@@ -1,15 +1,15 @@
 ---
-title: Image Generation
+title: Generación de Imágenes
 description: Generate high-quality images using FLUX 2 Pro with automatic upscaling via FAL.ai.
-sidebar_label: Image Generation
+sidebar_label: Generación de Imágenes
 sidebar_position: 6
 ---
 
-# Image Generation
+# Generación de Imágenes
 
 Hermes Agent can generate images from text prompts using FAL.ai's **FLUX 2 Pro** model with automatic 2x upscaling via the **Clarity Upscaler** for enhanced quality.
 
-## Setup
+## Configuración
 
 ### Get a FAL API Key
 
@@ -43,7 +43,7 @@ When you ask Hermes to generate an image:
 
 If upscaling fails for any reason, the original image is returned as a fallback.
 
-## Usage
+## Uso
 
 Simply ask Hermes to create an image:
 

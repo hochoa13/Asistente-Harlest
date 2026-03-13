@@ -1,10 +1,10 @@
 ---
 sidebar_position: 7
-title: "Subagent Delegation"
+title: "Subagent Delegación"
 description: "Spawn isolated child agents for parallel workstreams with delegate_task"
 ---
 
-# Subagent Delegation
+# Subagent Delegación
 
 The `delegate_task` tool spawns child AIAgent instances with isolated context, restricted toolsets, and their own terminal sessions. Each child gets a fresh conversation and works independently — only its final summary enters the parent's context.
 
@@ -24,8 +24,8 @@ Up to 3 concurrent subagents:
 
 ```python
 delegate_task(tasks=[
-    {"goal": "Research topic A", "toolsets": ["web"]},
-    {"goal": "Research topic B", "toolsets": ["web"]},
+    {"goal": "Rebuscar topic A", "toolsets": ["web"]},
+    {"goal": "Rebuscar topic B", "toolsets": ["web"]},
     {"goal": "Fix the build", "toolsets": ["terminal", "file"]}
 ])
 ```
@@ -55,26 +55,26 @@ delegate_task(
 
 The subagent receives a focused system prompt built from your goal and context, instructing it to complete the task and provide a structured summary of what it did, what it found, any files modified, and any issues encountered.
 
-## Practical Examples
+## Practical Ejemplos
 
-### Parallel Research
+### Parallel Rebuscar
 
-Research multiple topics simultaneously and collect summaries:
+Rebuscar multiple topics simultaneously and collect summaries:
 
 ```python
 delegate_task(tasks=[
     {
-        "goal": "Research the current state of WebAssembly in 2025",
+        "goal": "Rebuscar the current state of WebAssembly in 2025",
         "context": "Focus on: browser support, non-browser runtimes, language support",
         "toolsets": ["web"]
     },
     {
-        "goal": "Research the current state of RISC-V adoption in 2025",
+        "goal": "Rebuscar the current state of RISC-V adoption in 2025",
         "context": "Focus on: server chips, embedded systems, software ecosystem",
         "toolsets": ["web"]
     },
     {
-        "goal": "Research quantum computing progress in 2025",
+        "goal": "Rebuscar quantum computing progress in 2025",
         "context": "Focus on: error correction breakthroughs, practical applications, key players",
         "toolsets": ["web"]
     }
@@ -91,7 +91,7 @@ delegate_task(
     context="""Project at /home/user/webapp.
     Auth module files: src/auth/login.py, src/auth/jwt.py, src/auth/middleware.py.
     The project uses Flask, PyJWT, and bcrypt.
-    Focus on: SQL injection, JWT validation, password handling, session management.
+    Focus on: SQL injection, JWT validation, password handling, session gestión.
     Fix any issues found and run the test suite (pytest tests/auth/).""",
     toolsets=["terminal", "file"]
 )
@@ -117,7 +117,7 @@ delegate_task(
 )
 ```
 
-## Batch Mode Details
+## Batch Mode Detalles
 
 When you provide a `tasks` array, subagents run in **parallel** using a thread pool:
 
@@ -144,17 +144,17 @@ delegate_task(
 
 If omitted, subagents use the same model as the parent.
 
-## Toolset Selection Tips
+## Herramientaset Selection Tips
 
 The `toolsets` parameter controls what tools the subagent has access to. Choose based on the task:
 
-| Toolset Pattern | Use Case |
+| Herramientaset Pattern | Use Case |
 |----------------|----------|
 | `["terminal", "file"]` | Code work, debugging, file editing, builds |
-| `["web"]` | Research, fact-checking, documentation lookup |
+| `["web"]` | Rebuscar, fact-checking, documentation lookup |
 | `["terminal", "file", "web"]` | Full-stack tasks (default) |
 | `["file"]` | Read-only analysis, code review without execution |
-| `["terminal"]` | System administration, process management |
+| `["terminal"]` | System administration, process gestión |
 
 Certain toolsets are **always blocked** for subagents regardless of what you specify:
 - `delegation` — no recursive delegation (prevents infinite spawning)
@@ -177,7 +177,7 @@ delegate_task(
 
 ## Depth Limit
 
-Delegation has a **depth limit of 2** — a parent (depth 0) can spawn children (depth 1), but children cannot delegate further. This prevents runaway recursive delegation chains.
+Delegación has a **depth limit of 2** — a parent (depth 0) can spawn children (depth 1), but children cannot delegate further. This prevents runaway recursive delegation chains.
 
 ## Key Properties
 
@@ -188,7 +188,7 @@ Delegation has a **depth limit of 2** — a parent (depth 0) can spawn children 
 - Only the final summary enters the parent's context, keeping token usage efficient
 - Subagents inherit the parent's **API key and provider configuration**
 
-## Delegation vs execute_code
+## Delegación vs execute_code
 
 | Factor | delegate_task | execute_code |
 |--------|--------------|-------------|
@@ -202,7 +202,7 @@ Delegation has a **depth limit of 2** — a parent (depth 0) can spawn children 
 
 **Rule of thumb:** Use `delegate_task` when the subtask requires reasoning, judgment, or multi-step problem solving. Use `execute_code` when you need mechanical data processing or scripted workflows.
 
-## Configuration
+## Configuración
 
 ```yaml
 # In ~/.hermes/config.yaml

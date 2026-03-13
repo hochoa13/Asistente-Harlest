@@ -8,7 +8,7 @@ description: "Connect Hermes Agent to external tool servers via MCP — database
 
 MCP lets Hermes Agent connect to external tool servers — giving the agent access to databases, APIs, filesystems, and more without any code changes.
 
-## Overview
+## Descripción General
 
 The [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) is an open standard for connecting AI agents to external tools and data sources. MCP servers expose tools over a lightweight RPC protocol, and Hermes Agent can connect to any compliant server automatically.
 
@@ -31,7 +31,7 @@ pip install hermes-agent[mcp]
 | npm-based (npx) | Node.js 18+ | `command: "npx"` |
 | Python-based | uv (recommended) | `command: "uvx"` |
 
-## Configuration
+## Configuración
 
 MCP servers are configured in `~/.hermes/config.yaml` under the `mcp_servers` key.
 
@@ -86,7 +86,7 @@ mcp_servers:
     connect_timeout: 90   # Initial connection timeout (default: 60s)
 ```
 
-### Mixed Configuration Example
+### Mixed Configuración Example
 
 ```yaml
 mcp_servers:
@@ -157,7 +157,7 @@ mcp_{server_name}_{tool_name}
 | `github` | `create-issue` | `mcp_github_create_issue` |
 | `my-api` | `query.data` | `mcp_my_api_query_data` |
 
-Tools appear alongside built-in tools — the agent calls them like any other tool.
+Herramientas appear alongside built-in tools — the agent calls them like any other tool.
 
 :::info
 In addition to the server's own tools, each MCP server also gets 4 utility tools auto-registered: `list_resources`, `read_resource`, `list_prompts`, and `get_prompt`. These allow the agent to discover and use MCP resources and prompts exposed by the server.
@@ -175,15 +175,15 @@ On agent exit, all MCP server connections are cleanly shut down.
 
 | Server | Package | Description |
 |--------|---------|-------------|
-| Filesystem | `@modelcontextprotocol/server-filesystem` | Read/write/search local files |
-| GitHub | `@modelcontextprotocol/server-github` | Issues, PRs, repos, code search |
+| Filesystem | `@modelcontextprotocol/server-filesystem` | Read/write/buscar local files |
+| GitHub | `@modelcontextprotocol/server-github` | Issues, PRs, repos, code buscar |
 | Git | `@modelcontextprotocol/server-git` | Git operations on local repos |
 | Fetch | `@modelcontextprotocol/server-fetch` | HTTP fetching and web content |
-| Memory | `@modelcontextprotocol/server-memory` | Persistent key-value memory |
+| Memoria | `@modelcontextprotocol/server-memory` | Persistent key-value memory |
 | SQLite | `@modelcontextprotocol/server-sqlite` | Query SQLite databases |
 | PostgreSQL | `@modelcontextprotocol/server-postgres` | Query PostgreSQL databases |
-| Brave Search | `@modelcontextprotocol/server-brave-search` | Web search via Brave API |
-| Puppeteer | `@modelcontextprotocol/server-puppeteer` | Browser automation |
+| Brave Search | `@modelcontextprotocol/server-brave-buscar` | Web buscar via Brave API |
+| Puppeteer | `@modelcontextprotocol/server-puppeteer` | Navegador automation |
 
 ### Example Configs
 
@@ -213,14 +213,14 @@ mcp_servers:
     env:
       GITHUB_PERSONAL_ACCESS_TOKEN: "ghp_xxxxxxxxxxxx"
 
-  brave_search:
+  brave_buscar:
     command: "npx"
-    args: ["-y", "@modelcontextprotocol/server-brave-search"]
+    args: ["-y", "@modelcontextprotocol/server-brave-buscar"]
     env:
       BRAVE_API_KEY: "BSA_xxxxxxxxxxxx"
 ```
 
-## Troubleshooting
+## Solución de Problemas
 
 ### "MCP SDK not available"
 
@@ -286,7 +286,7 @@ When an MCP server sends a `sampling/createMessage` request:
 4. Offloads the LLM call to a thread via `asyncio.to_thread()` (non-blocking)
 5. Returns the response (text or tool use) back to the server
 
-### Configuration
+### Configuración
 
 Sampling is **enabled by default** for all MCP servers. No extra setup needed — if you have an auxiliary LLM client configured, sampling works automatically.
 

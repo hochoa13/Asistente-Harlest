@@ -1,11 +1,11 @@
 ---
-title: Vision & Image Paste
+title: Visión & Image Paste
 description: Paste images from your clipboard into the Hermes CLI for multimodal vision analysis.
-sidebar_label: Vision & Image Paste
+sidebar_label: Visión & Image Paste
 sidebar_position: 7
 ---
 
-# Vision & Image Paste
+# Visión & Image Paste
 
 Hermes Agent supports **multimodal vision** — you can paste images from your clipboard directly into the CLI and ask the agent to analyze, describe, or work with them. Images are sent to the model as base64-encoded content blocks, so any vision-capable model can process them.
 
@@ -70,9 +70,9 @@ On Linux desktop terminals (GNOME Terminal, Konsole, Alacritty, etc.), `Ctrl+V` 
 | **SSH terminal (any)** | ❌² | ❌² | ❌² | Remote clipboard not accessible |
 
 ¹ Only when clipboard has both text and an image (image-only clipboard = nothing happens)
-² See [SSH & Remote Sessions](#ssh--remote-sessions) below
+² See [SSH & Remote Sesiones](#ssh--remote-sessions) below
 
-## Platform-Specific Setup
+## Platform-Specific Configuración
 
 ### macOS
 
@@ -112,7 +112,7 @@ sudo dnf install wl-clipboard
 sudo pacman -S wl-clipboard
 ```
 
-:::tip How to check if you're on Wayland
+:::tip Cómo check if you're on Wayland
 ```bash
 echo $XDG_SESSION_TYPE
 # "wayland" = Wayland, "x11" = X11, "tty" = no display server
@@ -143,7 +143,7 @@ powershell.exe -NoProfile -Command "Add-Type -AssemblyName System.Windows.Forms;
 # Should print "True"
 ```
 
-## SSH & Remote Sessions
+## SSH & Remote Sesiones
 
 **Clipboard paste does not work over SSH.** When you SSH into a remote machine, the Hermes CLI runs on the remote host. All clipboard tools (`xclip`, `wl-paste`, `powershell.exe`, `osascript`) read the clipboard of the machine they run on — which is the remote server, not your local machine. Your local clipboard is inaccessible from the remote side.
 
@@ -184,4 +184,4 @@ Image paste works with any vision-capable model. The image is sent as a base64-e
 }
 ```
 
-Most modern models support this format, including GPT-4 Vision, Claude (with vision), Gemini, and open-source multimodal models served through OpenRouter.
+Most modern models support this format, including GPT-4 Visión, Claude (with vision), Gemini, and open-source multimodal models served through OpenRouter.
