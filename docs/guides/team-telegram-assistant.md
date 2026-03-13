@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
-title: "Tutorial: Team Telegram Assistant"
-description: "Step-by-step guide to setting up a Telegram bot that your whole team can use for code help, research, system admin, and more"
+title: "Tutorial: Asistente de Equipo Telegram"
+description: "Guía paso a paso para configurar un bot Telegram que todo tu equipo pueda usar for code help, research, system admin, and more"
 ---
 
 # Set Up a Team Telegram Assistant
@@ -20,7 +20,7 @@ A Telegram bot that:
 
 ---
 
-## Prerequisites
+## Requisitos Previos
 
 Before starting, make sure you have:
 
@@ -34,7 +34,7 @@ A $5/month VPS is plenty for running the gateway. Hermes itself is lightweight �
 
 ---
 
-## Step 1: Create a Telegram Bot
+## Paso 1: Create a Telegram Bot
 
 Every Telegram bot starts with **@BotFather** — Telegram's official bot for creating bots.
 
@@ -79,7 +79,7 @@ Keep your bot token secret. Anyone with the token can control the bot. If it lea
 
 ---
 
-## Step 2: Configure the Gateway
+## Paso 2: Configure the Gateway
 
 You have two options: the interactive setup wizard (recommended) or manual configuration.
 
@@ -117,7 +117,7 @@ Telegram user IDs are permanent numbers like `123456789`. They're different from
 
 ---
 
-## Step 3: Start the Gateway
+## Paso 3: Start the Gateway
 
 ### Quick Test
 
@@ -177,7 +177,7 @@ Then send a test message to your bot on Telegram. You should get a response with
 
 ---
 
-## Step 4: Set Up Team Access
+## Paso 4: Set Up Team Access
 
 Now let's give your teammates access. There are two approaches.
 
@@ -232,7 +232,7 @@ hermes pairing clear-pending
 DM pairing is ideal for teams because you don't need to restart the gateway when adding new users. Approvals take effect immediately.
 :::
 
-### Security Considerations
+### Seguridad Considerations
 
 - **Never set `GATEWAY_ALLOW_ALL_USERS=true`** on a bot with terminal access — anyone who finds your bot could run commands on your server
 - Pairing codes expire after **1 hour** and use cryptographic randomness
@@ -416,7 +416,7 @@ hermes gateway stop && hermes gateway start
 
 You've got a working team Telegram assistant. Here are some next steps:
 
-- **[Security Guide](/user-guide/security)** — deep dive into authorization, container isolation, and command approval
+- **[Seguridad Guide](/user-guide/security)** — deep dive into authorization, container isolation, and command approval
 - **[Messaging Gateway](/user-guide/messaging)** — full reference for gateway architecture, session management, and chat commands
 - **[Telegram Setup](/user-guide/messaging/telegram)** — platform-specific details including voice messages and TTS
 - **[Scheduled Tasks](/user-guide/features/cron)** — advanced cron scheduling with delivery options and cron expressions

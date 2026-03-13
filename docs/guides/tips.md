@@ -1,10 +1,10 @@
 ---
 sidebar_position: 1
-title: "Tips & Best Practices"
-description: "Practical advice to get the most out of Hermes Agent — prompt tips, CLI shortcuts, context files, memory, cost optimization, and security"
+title: "Tips y Mejores Prácticas"
+description: "Consejos prácticos para sacar el máximo provecho de Hermes Agent — prompt tips, CLI shortcuts, context files, memory, cost optimization, and security"
 ---
 
-# Tips & Best Practices
+# Tips y Mejores Prácticas
 
 A quick-wins collection of practical tips that make you immediately more effective with Hermes Agent. Each section targets a different aspect — scan the headers and jump to what's relevant.
 
@@ -32,7 +32,7 @@ Don't try to hand-hold every step. Say "find and fix the failing test" rather th
 
 Before writing a long prompt explaining how to do something, check if there's already a skill for it. Type `/skills` to browse available skills, or just invoke one directly like `/axolotl` or `/github-pr-workflow`.
 
-## CLI Power User Tips
+## Tips del Usuario Avanzado de CLI
 
 ### Multi-Line Input
 
@@ -121,7 +121,7 @@ After a productive session, say "remember this for next time" and the agent will
 Memory is a frozen snapshot — changes made during a session don't appear in the system prompt until the next session starts. The agent writes to disk immediately, but the prompt cache isn't invalidated mid-session.
 :::
 
-## Performance & Cost
+## Rendimiento & Cost
 
 ### Don't Break the Prompt Cache
 
@@ -169,7 +169,7 @@ Use `/verbose` to control how much tool activity you see. In messaging platforms
 On messaging platforms, sessions auto-reset after idle time (default: 120 min) or daily at 4 AM. Adjust per-platform in `~/.hermes/gateway.json` if you need longer sessions.
 :::
 
-## Security
+## Seguridad
 
 ### Use Docker for Untrusted Code
 

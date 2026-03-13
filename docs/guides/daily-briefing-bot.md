@@ -1,6 +1,6 @@
 ---
 sidebar_position: 2
-title: "Tutorial: Daily Briefing Bot"
+title: "Tutorial: Bot de Resumen Diario"
 description: "Build an automated daily briefing bot that researches topics, summarizes findings, and delivers them to Telegram or Discord every morning"
 ---
 
@@ -22,7 +22,7 @@ Here's the flow:
 
 The whole thing runs hands-free. You just read your briefing with your morning coffee.
 
-## Prerequisites
+## Requisitos Previos
 
 Before starting, make sure you have:
 
@@ -40,7 +40,7 @@ Before starting, make sure you have:
 You can still follow this tutorial using `deliver: "local"`. Briefings will be saved to `~/.hermes/cron/output/` and you can read them anytime.
 :::
 
-## Step 1: Test the Workflow Manually
+## Paso 1: Test the Workflow Manually
 
 Before automating anything, let's make sure the briefing works. Start a chat session:
 
@@ -85,7 +85,7 @@ If this works, you're ready to automate it.
 Try different prompts until you get output you love. Add instructions like "use emoji headers" or "keep each summary under 2 sentences." Whatever you settle on goes into the cron job.
 :::
 
-## Step 2: Create the Cron Job
+## Paso 2: Create the Cron Job
 
 Now let's schedule this to run automatically every morning. You can do this in two ways.
 
@@ -131,7 +131,7 @@ Use a friendly, professional tone. Format with emoji bullet points.
 
 The good prompt is specific about **what to search**, **how many articles**, **what format**, and **what tone**. It's everything the agent needs in one shot.
 
-## Step 3: Customize the Briefing
+## Paso 3: Customize the Briefing
 
 Once the basic briefing works, you can get creative.
 
@@ -197,7 +197,7 @@ Search for the latest news on these topics. Summarize the top 3 stories with lin
 Including details about who the briefing is *for* dramatically improves relevance. Tell the agent your role, interests, and what to skip.
 :::
 
-## Step 4: Manage Your Jobs
+## Paso 4: Manage Your Jobs
 
 ### List All Scheduled Jobs
 
@@ -256,7 +256,7 @@ You've built a working daily briefing bot. Here are some directions to explore n
 - **[Delegation](/docs/user-guide/features/delegation)** — Deep dive into parallel sub-agent workflows
 - **[Messaging Platforms](/docs/user-guide/messaging)** — Set up Telegram, Discord, or other delivery targets
 - **[Memory](/docs/user-guide/features/memory)** — Persistent context across sessions
-- **[Tips & Best Practices](/docs/guides/tips)** — More prompt engineering advice
+- **[Tips y Mejores Prácticas](/docs/guides/tips)** — More prompt engineering advice
 
 :::tip What else can you schedule?
 The briefing bot pattern works for anything: competitor monitoring, GitHub repo summaries, weather forecasts, portfolio tracking, server health checks, or even a daily joke. If you can describe it in a prompt, you can schedule it.

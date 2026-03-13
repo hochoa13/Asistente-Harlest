@@ -1,10 +1,10 @@
 ---
 sidebar_position: 4
-title: "Using Hermes as a Python Library"
-description: "Embed AIAgent in your own Python scripts, web apps, or automation pipelines — no CLI required"
+title: "Usando Hermes como una Librería Python"
+description: "Integra AIAgent en tus propios scripts de Python, web apps, or automation pipelines — no CLI required"
 ---
 
-# Using Hermes as a Python Library
+# Usando Hermes como una Librería Python
 
 Hermes isn't just a CLI tool. You can import `AIAgent` directly and use it programmatically in your own Python scripts, web applications, or automation pipelines. This guide shows you how.
 
@@ -226,7 +226,7 @@ Always create a **new `AIAgent` instance per thread or task**. The agent maintai
 
 ---
 
-## Integration Examples
+## Integration Ejemplos
 
 ### FastAPI Endpoint
 
