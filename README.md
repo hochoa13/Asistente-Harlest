@@ -30,7 +30,7 @@ Usa cualquier modelo que desees — [Nous Portal](https://portal.nousresearch.co
 ## Instalación Rápida
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/H4RLEST/Asistente-Harlest/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/hochoa13/Asistente-Harlest/main/scripts/install.sh | bash
 ```
 
 Funciona en Linux, macOS y WSL2. El instalador se encarga de todo — Python, Node.js, dependencias y el comando `hermes`. Sin prerrequisitos excepto git.
@@ -124,7 +124,7 @@ Ver `hermes claw migrate --help` para todas las opciones, o usa la habilidad `op
 Inicio rápido para contribuyentes:
 
 ```bash
-git clone --recurse-submodules https://github.com/H4RLEST/Asistente-Harlest.git
+git clone --recurse-submodules https://github.com/hochoa13/Asistente-Harlest.git
 cd Asistente-Harlest
 curl -LsSf https://astral.sh/uv/install.sh | sh
 uv venv .venv --python 3.11
@@ -140,8 +140,8 @@ python -m pytest tests/ -q
 
 - 💬 [Discord](https://discord.gg/NousResearch)
 - 📚 [Centro de Habilidades](https://agentskills.io)
-- 🐛 [Problemas](https://github.com/H4RLEST/Asistente-Harlest/issues)
-- 💡 [Discusiones](https://github.com/H4RLEST/Asistente-Harlest/discussions)
+- 🐛 [Problemas](https://github.com/hochoa13/Asistente-Harlest/issues)
+- 💡 [Discusiones](https://github.com/hochoa13/Asistente-Harlest/discussions)
 
 ---
 
