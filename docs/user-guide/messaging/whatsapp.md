@@ -1,10 +1,10 @@
 ---
 sidebar_position: 5
 title: "WhatsApp"
-description: "Set up Hermes Agent as a WhatsApp bot via the built-in Baileys bridge"
+description: "Configura Hermes Agent como un bot WhatsApp a través del puente Baileys integrado"
 ---
 
-# WhatsApp Setup
+# WhatsApp Configuración
 
 Hermes connects to WhatsApp through a built-in bridge using [whatsapp-web.js](https://github.com/pedroslopez/whatsapp-web.js)
 (Baileys-based). This works by emulating a WhatsApp Web session — **not** through the official
@@ -14,8 +14,8 @@ WhatsApp Business API. No Meta developer account or Business verification is req
 WhatsApp does **not** officially support third-party bots outside the Business API. Using
 whatsapp-web.js carries a small risk of account restrictions. To minimize risk:
 - **Use a dedicated phone number** for the bot (not your personal number)
-- **Don't send bulk/spam messages** — keep usage conversational
-- **Don't automate outbound messaging** to people who haven't messaged first
+- **Don't enviar bulk/spam mensajes** — keep usage conversational
+- **Don't automate outbound messaging** to people who haven't mensajed first
 :::
 
 :::warning WhatsApp Web Protocol Updates
@@ -26,14 +26,14 @@ bot stops working after a WhatsApp update, pull the latest Hermes version and re
 
 ## Two Modes
 
-| Mode | How it works | Best for |
+| Mode | Cómo funciona | Best for |
 |------|-------------|----------|
-| **Separate bot number** (recommended) | Dedicate a phone number to the bot. People message that number directly. | Clean UX, multiple users, lower ban risk |
-| **Personal self-chat** | Use your own WhatsApp. You message yourself to talk to the agent. | Quick setup, single user, testing |
+| **Separate bot number** (recommended) | Dedicate a phone number to the bot. People mensaje that number directly. | Clean UX, multiple usuarios, lower ban risk |
+| **Personal self-chat** | Use your own WhatsApp. You mensaje yourself to talk to the agent. | Quick setup, single usuario, testing |
 
 ---
 
-## Prerequisites
+## Requisitos Previos
 
 - **Node.js v18+** and **npm** — the WhatsApp bridge runs as a Node.js process
 - **A phone with WhatsApp** installed (for scanning the QR code)
@@ -56,7 +56,7 @@ sudo dnf install -y \
 
 ---
 
-## Step 1: Run the Setup Wizard
+## Step 1: Run the Configuración Wizard
 
 ```bash
 hermes whatsapp
@@ -114,7 +114,7 @@ WHATSAPP_MODE=bot                          # "bot" or "self-chat"
 WHATSAPP_ALLOWED_USERS=15551234567         # Comma-separated phone numbers (with country code, no +)
 
 # Optional
-WHATSAPP_HOME_CONTACT=15551234567          # Default contact for proactive/scheduled messages
+WHATSAPP_HOME_CONTACT=15551234567          # Default contact for proactive/scheduled mensajes
 ```
 
 Then start the gateway:
@@ -158,13 +158,13 @@ with reconnection logic.
 
 Hermes supports voice on WhatsApp:
 
-- **Incoming:** Voice messages (`.ogg` opus) are automatically transcribed using Whisper (requires `VOICE_TOOLS_OPENAI_KEY`)
+- **Incoming:** Voice mensajes (`.ogg` opus) are automatically transcribed using Whisper (requires `VOICE_TOOLS_OPENAI_KEY`)
 - **Outgoing:** TTS responses are sent as MP3 audio file attachments
 - Agent responses are prefixed with "⚕ **Hermes Agent**" for easy identification
 
 ---
 
-## Troubleshooting
+## Solución de Problemas
 
 | Problem | Solution |
 |---------|----------|
@@ -172,9 +172,9 @@ Hermes supports voice on WhatsApp:
 | **QR code expires** | QR codes refresh every ~20 seconds. If it times out, restart `hermes whatsapp`. |
 | **Session not persisting** | Check that `~/.hermes/.wwebjs_auth/` exists and is writable. On Docker, mount this as a volume. |
 | **Logged out unexpectedly** | WhatsApp unlinks devices after ~14 days of phone inactivity. Keep the phone on and connected to WiFi. Re-pair with `hermes whatsapp`. |
-| **"Execution context was destroyed"** | Chromium crashed. Install the Puppeteer dependencies listed in Prerequisites. On low-RAM servers, add swap space. |
+| **"Execution context was destroyed"** | Chromium crashed. Install the Puppeteer dependencies listed in Requisitos Previos. On low-RAM servers, add swap space. |
 | **Bot stops working after WhatsApp update** | Update Hermes to get the latest bridge version, then re-pair. |
-| **Messages not being received** | Verify `WHATSAPP_ALLOWED_USERS` includes the sender's number (with country code, no `+` or spaces). |
+| **Messages not being recibird** | Verify `WHATSAPP_ALLOWED_USERS` includes the enviarer's number (with country code, no `+` or spaces). |
 
 ---
 
@@ -182,12 +182,12 @@ Hermes supports voice on WhatsApp:
 
 :::warning
 **Always set `WHATSAPP_ALLOWED_USERS`** with phone numbers (including country code, without the `+`)
-of authorized users. Without this setting, the gateway will **deny all incoming messages** as a
+of authorized usuarios. Without this setting, the gateway will **deny all incoming mensajes** as a
 safety measure.
 :::
 
 - The `.wwebjs_auth` folder contains full session credentials — protect it like a password
-- Set file permissions: `chmod 700 ~/.hermes/.wwebjs_auth`
+- Set file permisos: `chmod 700 ~/.hermes/.wwebjs_auth`
 - Use a **dedicated phone number** for the bot to isolate risk from your personal account
 - If you suspect compromise, unlink the device from WhatsApp → Settings → Linked Devices
 - Phone numbers in logs are partially redacted, but review your log retention policy

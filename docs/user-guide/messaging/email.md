@@ -1,12 +1,12 @@
 ---
 sidebar_position: 7
 title: "Email"
-description: "Set up Hermes Agent as an email assistant via IMAP/SMTP"
+description: "Configura Hermes Agent comon email assistant via IMAP/SMTP"
 ---
 
-# Email Setup
+# Email Configuración
 
-Hermes can receive and reply to emails using standard IMAP and SMTP protocols. Send an email to the agent's address and it replies in-thread — no special client or bot API needed. Works with Gmail, Outlook, Yahoo, Fastmail, or any provider that supports IMAP/SMTP.
+Hermes can recibir and reply to emails using standard IMAP and SMTP protocols. Send an email to the agent's address and it replies in-thread — no special client or bot API needed. Works with Gmail, Outlook, Yahoo, Fastmail, or any provider that supports IMAP/SMTP.
 
 :::info No External Dependencies
 The Email adapter uses Python's built-in `imaplib`, `smtplib`, and `email` modules. No additional packages or external services are required.
@@ -14,13 +14,13 @@ The Email adapter uses Python's built-in `imaplib`, `smtplib`, and `email` modul
 
 ---
 
-## Prerequisites
+## Requisitos Previos
 
 - **A dedicated email account** for your Hermes agent (don't use your personal email)
 - **IMAP enabled** on the email account
 - **An app password** if using Gmail or another provider with 2FA
 
-### Gmail Setup
+### Gmail Configuración
 
 1. Enable 2-Factor Authentication on your Google Account
 2. Go to [App Passwords](https://myaccount.google.com/apppasswords)
@@ -51,9 +51,9 @@ The easiest way:
 hermes gateway setup
 ```
 
-Select **Email** from the platform menu. The wizard prompts for your email address, password, IMAP/SMTP hosts, and allowed senders.
+Select **Email** from the platform menu. The wizard prompts for your email address, password, IMAP/SMTP hosts, and allowed enviarers.
 
-### Manual Configuration
+### Manual Configuración
 
 Add to `~/.hermes/.env`:
 
@@ -85,8 +85,8 @@ hermes gateway install      # Install as a system service
 
 On startup, the adapter:
 1. Tests IMAP and SMTP connections
-2. Marks all existing inbox messages as "seen" (only processes new emails)
-3. Starts polling for new messages
+2. Marks all existing inbox mensajes as "seen" (only processes new emails)
+3. Starts polling for new mensajes
 
 ---
 
@@ -94,7 +94,7 @@ On startup, the adapter:
 
 ### Receiving Messages
 
-The adapter polls the IMAP inbox for UNSEEN messages at a configurable interval (default: 15 seconds). For each new email:
+The adapter polls the IMAP inbox for UNSEEN mensajes at a configuraciónurable interval (default: 15 seconds). For each new email:
 
 - **Subject line** is included as context (e.g., `[Subject: Deploy to production]`)
 - **Reply emails** (subject starting with `Re:`) skip the subject prefix — the thread context is already established
@@ -102,7 +102,7 @@ The adapter polls the IMAP inbox for UNSEEN messages at a configurable interval 
   - Images (JPEG, PNG, GIF, WebP) → available to the vision tool
   - Documents (PDF, ZIP, etc.) → available for file access
 - **HTML-only emails** have tags stripped for plain text extraction
-- **Self-messages** are filtered out to prevent reply loops
+- **Self-mensajes** are filtered out to prevent reply loops
 
 ### Sending Replies
 
@@ -115,7 +115,7 @@ Replies are sent via SMTP with proper email threading:
 
 ### File Attachments
 
-The agent can send file attachments in replies. Include `MEDIA:/path/to/file` in the response and the file is attached to the outgoing email.
+The agent can enviar file attachments in replies. Include `MEDIA:/path/to/file` in the response and the file is attached to the outgoing email.
 
 ---
 
@@ -124,26 +124,26 @@ The agent can send file attachments in replies. Include `MEDIA:/path/to/file` in
 Email access follows the same pattern as all other Hermes platforms:
 
 1. **`EMAIL_ALLOWED_USERS` set** → only emails from those addresses are processed
-2. **No allowlist set** → unknown senders get a pairing code
-3. **`EMAIL_ALLOW_ALL_USERS=true`** → any sender is accepted (use with caution)
+2. **No allowlist set** → unknown enviarers get a pairing code
+3. **`EMAIL_ALLOW_ALL_USERS=true`** → any enviarer is accepted (use with caution)
 
 :::warning
-**Always configure `EMAIL_ALLOWED_USERS`.** Without it, anyone who knows the agent's email address could send commands. The agent has terminal access by default.
+**Always configuraciónure `EMAIL_ALLOWED_USERS`.** Without it, anyone who knows the agent's email address could enviar commands. The agent has terminal access by default.
 :::
 
 ---
 
-## Troubleshooting
+## Solución de Problemas
 
 | Problem | Solution |
 |---------|----------|
 | **"IMAP connection failed"** at startup | Verify `EMAIL_IMAP_HOST` and `EMAIL_IMAP_PORT`. Ensure IMAP is enabled on the account. For Gmail, enable it in Settings → Forwarding and POP/IMAP. |
 | **"SMTP connection failed"** at startup | Verify `EMAIL_SMTP_HOST` and `EMAIL_SMTP_PORT`. Check that your password is correct (use App Password for Gmail). |
-| **Messages not received** | Check `EMAIL_ALLOWED_USERS` includes the sender's email. Check spam folder — some providers flag automated replies. |
+| **Messages not recibird** | Check `EMAIL_ALLOWED_USERS` includes the enviarer's email. Check spam folder — some providers flag automated replies. |
 | **"Authentication failed"** | For Gmail, you must use an App Password, not your regular password. Ensure 2FA is enabled first. |
 | **Duplicate replies** | Ensure only one gateway instance is running. Check `hermes gateway status`. |
 | **Slow response** | The default poll interval is 15 seconds. Reduce with `EMAIL_POLL_INTERVAL=5` for faster response (but more IMAP connections). |
-| **Replies not threading** | The adapter uses In-Reply-To headers. Some email clients (especially web-based) may not thread correctly with automated messages. |
+| **Replies not threading** | The adapter uses In-Reply-To headers. Some email clients (especially web-based) may not thread correctly with automated mensajes. |
 
 ---
 
@@ -171,6 +171,6 @@ Email access follows the same pattern as all other Hermes platforms:
 | `EMAIL_IMAP_PORT` | No | `993` | IMAP server port |
 | `EMAIL_SMTP_PORT` | No | `587` | SMTP server port |
 | `EMAIL_POLL_INTERVAL` | No | `15` | Seconds between inbox checks |
-| `EMAIL_ALLOWED_USERS` | No | — | Comma-separated allowed sender addresses |
+| `EMAIL_ALLOWED_USERS` | No | — | Comma-separated allowed enviarer addresses |
 | `EMAIL_HOME_ADDRESS` | No | — | Default delivery target for cron jobs |
-| `EMAIL_ALLOW_ALL_USERS` | No | `false` | Allow all senders (not recommended) |
+| `EMAIL_ALLOW_ALL_USERS` | No | `false` | Allow all enviarers (not recommended) |

@@ -1,12 +1,12 @@
 ---
 sidebar_position: 6
 title: "Signal"
-description: "Set up Hermes Agent as a Signal messenger bot via signal-cli daemon"
+description: "Configura Hermes Agent como un bot de mensajería Signal a través del demonio signal-cli"
 ---
 
-# Signal Setup
+# Signal Configuración
 
-Hermes connects to Signal through the [signal-cli](https://github.com/AsamK/signal-cli) daemon running in HTTP mode. The adapter streams messages in real-time via SSE (Server-Sent Events) and sends responses via JSON-RPC.
+Hermes connects to Signal through the [signal-cli](https://github.com/AsamK/signal-cli) daemon running in HTTP mode. The adapter streams mensajes in real-time via SSE (Server-Sent Events) and enviars responses via JSON-RPC.
 
 Signal is the most privacy-focused mainstream messenger — end-to-end encrypted by default, open-source protocol, minimal metadata collection. This makes it ideal for security-sensitive agent workflows.
 
@@ -16,7 +16,7 @@ The Signal adapter uses `httpx` (already a core Hermes dependency) for all commu
 
 ---
 
-## Prerequisites
+## Requisitos Previos
 
 - **signal-cli** — Java-based Signal client ([GitHub](https://github.com/AsamK/signal-cli))
 - **Java 17+** runtime — required by signal-cli
@@ -104,9 +104,9 @@ Select **Signal** from the platform menu. The wizard will:
 2. Prompt for the HTTP URL (default: `http://127.0.0.1:8080`)
 3. Test connectivity to the daemon
 4. Ask for your account phone number
-5. Configure allowed users and access policies
+5. Configure allowed usuarios and access policies
 
-### Manual Configuration
+### Manual Configuración
 
 Add to `~/.hermes/.env`:
 
@@ -119,7 +119,7 @@ SIGNAL_ACCOUNT=+1234567890
 SIGNAL_ALLOWED_USERS=+1234567890,+0987654321    # Comma-separated E.164 numbers or UUIDs
 
 # Optional
-SIGNAL_GROUP_ALLOWED_USERS=groupId1,groupId2     # Enable groups (omit to disable, * for all)
+SIGNAL_GROUP_ALLOWED_USERS=grupoId1,grupoId2     # Enable grupos (omit to disable, * for all)
 SIGNAL_HOME_CHANNEL=+1234567890                  # Default delivery target for cron jobs
 ```
 
@@ -138,19 +138,19 @@ hermes gateway install      # Install as a system service
 
 DM access follows the same pattern as all other Hermes platforms:
 
-1. **`SIGNAL_ALLOWED_USERS` set** → only those users can message
-2. **No allowlist set** → unknown users get a DM pairing code (approve via `hermes pairing approve signal CODE`)
-3. **`SIGNAL_ALLOW_ALL_USERS=true`** → anyone can message (use with caution)
+1. **`SIGNAL_ALLOWED_USERS` set** → only those usuarios can mensaje
+2. **No allowlist set** → unknown usuarios get a DM pairing code (approve via `hermes pairing approve signal CODE`)
+3. **`SIGNAL_ALLOW_ALL_USERS=true`** → anyone can mensaje (use with caution)
 
 ### Group Access
 
 Group access is controlled by the `SIGNAL_GROUP_ALLOWED_USERS` env var:
 
-| Configuration | Behavior |
+| Configuración | Behavior |
 |---------------|----------|
-| Not set (default) | All group messages are ignored. The bot only responds to DMs. |
-| Set with group IDs | Only listed groups are monitored (e.g., `groupId1,groupId2`). |
-| Set to `*` | The bot responds in any group it's a member of. |
+| Not set (default) | All grupo mensajes are ignored. The bot only responds to DMs. |
+| Set with grupo IDs | Only listed grupos are monitored (e.g., `grupoId1,grupoId2`). |
+| Set to `*` | The bot responds in any grupo it's a member of. |
 
 ---
 
@@ -158,17 +158,17 @@ Group access is controlled by the `SIGNAL_GROUP_ALLOWED_USERS` env var:
 
 ### Attachments
 
-The adapter supports sending and receiving:
+The adapter supports enviaring and receiving:
 
 - **Images** — PNG, JPEG, GIF, WebP (auto-detected via magic bytes)
-- **Audio** — MP3, OGG, WAV, M4A (voice messages transcribed if Whisper is configured)
+- **Audio** — MP3, OGG, WAV, M4A (voice mensajes transcribed if Whisper is configuraciónured)
 - **Documents** — PDF, ZIP, and other file types
 
 Attachment size limit: **100 MB**.
 
 ### Typing Indicators
 
-The bot sends typing indicators while processing messages, refreshing every 8 seconds.
+The bot enviars typing indicators while processing mensajes, refreshing every 8 seconds.
 
 ### Phone Number Redaction
 
@@ -184,30 +184,30 @@ The adapter monitors the SSE connection and automatically reconnects if:
 
 ---
 
-## Troubleshooting
+## Solución de Problemas
 
 | Problem | Solution |
 |---------|----------|
 | **"Cannot reach signal-cli"** during setup | Ensure signal-cli daemon is running: `signal-cli --account +YOUR_NUMBER daemon --http 127.0.0.1:8080` |
-| **Messages not received** | Check that `SIGNAL_ALLOWED_USERS` includes the sender's number in E.164 format (with `+` prefix) |
+| **Messages not recibird** | Check that `SIGNAL_ALLOWED_USERS` includes the enviarer's number in E.164 format (with `+` prefix) |
 | **"signal-cli not found on PATH"** | Install signal-cli and ensure it's in your PATH, or use Docker |
 | **Connection keeps dropping** | Check signal-cli logs for errors. Ensure Java 17+ is installed. |
-| **Group messages ignored** | `SIGNAL_GROUP_POLICY` defaults to `disabled`. Set to `allowlist` or `open`. |
-| **Bot responds to everyone** | Set `SIGNAL_DM_POLICY=pairing` or `allowlist` and configure `SIGNAL_ALLOWED_USERS` |
-| **Duplicate messages** | Ensure only one signal-cli instance is listening on your phone number |
+| **Group mensajes ignored** | `SIGNAL_GROUP_POLICY` defaults to `disabled`. Set to `allowlist` or `open`. |
+| **Bot responds to everyone** | Set `SIGNAL_DM_POLICY=pairing` or `allowlist` and configuraciónure `SIGNAL_ALLOWED_USERS` |
+| **Duplicate mensajes** | Ensure only one signal-cli instance is listening on your phone number |
 
 ---
 
 ## Security
 
 :::warning
-**Always configure access controls.** The bot has terminal access by default. Without `SIGNAL_ALLOWED_USERS` or DM pairing, the gateway denies all incoming messages as a safety measure.
+**Always configuraciónure access controls.** The bot has terminal access by default. Without `SIGNAL_ALLOWED_USERS` or DM pairing, the gateway denies all incoming mensajes as a safety measure.
 :::
 
 - Phone numbers are redacted in all log output
-- Use `SIGNAL_DM_POLICY=pairing` (default) for safe onboarding of new users
-- Keep groups disabled unless you specifically need group support
-- Signal's end-to-end encryption protects message content in transit
+- Use `SIGNAL_DM_POLICY=pairing` (default) for safe onboarding of new usuarios
+- Keep grupos disabled unless you specifically need grupo support
+- Signal's end-to-end encryption protects mensaje content in transit
 - The signal-cli session data in `~/.local/share/signal-cli/` contains account credentials — protect it like a password
 
 ---
@@ -219,5 +219,5 @@ The adapter monitors the SSE connection and automatically reconnects if:
 | `SIGNAL_HTTP_URL` | Yes | — | signal-cli HTTP endpoint |
 | `SIGNAL_ACCOUNT` | Yes | — | Bot phone number (E.164) |
 | `SIGNAL_ALLOWED_USERS` | No | — | Comma-separated phone numbers/UUIDs |
-| `SIGNAL_GROUP_ALLOWED_USERS` | No | — | Group IDs to monitor, or `*` for all (omit to disable groups) |
+| `SIGNAL_GROUP_ALLOWED_USERS` | No | — | Group IDs to monitor, or `*` for all (omit to disable grupos) |
 | `SIGNAL_HOME_CHANNEL` | No | — | Default delivery target for cron jobs |
