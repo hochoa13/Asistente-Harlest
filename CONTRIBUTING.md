@@ -45,7 +45,7 @@ Bundled skills (in `skills/`) ship with every Hermes install. They should be **b
 
 If your skill is official and useful but not universally needed (e.g., a paid service integration, a heavyweight dependency), put it in **`optional-skills/`** — it ships with the repo but isn't activated by default. Users can discover it via `hermes skills browse` (labeled "official") and install it with `hermes skills install` (no third-party warning, builtin trust).
 
-If your skill is specialized, community-contributed, or niche, it's better suited for a **Skills Hub** — upload it to a skills registry and share it in the [Nous Research Discord](https://discord.gg/NousResearch). Users can install it with `hermes skills install`.
+If your skill is specialized, community-contributed, or niche, it's better suited for a **Skills Hub** — upload it to a skills registry and share it in the [Harlest Community](#). Users can install it with `hermes skills install`.
 
 ---
 
@@ -63,7 +63,7 @@ If your skill is specialized, community-contributed, or niche, it's better suite
 ### Clone and install
 
 ```bash
-git clone --recurse-submodules https://github.com/NousResearch/hermes-agent.git
+git clone --recurse-submodules https://github.com/hochoa13/Asistente-Harlest.git
 cd hermes-agent
 
 # Create venv with Python 3.11
@@ -174,7 +174,7 @@ hermes-agent/
 ├── optional-skills/          # Official optional skills (discoverable via hub, not activated by default)
 ├── environments/             # RL training environments (Atropos integration)
 ├── tests/                    # Test suite
-├── website/                  # Documentation site (hermes-agent.nousresearch.com)
+├── website/                  # Documentation site (Asistente-Harlest)
 │
 ├── cli-config.yaml.example   # Example configuration (copied to ~/.hermes/config.yaml)
 └── AGENTS.md                 # Development guide for AI coding assistants
@@ -596,7 +596,7 @@ test(tools): add unit tests for file_operations
 
 ## Reporting Issues
 
-- Use [GitHub Issues](https://github.com/NousResearch/hermes-agent/issues)
+- Use [GitHub Issues](https://github.com/hochoa13/Asistente-Harlest/issues)
 - Include: OS, Python version, Hermes version (`hermes version`), full error traceback
 - Include steps to reproduce
 - Check existing issues before creating duplicates

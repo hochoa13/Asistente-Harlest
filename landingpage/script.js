@@ -5,7 +5,7 @@
 // --- Platform install commands ---
 const PLATFORMS = {
     linux: {
-        command: 'curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash',
+        command: 'curl -fsSL https://raw.githubusercontent.com/hochoa13/Asistente-Harlest/main/scripts/install.sh | bash',
         prompt: '$',
         note: 'Works on Linux, macOS & WSL2 · No prerequisites · Installs everything automatically',
         stepNote: 'Installs uv, Python 3.11, clones the repo, sets up everything. No sudo needed.',
@@ -159,7 +159,7 @@ const demoSequence = [
     // Scene 2: Quick delegation
     { type: 'clear' },
     { type: 'prompt', text: '❯ ' },
-    { type: 'type', text: 'Review the PR at NousResearch/hermes-agent#42 and fix any issues', delay: 30 },
+    { type: 'type', text: 'Review the PR at hochoa13/Asistente-Harlest#42 and fix any issues', delay: 30 },
     { type: 'pause', ms: 600 },
     { type: 'output', lines: [
         '',

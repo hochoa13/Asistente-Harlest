@@ -758,7 +758,7 @@ HERMES_CADUCEUS = """[#CD7F32]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⡀⠀⣀⣀�
 COMPACT_BANNER = """
 [bold #FFD700]╔══════════════════════════════════════════════════════════════╗[/]
 [bold #FFD700]║[/]  [#FFBF00]⚕ NOUS HERMES[/] [dim #B8860B]- AI Agent Framework[/]              [bold #FFD700]║[/]
-[bold #FFD700]║[/]  [#CD7F32]Messenger of the Digital Gods[/]    [dim #B8860B]Nous Research[/]   [bold #FFD700]║[/]
+[bold #FFD700]║[/]  [#CD7F32]Messenger of the Digital Gods[/]    [dim #B8860B]Harlest[/]   [bold #FFD700]║[/]
 [bold #FFD700]╚══════════════════════════════════════════════════════════════╝[/]
 """
 
@@ -767,11 +767,11 @@ def _build_compact_banner() -> str:
     """Construye un banner compacto que se ajuste al ancho actual del terminal."""
     w = min(shutil.get_terminal_size().columns - 2, 64)
     if w < 30:
-        return "\n[#FFBF00]⚕ NOUS HERMES[/] [dim #B8860B]- Nous Research[/]\n"
+        return "\n[#FFBF00]⚕ HARLEST HERMES[/] [dim #B8860B]- Harlest[/]\n"
     inner = w - 2  # inside the box border
     bar = "═" * w
     line1 = "⚕ NOUS HERMES - AI Agent Framework"
-    line2 = "Messenger of the Digital Gods  ·  Nous Research"
+    line2 = "Messenger of the Digital Gods  ·  Harlest"
     # Truncate and pad to fit
     line1 = line1[:inner - 2].ljust(inner - 2)
     line2 = line2[:inner - 2].ljust(inner - 2)
@@ -880,7 +880,7 @@ def build_welcome_banner(console: Console, model: str, cwd: str, tools: List[dic
         model_short = model_short[:25] + "..."
     
     ctx_str = f" [dim {_dim}]·[/] [dim {_dim}]{_format_context_length(context_length)} context[/]" if context_length else ""
-    left_lines.append(f"[{_accent}]{model_short}[/]{ctx_str} [dim {_dim}]·[/] [dim {_dim}]Nous Research[/]")
+    left_lines.append(f"[{_accent}]{model_short}[/]{ctx_str} [dim {_dim}]·[/] [dim {_dim}]Harlest[/]")
     left_lines.append(f"[dim {_dim}]{cwd}[/]")
     
     # Add session ID if provided
