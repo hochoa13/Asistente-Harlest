@@ -1,142 +1,142 @@
 ---
 sidebar_position: 8
 title: "Seguridad"
-description: "Security model, dangerous command approval, user authorization, container isolation, and production deployment best practices"
+description: "Modelo de seguridad, aprobación de comandos peligrosos, autorización de usuarios, aislamiento de contenedores y mejores prácticas de implementación en producción"
 ---
 
-# Security
+# Seguridad
 
-Hermes Agent is designed with a defense-in-depth security model. This page covers every security boundary — from command approval to container isolation to user authorization on messaging platforms.
+Hermes Agent está diseñado con un modelo de seguridad de defensa en profundidad. Esta página cubre cada límite de seguridad — desde aprobación de comandos hasta aislamiento de contenedores hasta autorización de usuarios en plataformas de mensajería.
 
-## Overview
+## Descripción General
 
-The security model has five layers:
+El modelo de seguridad tiene cinco capas:
 
-1. **User authorization** — who can talk to the agent (allowlists, DM pairing)
-2. **Dangerous command approval** — human-in-the-loop for destructive operations
-3. **Container isolation** — Docker/Singularity/Modal sandboxing with hardened settings
-4. **MCP credential filtering** — environment variable isolation for MCP subprocesses
-5. **Context file scanning** — prompt injection detection in project files
+1. **Autorización de usuario** — quién puede hablar con el agente (listas blancas, emparejamiento de MD)
+2. **Aprobación de comandos peligrosos** — intervención humana para operaciones destructivas
+3. **Aislamiento de contenedor** — aislamiento de Docker/Singularity/Modal con configuración endurecida
+4. **Filtrado de credenciales MCP** — aislamiento de variables de entorno para subprocesos MCP
+5. **Escaneo de archivos de contexto** — detección de inyección de indicación en archivos de proyecto
 
-## Dangerous Command Approval
+## Aprobación de comandos peligrosos
 
-Before executing any command, Hermes checks it against a curated list of dangerous patterns. If a match is found, the user must explicitly approve it.
+Antes de ejecutar cualquier comando, Hermes lo verifica contra una lista curada de patrones peligrosos. Si se encuentra una coincidencia, el usuario debe aprobarlo explícitamente.
 
-### What Triggers Approval
+### Qué desencadena la aprobación
 
-The following patterns trigger approval prompts (defined in `tools/approval.py`):
+Los siguientes patrones desencadenan avisos de aprobación (definidos en `tools/approval.py`):
 
-| Pattern | Description |
+| Patrón | Descripción |
 |---------|-------------|
-| `rm -r` / `rm --recursive` | Recursive delete |
-| `rm ... /` | Delete in root path |
-| `chmod 777` | World-writable permissions |
-| `mkfs` | Format filesystem |
-| `dd if=` | Disk copy |
+| `rm -r` / `rm --recursive` | Eliminación recursiva |
+| `rm ... /` | Eliminar en ruta raíz |
+| `chmod 777` | Permisos grabables por todo el mundo |
+| `mkfs` | Formatear sistema de archivos |
+| `dd if=` | Copia de disco |
 | `DROP TABLE/DATABASE` | SQL DROP |
-| `DELETE FROM` (without WHERE) | SQL DELETE without WHERE |
+| `DELETE FROM` (sin WHERE) | SQL DELETE sin WHERE |
 | `TRUNCATE TABLE` | SQL TRUNCATE |
-| `> /etc/` | Overwrite system config |
-| `systemctl stop/disable/mask` | Stop/disable system services |
-| `kill -9 -1` | Kill all processes |
-| `curl ... \| sh` | Pipe remote content to shell |
-| `bash -c`, `python -e` | Shell/script execution via flags |
-| `find -exec rm`, `find -delete` | Find with destructive actions |
-| Fork bomb patterns | Fork bombs |
+| `> /etc/` | Sobrescribir configuración del sistema |
+| `systemctl stop/disable/mask` | Detener/deshabilitar servicios del sistema |
+| `kill -9 -1` | Matar todos los procesos |
+| `curl ... \| sh` | Conducir contenido remoto a shell |
+| `bash -c`, `python -e` | Ejecución de shell/script vía banderas |
+| `find -exec rm`, `find -delete` | Buscar con acciones destructivas |
+| Patrones de bomba de tenedor | Bombas de tenedor |
 
 :::info
-**Container bypass**: When running in `docker`, `singularity`, `modal`, or `daytona` backends, dangerous command checks are **skipped** because the container itself is the security boundary. Destructive commands inside a container can't harm the host.
+**Omisión de contenedor**: Al ejecutar en backends `docker`, `singularity`, `modal` o `daytona`, las verificaciones de comandos peligrosos se **omiten** porque el contenedor en sí es el límite de seguridad. Los comandos destructivos dentro de un contenedor no pueden dañar al host.
 :::
 
-### Approval Flow (CLI)
+### Flujo de aprobación (CLI)
 
-In the interactive CLI, dangerous commands show an inline approval prompt:
+En la CLI interactiva, los comandos peligrosos muestran un mensaje de aprobación en línea:
 
 ```
-  ⚠️  DANGEROUS COMMAND: recursive delete
+  ⚠️  COMANDO PELIGROSO: eliminación recursiva
       rm -rf /tmp/old-project
 
-      [o]nce  |  [s]ession  |  [a]lways  |  [d]eny
+      [u]na vez  |  [s]esión  |  [s]iempre  |  [b]loquear
 
-      Choice [o/s/a/D]:
+      Opción [u/s/s/B]:
 ```
 
-The four options:
+Las cuatro opciones:
 
-- **once** — allow this single execution
-- **session** — allow this pattern for the rest of the session
-- **always** — add to permanent allowlist (saved to `config.yaml`)
-- **deny** (default) — block the command
+- **una vez** — permitir esta ejecución única
+- **sesión** — permitir este patrón para el resto de la sesión
+- **siempre** — agregar a la lista blanca permanente (guardada en `config.yaml`)
+- **bloquear** (por defecto) — bloquear el comando
 
-### Approval Flow (Gateway/Messaging)
+### Flujo de aprobación (Puerta de enlace/Mensajería)
 
-On messaging platforms, the agent sends the dangerous command details to the chat and waits for the user to reply:
+En plataformas de mensajería, el agente envía los detalles del comando peligroso al chat y espera que el usuario responda:
 
-- Reply **yes**, **y**, **approve**, **ok**, or **go** to approve
-- Reply **no**, **n**, **deny**, or **cancel** to deny
+- Responda **sí**, **y**, **apruebo**, **ok** o **adelante** para aprobar
+- Responda **no**, **n**, **niego** o **cancelar** para negar
 
-The `HERMES_EXEC_ASK=1` environment variable is automatically set when running the gateway.
+La variable de entorno `HERMES_EXEC_ASK=1` se establece automáticamente cuando se ejecuta la puerta de enlace.
 
-### Permanent Allowlist
+### Lista blanca permanente
 
-Commands approved with "always" are saved to `~/.hermes/config.yaml`:
+Los comandos aprobados con "siempre" se guardan en `~/.hermes/config.yaml`:
 
 ```yaml
-# Permanently allowed dangerous command patterns
+# Patrones de comandos peligrosos permitidos permanentemente
 command_allowlist:
   - rm
   - systemctl
 ```
 
-These patterns are loaded at startup and silently approved in all future sessions.
+Estos patrones se cargan al iniciarse y se aprueban silenciosamente en todas las sesiones futuras.
 
 :::tip
-Use `hermes config edit` to review or remove patterns from your permanent allowlist.
+Use `hermes config edit` para revisar o eliminar patrones de su lista blanca permanente.
 :::
 
-## User Authorization (Gateway)
+## Autorización de usuario (Puerta de enlace)
 
-When running the messaging gateway, Hermes controls who can interact with the bot through a layered authorization system.
+Al ejecutar la puerta de enlace de mensajería, Hermes controla quién puede interactuar con el bot a través de un sistema de autorización en capas.
 
-### Authorization Check Order
+### Orden de verificación de autorización
 
-The `_is_user_authorized()` method checks in this order:
+El método `_is_user_authorized()` verifica en este orden:
 
-1. **Per-platform allow-all flag** (e.g., `DISCORD_ALLOW_ALL_USERS=true`)
-2. **DM pairing approved list** (users approved via pairing codes)
-3. **Platform-specific allowlists** (e.g., `TELEGRAM_ALLOWED_USERS=12345,67890`)
-4. **Global allowlist** (`GATEWAY_ALLOWED_USERS=12345,67890`)
-5. **Global allow-all** (`GATEWAY_ALLOW_ALL_USERS=true`)
-6. **Default: deny**
+1. **Bandera permitir todo por plataforma** (p. ej., `DISCORD_ALLOW_ALL_USERS=true`)
+2. **Lista aprobada de emparejamiento de MD** (usuarios aprobados vía códigos de emparejamiento)
+3. **Listas blancas específicas de plataforma** (p. ej., `TELEGRAM_ALLOWED_USERS=12345,67890`)
+4. **Lista blanca global** (`GATEWAY_ALLOWED_USERS=12345,67890`)
+5. **Permitir todo global** (`GATEWAY_ALLOW_ALL_USERS=true`)
+6. **Predeterminado: negar**
 
-### Platform Allowlists
+### Listas blancas de plataforma
 
-Set allowed user IDs as comma-separated values in `~/.hermes/.env`:
+Establezca las ID de usuario permitidas como valores separados por comas en `~/.hermes/.env`:
 
 ```bash
-# Platform-specific allowlists
+# Listas blancas específicas de plataforma
 TELEGRAM_ALLOWED_USERS=123456789,987654321
 DISCORD_ALLOWED_USERS=111222333444555666
 WHATSAPP_ALLOWED_USERS=15551234567
 SLACK_ALLOWED_USERS=U01ABC123
 
-# Cross-platform allowlist (checked for all platforms)
+# Lista blanca entre plataformas (verificada para todas las plataformas)
 GATEWAY_ALLOWED_USERS=123456789
 
-# Per-platform allow-all (use with caution)
+# Permitir todo por plataforma (usar con cuidado)
 DISCORD_ALLOW_ALL_USERS=true
 
-# Global allow-all (use with extreme caution)
+# Permitir todo global (usar con extrema precaución)
 GATEWAY_ALLOW_ALL_USERS=true
 ```
 
 :::warning
-If **no allowlists are configured** and `GATEWAY_ALLOW_ALL_USERS` is not set, **all users are denied**. The gateway logs a warning at startup:
+Si **no se configuran listas blancas** y `GATEWAY_ALLOW_ALL_USERS` no está establecido, **todos los usuarios se niegan**. La puerta de enlace registra una advertencia al iniciar:
 
 ```
-No user allowlists configured. All unauthorized users will be denied.
-Set GATEWAY_ALLOW_ALL_USERS=true in ~/.hermes/.env to allow open access,
-or configure platform allowlists (e.g., TELEGRAM_ALLOWED_USERS=your_id).
+No se han configurado listas blancas de usuario. Se negarán todos los usuarios no autorizados.
+Establezca GATEWAY_ALLOW_ALL_USERS=true en ~/.hermes/.env para permitir acceso abierto,
+o configure listas blancas de plataforma (p. ej., TELEGRAM_ALLOWED_USERS=su_id).
 ```
 :::
 
@@ -164,95 +164,87 @@ For more flexible authorization, Hermes includes a code-based pairing system. In
 | File security | `chmod 0600` on all pairing data files |
 | Logging | Codes are never logged to stdout |
 
-**Pairing CLI commands:**
+**Comandos CLI de emparejamiento:**
 
 ```bash
-# List pending and approved users
+# Listar usuarios pendientes y aprobados
 hermes pairing list
 
-# Approve a pairing code
+# Aprobar un código de emparejamiento
 hermes pairing approve telegram ABC12DEF
 
-# Revoke a user's access
+# Revocar acceso de un usuario
 hermes pairing revoke telegram 123456789
 
-# Clear all pending codes
+# Limpiar todos los códigos pendientes
 hermes pairing clear-pending
 ```
 
-**Storage:** Pairing data is stored in `~/.hermes/pairing/` with per-platform JSON files:
-- `{platform}-pending.json` — pending pairing requests
-- `{platform}-approved.json` — approved users
-- `_rate_limits.json` — rate limit and lockout tracking
+**Almacenamiento:** Los datos de emparejamiento se almacenan en `~/.hermes/pairing/` con archivos JSON por plataforma:
+- `{plataforma}-pending.json` — solicitudes de emparejamiento pendientes
+- `{plataforma}-approved.json` — usuarios aprobados
+- `_rate_limits.json` — rastreo de límite de velocidad y bloqueo
 
-## Container Isolation
+## Aislamiento de contenedor
 
-When using the `docker` terminal backend, Hermes applies strict security hardening to every container.
+Cuando se usa el backend de terminal `docker`, Hermes aplica un endurecimiento de seguridad estricto a cada contenedor.
 
-### Docker Security Flags
+### Banderas de seguridad de Docker
 
-Every container runs with these flags (defined in `tools/environments/docker.py`):
+Cada contenedor se ejecuta con estas banderas (definidas en `tools/environments/docker.py`):
 
 ```python
 _SECURITY_ARGS = [
-    "--cap-drop", "ALL",                          # Drop ALL Linux capabilities
-    "--security-opt", "no-new-privileges",         # Block privilege escalation
-    "--pids-limit", "256",                         # Limit process count
-    "--tmpfs", "/tmp:rw,nosuid,size=512m",         # Size-limited /tmp
-    "--tmpfs", "/var/tmp:rw,noexec,nosuid,size=256m",  # No-exec /var/tmp
-    "--tmpfs", "/run:rw,noexec,nosuid,size=64m",   # No-exec /run
+    "--cap-drop", "ALL",                          # Soltar TODAS las capacidades de Linux
+    "--security-opt", "no-new-privileges",         # Bloquear escalada de privilegios
+    "--pids-limit", "256",                         # Limitar recuento de procesos
+    "--tmpfs", "/tmp:rw,nosuid,size=512m",         # /tmp de tamaño limitado
+    "--tmpfs", "/var/tmp:rw,noexec,nosuid,size=256m",  # /var/tmp sin ejecución
+    "--tmpfs", "/run:rw,noexec,nosuid,size=64m",   # /run sin ejecución
 ]
 ```
 
-### Resource Limits
+### Límites de recursos
 
-Container resources are configurable in `~/.hermes/config.yaml`:
+Los recursos del contenedor se configuran en `~/.hermes/config.yaml`:
 
 ```yaml
 terminal:
   backend: docker
   docker_image: "nikolaik/python-nodejs:python3.11-nodejs20"
-  container_cpu: 1        # CPU cores
-  container_memory: 5120  # MB (default 5GB)
-  container_disk: 51200   # MB (default 50GB, requires overlay2 on XFS)
-  container_persistent: true  # Persist filesystem across sessions
+  container_cpu: 1        # N\u00facleo de CPU
+  container_memory: 5120  # MB (predeterminado 5GB)
+  container_disk: 51200   # MB (predeterminado 50GB, requiere overlay2 en XFS)
+  container_persistent: true  # Persistir sistema de archivos entre sesiones
 ```
 
-### Filesystem Persistence
+### Persistencia del sistema de archivos
 
-- **Persistent mode** (`container_persistent: true`): Bind-mounts `/workspace` and `/root` from `~/.hermes/sandboxes/docker/<task_id>/`
-- **Ephemeral mode** (`container_persistent: false`): Uses tmpfs for workspace — everything is lost on cleanup
+- **Modo persistente** (`container_persistent: true`): Bind-monta `/workspace` y `/root` desde `~/.hermes/sandboxes/docker/<task_id>/`
+- **Modo ef\u00edmero** (`container_persistent: false`): Usa tmpfs para espacio de trabajo \u2014 todo se pierde al limpiar
 
 :::tip
-For production gateway deployments, use `docker`, `modal`, or `daytona` backend to isolate agent commands from your host system. This eliminates the need for dangerous command approval entirely.
-:::
+Para implementaciones de puerta de enlace en producci\u00f3n, use el backend `docker`, `modal` o `daytona` para aislar los comandos del agente de su sistema anfitri\u00f3n. Esto elimina la necesidad de aprobaci\u00f3n de comandos peligrosos.\n:::
 
-## Terminal Backend Security Comparison
+## Comparaci\u00f3n de seguridad del backend de terminal
 
-| Backend | Isolation | Dangerous Cmd Check | Best For |
-|---------|-----------|-------------------|----------|
-| **local** | None — runs on host | ✅ Yes | Development, trusted users |
-| **ssh** | Remote machine | ✅ Yes | Running on a separate server |
-| **docker** | Container | ❌ Skipped (container is boundary) | Production gateway |
-| **singularity** | Container | ❌ Skipped | HPC environments |
-| **modal** | Cloud sandbox | ❌ Skipped | Scalable cloud isolation |
-| **daytona** | Cloud sandbox | ❌ Skipped | Persistent cloud workspaces |
+| Backend | Aislamiento | Verificaci\u00f3n de comando peligroso | Mejor para |\n|---------|-----------|-------------------|----------|\n| **local** | Ninguno \u2014 se ejecuta en anfitri\u00f3n | \u2705 S\u00ed | Desarrollo, usuarios de confianza |\n| **ssh** | M\u00e1quina remota | \u2705 S\u00ed | Ejecutar en un servidor separado |\n| **docker** | Contenedor | \u274c Omitido (contenedor es l\u00edmite) | Puerta de enlace de producci\u00f3n |\n| **singularity** | Contenedor | \u274c Omitido | Entornos HPC |\n| **modal** | Arena de nube | \u274c Omitido | Aislamiento de nube escalable |\n| **daytona** | Arena de nube | \u274c Omitido | Espacios de trabajo en la nube persistentes |
 
-## MCP Credential Handling
+## Manejo de credenciales MCP
 
-MCP (Model Context Protocol) server subprocesses receive a **filtered environment** to prevent accidental credential leakage.
+Los subprocesos del servidor MCP (Protocolo de Contexto de Modelo) reciben un **entorno filtrado** para prevenir filtración accidental de credenciales.
 
-### Safe Environment Variables
+### Variables de entorno seguras
 
-Only these variables are passed through from the host to MCP stdio subprocesses:
+Solo estas variables se pasan del anfitrión a los subprocesos stdio MCP:
 
 ```
 PATH, HOME, USER, LANG, LC_ALL, TERM, SHELL, TMPDIR
 ```
 
-Plus any `XDG_*` variables. All other environment variables (API keys, tokens, secrets) are **stripped**.
+Más cualquier variable `XDG_*`. Todas las otras variables de entorno (claves API, tokens, secretos) se **eliminan**.
 
-Variables explicitly defined in the MCP server's `env` config are passed through:
+Las variables definidas explícitamente en la configuración `env` del servidor MCP se pasan a través:
 
 ```yaml
 mcp_servers:
@@ -260,62 +252,62 @@ mcp_servers:
     command: "npx"
     args: ["-y", "@modelcontextprotocol/server-github"]
     env:
-      GITHUB_PERSONAL_ACCESS_TOKEN: "ghp_..."  # Only this is passed
+      GITHUB_PERSONAL_ACCESS_TOKEN: "ghp_..."  # Solo esto se pasa
 ```
 
-### Credential Redaction
+### Redacción de credenciales
 
-Error messages from MCP tools are sanitized before being returned to the LLM. The following patterns are replaced with `[REDACTED]`:
+Los mensajes de error de herramientas MCP se desinfectan antes de devolverse al LLM. Los siguientes patrones se reemplazan con `[REDACTADO]`:
 
-- GitHub PATs (`ghp_...`)
-- OpenAI-style keys (`sk-...`)
-- Bearer tokens
-- `token=`, `key=`, `API_KEY=`, `password=`, `secret=` parameters
+- PAT de GitHub (`ghp_...`)
+- Claves de estilo OpenAI (`sk-...`)
+- Tokens de portador
+- Parámetros `token=`, `key=`, `API_KEY=`, `password=`, `secret=`
 
-### Context File Injection Protection
+### Protección contra inyección de archivos de contexto
 
-Context files (AGENTS.md, .cursorrules, SOUL.md) are scanned for prompt injection before being included in the system prompt. The scanner checks for:
+Los archivos de contexto (AGENTS.md, .cursorrules, SOUL.md) se escanean para detectar inyección de indicación antes de incluirse en el mensaje del sistema. El escáner comprueba:
 
-- Instructions to ignore/disregard prior instructions
-- Hidden HTML comments with suspicious keywords
-- Attempts to read secrets (`.env`, `credentials`, `.netrc`)
-- Credential exfiltration via `curl`
-- Invisible Unicode characters (zero-width spaces, bidirectional overrides)
+- Instrucciones para ignorar/desatender instrucciones previas
+- Comentarios HTML ocultos con palabras clave sospechosas
+- Intentos de leer secretos (`.env`, `credentials`, `.netrc`)
+- Exfiltración de credenciales vía `curl`
+- Caracteres Unicode invisibles (espacios de ancho cero, anulaciones bidireccionales)
 
-Blocked files show a warning:
+Los archivos bloqueados muestran una advertencia:
 
 ```
-[BLOCKED: AGENTS.md contained potential prompt injection (prompt_injection). Content not loaded.]
+[BLOQUEADO: AGENTS.md contenía potencial inyección de indicación (prompt_injection). Contenido no cargado.]
 ```
 
-## Best Practices for Production Deployment
+## Mejores prácticas para implementación en producción
 
-### Gateway Deployment Checklist
+### Lista de verificación de implementación de puerta de enlace
 
-1. **Set explicit allowlists** — never use `GATEWAY_ALLOW_ALL_USERS=true` in production
-2. **Use container backend** — set `terminal.backend: docker` in config.yaml
-3. **Restrict resource limits** — set appropriate CPU, memory, and disk limits
-4. **Store secrets securely** — keep API keys in `~/.hermes/.env` with proper file permissions
-5. **Enable DM pairing** — use pairing codes instead of hardcoding user IDs when possible
-6. **Review command allowlist** — periodically audit `command_allowlist` in config.yaml
-7. **Set `MESSAGING_CWD`** — don't let the agent operate from sensitive directories
-8. **Run as non-root** — never run the gateway as root
-9. **Monitor logs** — check `~/.hermes/logs/` for unauthorized access attempts
-10. **Keep updated** — run `hermes update` regularly for security patches
+1. **Establecer listas blancas explícitas** — nunca use `GATEWAY_ALLOW_ALL_USERS=true` en producción
+2. **Usar backend de contenedor** — establezca `terminal.backend: docker` en config.yaml
+3. **Restringir límites de recursos** — establezca límites apropiados de CPU, memoria y disco
+4. **Almacenar secretos de forma segura** — mantenga claves API en `~/.hermes/.env` con permisos de archivo adecuados
+5. **Habilitar emparejamiento de MD** — use códigos de emparejamiento en lugar de codificar ID de usuario
+6. **Revisar lista blanca de comandos** — auditar periódicamente `command_allowlist` en config.yaml
+7. **Establecer `MESSAGING_CWD`** — no dejes que el agente opere desde directorios sensibles
+8. **Ejecutar como no root** — nunca ejecute la puerta de enlace como root
+9. **Monitorear registros** — verifique `~/.hermes/logs/` para intentos de acceso no autorizados
+10. **Mantenerse actualizado** — ejecute `hermes update` regularmente para parches de seguridad
 
-### Securing API Keys
+### Aseguramiento de claves API
 
 ```bash
-# Set proper permissions on the .env file
+# Establecer permisos apropiados en el archivo .env
 chmod 600 ~/.hermes/.env
 
-# Keep separate keys for different services
-# Never commit .env files to version control
+# Mantener claves separadas para diferentes servicios
+# Nunca confirmar archivos .env al control de versiones
 ```
 
-### Network Isolation
+### Aislamiento de red
 
-For maximum security, run the gateway on a separate machine or VM:
+Para máxima seguridad, ejecute la puerta de enlace en una máquina o VM separada:
 
 ```yaml
 terminal:
@@ -325,4 +317,4 @@ terminal:
   ssh_key: "~/.ssh/hermes_agent_key"
 ```
 
-This keeps the gateway's messaging connections separate from the agent's command execution.
+Esto mantiene las conexiones de mensajería de la puerta de enlace separadas de la ejecución de comandos del agente.
