@@ -68,23 +68,21 @@ hermes doctor       # Diagnostica cualquier problema
 
 Toda la documentación se encuentra localmente en la carpeta **[`docs`](docs/)**:
 
-| Sección | Qué se Cubre |
-|---------|-------------|
-| [Inicio Rápido](docs/getting-started/quickstart.md) | Instalar → configurar → primera conversación en 2 minutos |
-| [Uso de CLI](docs/user-guide/cli.md) | Comandos, atajos de teclado, personalidades, sesiones |
-| [Configuración](docs/user-guide/configuration.md) | Archivo de configuración, proveedores, modelos, todas las opciones |
-| [Puerta de Enlace de Mensajería](docs/user-guide/messaging/index.md) | Telegram, Discord, Slack, WhatsApp, Signal, Home Assistant |
-| [Seguridad](docs/user-guide/security.md) | Aprobación de comandos, emparejamiento de DM, aislamiento de contenedor |
-| [Herramientas y Conjuntos de Herramientas](docs/user-guide/features/tools.md) | 40+ herramientas, sistema de conjuntos de herramientas, backends de terminal |
-| [Sistema de Habilidades](docs/user-guide/features/skills.md) | Memoria procedimental, Centro de Habilidades, creación de habilidades |
-| [Memoria](docs/user-guide/features/memory.md) | Memoria persistente, perfiles de usuario, mejores prácticas |
-| [Integración MCP](docs/user-guide/features/mcp.md) | Conecta cualquier servidor MCP para capacidades extendidas |
-| [Programación Cron](docs/user-guide/features/cron.md) | Tareas programadas con entrega de plataforma |
-| [Archivos de Contexto](docs/user-guide/features/context-files.md) | Contexto del proyecto que moldea cada conversación |
-| [Arquitectura](docs/developer-guide/architecture.md) | Estructura del proyecto, ciclo del agente, clases clave |
-| [Contribuyendo](docs/developer-guide/contributing.md) | Configuración de desarrollo, proceso de PR, estilo de código |
-| [Referencia CLI](docs/reference/cli-commands.md) | Todos los comandos y banderas |
-| [Variables de Entorno](docs/reference/environment-variables.md) | Referencia completa de variables de entorno |
+| Guía | Descripción |
+|------|-------------|
+| 📖 **[Tutorial Rápido](docs/getting-started/quickstart.md)** | Tu primera conversación y características clave a probar |
+| 🗺️ **[Ruta de Aprendizaje](docs/getting-started/learning-path.md)** | Encuentra los docs correctos para tu nivel de experiencia |
+| ⚙️ **[Configuración](docs/user-guide/configuration.md)** | Archivo de configuración, proveedores, modelos y opciones |
+| 💬 **[Puerta de Enlace de Mensajería](docs/user-guide/messaging/index.md)** | Configura Telegram, Discord, Slack o WhatsApp |
+| 🔧 **[Herramientas y Conjuntos](docs/user-guide/features/tools.md)** | 40+ herramientas integradas y cómo configurarlas |
+| 🧠 **[Sistema de Memoria](docs/user-guide/features/memory.md)** | Memoria persistente que crece entre sesiones |
+| 📚 **[Sistema de Habilidades](docs/user-guide/features/skills.md)** | Memoria procedimental que el agente crea y reutiliza |
+| 🔌 **[Integración MCP](docs/user-guide/features/mcp.md)** | Conecta a cualquier servidor MCP para capacidades extendidas |
+| 📄 **[Archivos de Contexto](docs/user-guide/features/context-files.md)** | Archivos de contexto que moldean cada conversación |
+| 🔒 **[Seguridad](docs/user-guide/security.md)** | Aprobación de comandos, autorización, aislamiento de contenedor |
+| 💡 **[Tips y Mejores Prácticas](docs/guides/tips.md)** | Ganancias rápidas para sacar el máximo de Hermes |
+| 🏗️ **[Arquitectura](docs/developer-guide/architecture.md)** | Cómo funciona bajo el capó |
+| ❓ **[Preguntas Frecuentes](docs/reference/faq.md)** | Preguntas comunes y soluciones |
 
 ---
 
