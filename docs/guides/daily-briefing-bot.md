@@ -1,18 +1,18 @@
 ---
 sidebar_position: 2
 title: "Tutorial: Bot de Resumen Diario"
-description: "Build an automated daily briefing bot that researches topics, summarizes findings, and delivers them to Telegram or Discord every morning"
+description: "Construye un bot de resumen diario automatizado que investiga temas, resume hallazgos y los entrega a Telegram o Discord cada mañana"
 ---
 
-# Tutorial: Build a Daily Briefing Bot
+# Tutorial: Construye un Bot de Resumen Diario
 
-In this tutorial, you'll build a personal briefing bot that wakes up every morning, researches topics you care about, summarizes the findings, and delivers a concise briefing straight to your Telegram or Discord.
+En este tutorial, construirás un bot de resumen personal que se despierta cada mañana, investiga temas que te importan, resume los hallazgos y entrega un resumen conciso directo a tu Telegram o Discord.
 
-By the end, you'll have a fully automated workflow combining **web search**, **cron scheduling**, **delegation**, and **messaging delivery** — no code required.
+Al final, tendrás un flujo de trabajo completamente automatizado que combina **búsqueda web**, **programación cron**, **delegación** y **entrega de mensajes** — sin código requerido.
 
-## What We're Building
+## Qué Estamos Construyendo
 
-Here's the flow:
+Aquí está el flujo:
 
 1. **8:00 AM** — The cron scheduler triggers your job
 2. **Hermes spins up** a fresh agent session with your prompt
