@@ -1,110 +1,110 @@
-# Migrando desde OpenClaw a Hermes Agent
+# Migración desde OpenClaw a Hermes Agent
 
-This guide covers how to import your OpenClaw settings, memories, skills, and API keys into Hermes Agent.
+Esta guía cubre cómo importar su configuración de OpenClaw, memorias, habilidades y claves API en Hermes Agent.
 
-## Three Ways to Migrate
+## Tres formas de migrar
 
-### 1. Automatic (during first-time setup)
+### 1. Automático (durante la configuración inicial)
 
-When you run `hermes setup` for the first time and Hermes detects `~/.openclaw`, it automatically offers to import your OpenClaw data before configuration begins. Just accept the prompt and everything is handled for you.
+Cuando ejecuta `hermes setup` por primera vez y Hermes detecta `~/.openclaw`, automáticamente ofrece importar sus datos de OpenClaw antes de que comience la configuración. Solo acepte el mensaje y todo se maneja para usted.
 
-### 2. CLI Command (quick, scriptable)
+### 2. Comando CLI (rápido, programable)
 
 ```bash
-hermes claw migrate                      # Full migration with confirmation prompt
-hermes claw migrate --dry-run            # Preview what would happen
-hermes claw migrate --preset user-data   # Migrate without API keys/secrets
-hermes claw migrate --yes                # Skip confirmation prompt
+hermes claw migrate                      # Migración completa con aviso de confirmación
+hermes claw migrate --dry-run            # Vista previa de lo que sucedería
+hermes claw migrate --preset user-data   # Migrar sin claves API/secretos
+hermes claw migrate --yes                # Omitir avisos de confirmación
 ```
 
-**All options:**
+**Todas las opciones:**
 
-| Flag | Description |
+| Bandera | Descripción |
 |------|-------------|
-| `--source PATH` | Path to OpenClaw directory (default: `~/.openclaw`) |
-| `--dry-run` | Preview only — no files are modified |
-| `--preset {user-data,full}` | Migración preset (default: `full`). `user-data` excludes secrets |
-| `--overwrite` | Overwrite existing files (default: skip conflicts) |
-| `--migrate-secrets` | Include allowlisted secrets (auto-enabled with `full` preset) |
-| `--workspace-target PATH` | Copy workspace instructions (AGENTS.md) to this absolute path |
-| `--skill-conflict {skip,overwrite,rename}` | Cómo handle skill name conflicts (default: `skip`) |
-| `--yes`, `-y` | Skip confirmation prompts |
+| `--source PATH` | Ruta al directorio OpenClaw (predeterminado: `~/.openclaw`) |
+| `--dry-run` | Solo vista previa — no se modifican archivos |
+| `--preset {user-data,full}` | Preset de migración (predeterminado: `full`). `user-data` excluye secretos |
+| `--overwrite` | Sobrescribir archivos existentes (predeterminado: omitir conflictos) |
+| `--migrate-secrets` | Incluir secretos permitidos (habilitado automáticamente con preset `full`) |
+| `--workspace-target PATH` | Copiar instrucciones de espacio de trabajo (AGENTS.md) a esta ruta absoluta |
+| `--skill-conflict {skip,overwrite,rename}` | Cómo manejar conflictos de nombre de habilidad (predeterminado: `skip`) |
+| `--yes`, `-y` | Omitir avisos de confirmación |
 
-### 3. Agent-Guíad (interactive, with previews)
+### 3. Guía del Agente (interactivo, con vistas previas)
 
-Ask the agent to run the migration for you:
+Pida al agente que ejecute la migración por usted:
 
 ```
-> Migrate my OpenClaw setup to Hermes
+> Migra mi configuración de OpenClaw a Hermes
 ```
 
-The agent will use the `openclaw-migration` skill to:
-1. Run a dry-run first to preview changes
-2. Ask about conflict resolution (SOUL.md, skills, etc.)
-3. Let you choose between `user-data` and `full` presets
-4. Execute the migration with your choices
-5. Print a detailed summary of what was migrated
+El agente utilizará la habilidad `openclaw-migration` para:
+1. Ejecutar una ejecución en seco primero para vista previa de cambios
+2. Preguntar sobre resolución de conflictos (SOUL.md, habilidades, etc.)
+3. Dejar que elija entre presets `user-data` y `full`
+4. Ejecutar la migración con tus elecciones
+5. Imprimir un resumen detallado de lo que se migró
 
-## What Gets Migrated
+## Qué se migra
 
-### `user-data` preset
-| Item | Source | Destination |
+### Preset `user-data`
+| Elemento | Origen | Destino |
 |------|--------|-------------|
 | SOUL.md | `~/.openclaw/workspace/SOUL.md` | `~/.hermes/SOUL.md` |
-| Memoria entries | `~/.openclaw/workspace/MEMORY.md` | `~/.hermes/memories/MEMORY.md` |
-| User profile | `~/.openclaw/workspace/USER.md` | `~/.hermes/memories/USER.md` |
+| Entradas de memoria | `~/.openclaw/workspace/MEMORY.md` | `~/.hermes/memories/MEMORY.md` |
+| Perfil de usuario | `~/.openclaw/workspace/USER.md` | `~/.hermes/memories/USER.md` |
 | Habilidades | `~/.openclaw/workspace/skills/` | `~/.hermes/skills/openclaw-imports/` |
-| Command allowlist | `~/.openclaw/workspace/exec_approval_patterns.yaml` | Merged into `~/.hermes/config.yaml` |
-| Messaging settings | `~/.openclaw/config.yaml` (TELEGRAM_ALLOWED_USERS, MESSAGING_CWD) | `~/.hermes/.env` |
-| TTS assets | `~/.openclaw/workspace/tts/` | `~/.hermes/tts/` |
+| Lista de permitidos de comando | `~/.openclaw/workspace/exec_approval_patterns.yaml` | Fusionado en `~/.hermes/config.yaml` |
+| Configuración de mensajería | `~/.openclaw/config.yaml` (TELEGRAM_ALLOWED_USERS, MESSAGING_CWD) | `~/.hermes/.env` |
+| Activos de TTS | `~/.openclaw/workspace/tts/` | `~/.hermes/tts/` |
 
-### `full` preset (adds to `user-data`)
-| Item | Source | Destination |
+### Preset `full` (agrega a `user-data`)
+| Elemento | Origen | Destino |
 |------|--------|-------------|
-| Telegram bot token | `~/.openclaw/config.yaml` | `~/.hermes/.env` |
-| OpenRouter API key | `~/.openclaw/.env` or config | `~/.hermes/.env` |
-| OpenAI API key | `~/.openclaw/.env` or config | `~/.hermes/.env` |
-| Anthropic API key | `~/.openclaw/.env` or config | `~/.hermes/.env` |
-| ElevenLabs API key | `~/.openclaw/.env` or config | `~/.hermes/.env` |
+| Token de bot Telegram | `~/.openclaw/config.yaml` | `~/.hermes/.env` |
+| Clave API de OpenRouter | `~/.openclaw/.env` o config | `~/.hermes/.env` |
+| Clave API de OpenAI | `~/.openclaw/.env` o config | `~/.hermes/.env` |
+| Clave API de Anthropic | `~/.openclaw/.env` o config | `~/.hermes/.env` |
+| Clave API de ElevenLabs | `~/.openclaw/.env` o config | `~/.hermes/.env` |
 
-Only these 6 allowlisted secrets are ever imported. Other credentials are skipped and reported.
+Solo estos 6 secretos permitidos se importan. Otras credenciales se omiten y se reportan.
 
-## Conflict Handling
+## Manejo de conflictos
 
-By default, the migration **will not overwrite** existing Hermes data:
+De forma predeterminada, la migración **no sobrescribirá** datos existentes de Hermes:
 
-- **SOUL.md** — skipped if one already exists in `~/.hermes/`
-- **Memoria entries** — skipped if memories already exist (to avoid duplicates)
-- **Habilidades** — skipped if a skill with the same name already exists
-- **API keys** — skipped if the key is already set in `~/.hermes/.env`
+- **SOUL.md** — omitido si uno ya existe en `~/.hermes/`
+- **Entradas de memoria** — omitidas si ya existen memorias (para evitar duplicados)
+- **Habilidades** — omitidas si ya existe una habilidad con el mismo nombre
+- **Claves API** — omitidas si la clave ya está configurada en `~/.hermes/.env`
 
-To overwrite conflicts, use `--overwrite`. The migration creates backups before overwriting.
+Para sobrescribir conflictos, use `--overwrite`. La migración crea copias de seguridad antes de sobrescribir.
 
-For skills, you can also use `--skill-conflict rename` to import conflicting skills under a new name (e.g., `skill-name-imported`).
+Para habilidades, también puede usar `--skill-conflict rename` para importar habilidades conflictivas bajo un nuevo nombre (p. ej., `skill-name-imported`).
 
-## Migración Report
+## Reporte de migración
 
-Every migration (including dry runs) produces a report showing:
-- **Migrated items** — what was successfully imported
-- **Conflicts** — items skipped because they already exist
-- **Skipped items** — items not found in the source
-- **Errors** — items that failed to import
+Cada migración (incluidas las ejecuciones en seco) produce un reporte mostrando:
+- **Elementos migrados** — lo que se importó exitosamente
+- **Conflictos** — elementos omitidos porque ya existen
+- **Elementos omitidos** — elementos no encontrados en la fuente
+- **Errores** — elementos que no se pudieron importar
 
-For execute runs, the full report is saved to `~/.hermes/migration/openclaw/<timestamp>/`.
+Para ejecuciones completadas, el reporte completo se guarda en `~/.hermes/migration/openclaw/<timestamp>/`.
 
 ## Solución de Problemas
 
-### "OpenClaw directory not found"
-The migration looks for `~/.openclaw` by default. If your OpenClaw is installed elsewhere, use `--source`:
+### "Directorio de OpenClaw no encontrado"
+La migración busca `~/.openclaw` de forma predeterminada. Si su OpenClaw está instalado en otro lugar, use `--source`:
 ```bash
 hermes claw migrate --source /path/to/.openclaw
 ```
 
-### "Migración script not found"
-The migration script ships with Hermes Agent. If you installed via pip (not git clone), the `optional-skills/` directory may not be present. Install the skill from the Habilidades Hub:
+### "Script de migración no encontrado"
+El script de migración se envía con Hermes Agent. Si instaló vía pip (no git clone), el directorio `optional-skills/` puede no estar presente. Instale la habilidad desde el Centro de Habilidades:
 ```bash
 hermes skills install openclaw-migration
 ```
 
-### Memoria overflow
-If your OpenClaw MEMORY.md or USER.md exceeds Hermes' character limits, excess entries are exported to an overflow file in the migration report directory. You can manually review and add the most important ones.
+### Desbordamiento de memoria
+Si su MEMORY.md o USER.md de OpenClaw excede los límites de caracteres de Hermes, las entradas excedentes se exportan a un archivo de desbordamiento en el directorio de reporte de migración. Puede revisar manualmente y agregar las más importantes.
