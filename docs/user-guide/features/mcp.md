@@ -1,43 +1,43 @@
 ---
 sidebar_position: 4
-title: "MCP (Model Context Protocol)"
-description: "Connect Hermes Agent to external tool servers via MCP — databases, APIs, filesystems, and more"
+title: "MCP (Protocolo de Contexto de Modelo)"
+description: "Conecta Hermes Agent a servidores de herramientas externas vía MCP — bases de datos, APIs, sistemas de archivos y más"
 ---
 
-# MCP (Model Context Protocol)
+# MCP (Protocolo de Contexto de Modelo)
 
-MCP lets Hermes Agent connect to external tool servers — giving the agent access to databases, APIs, filesystems, and more without any code changes.
+MCP permite que Hermes Agent se conecte a servidores de herramientas externas — dándole al agente acceso a bases de datos, APIs, sistemas de archivos y más sin cambios de código.
 
 ## Descripción General
 
-The [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) is an open standard for connecting AI agents to external tools and data sources. MCP servers expose tools over a lightweight RPC protocol, and Hermes Agent can connect to any compliant server automatically.
+El [Protocolo de Contexto de Modelo](https://modelcontextprotocol.io/) (MCP) es un estándar abierto para conectar agentes de IA a herramientas externas y fuentes de datos. Los servidores MCP exponen herramientas sobre un protocolo RPC ligero, y Hermes Agent puede conectarse a cualquier servidor compatible automáticamente.
 
-What this means for you:
+Lo que esto significa para usted:
 
-- **Thousands of ready-made tools** — browse the [MCP server directory](https://github.com/modelcontextprotocol/servers) for servers covering GitHub, Slack, databases, file systems, web scraping, and more
-- **No code changes needed** — add a few lines to `~/.hermes/config.yaml` and the tools appear alongside built-in ones
-- **Mix and match** — run multiple MCP servers simultaneously, combining stdio-based and HTTP-based servers
-- **Secure by default** — environment variables are filtered and credentials are stripped from error messages
+- **Miles de herramientas listas para usar** — explore el [directorio de servidores MCP](https://github.com/modelcontextprotocol/servers) para servidores que cubren GitHub, Slack, bases de datos, sistemas de archivos, web scraping y más
+- **No se necesitan cambios de código** — agregue algunas líneas a `~/.hermes/config.yaml` y las herramientas aparecen junto con las integradas
+- **Mezclar y combinar** — ejecute múltiples servidores MCP simultáneamente, combinando servidores basados en stdio e HTTP
+- **Seguro de forma predeterminada** — las variables de entorno están filtradas y las credenciales se eliminan de los mensajes de error
 
-## Prerequisites
+## Requisitos previos
 
 ```bash
 pip install hermes-agent[mcp]
 ```
 
-| Server Type | Runtime Needed | Example |
+| Tipo de Servidor | Tiempo de ejecución necesario | Ejemplo |
 |-------------|---------------|---------|
-| HTTP/remote | Nothing extra | `url: "https://mcp.example.com"` |
-| npm-based (npx) | Node.js 18+ | `command: "npx"` |
-| Python-based | uv (recommended) | `command: "uvx"` |
+| HTTP/remoto | Nada extra | `url: "https://mcp.example.com"` |
+| Basado en npm (npx) | Node.js 18+ | `command: "npx"` |
+| Basado en Python | uv (recomendado) | `command: "uvx"` |
 
 ## Configuración
 
-MCP servers are configured in `~/.hermes/config.yaml` under the `mcp_servers` key.
+Los servidores MCP se configuran en `~/.hermes/config.yaml` bajo la clave `mcp_servers`.
 
-### Stdio Servers
+### Servidores Stdio
 
-Stdio servers run as local subprocesses, communicating over stdin/stdout:
+Los servidores Stdio se ejecutan como subprocesos locales, comunicándose sobre stdin/stdout:
 
 ```yaml
 mcp_servers:
@@ -53,17 +53,17 @@ mcp_servers:
       GITHUB_PERSONAL_ACCESS_TOKEN: "ghp_xxxxxxxxxxxx"
 ```
 
-| Key | Required | Description |
+| Clave | Requerida | Descripción |
 |-----|----------|-------------|
-| `command` | Yes | Executable to run (`npx`, `uvx`, `python`) |
-| `args` | No | Command-line arguments |
-| `env` | No | Environment variables for the subprocess |
+| `command` | Sí | Ejecutable a executar (`npx`, `uvx`, `python`) |
+| `args` | No | Argumentos de línea de comandos |
+| `env` | No | Variables de entorno para el subproceso |
 
-:::info Security
-Only explicitly listed `env` variables plus a safe baseline (`PATH`, `HOME`, `USER`, `LANG`, `SHELL`, `TMPDIR`, `XDG_*`) are passed to the subprocess. Your API keys and secrets are **not** leaked.
+:::info Seguridad
+Solo las variables `env` listadas explícitamente más una línea base segura (`PATH`, `HOME`, `USER`, `LANG`, `SHELL`, `TMPDIR`, `XDG_*`) se pasan al subproceso. Sus claves API y secretos **no** se filtran.
 :::
 
-### HTTP Servers
+### Servidores HTTP
 
 ```yaml
 mcp_servers:
@@ -73,7 +73,7 @@ mcp_servers:
       Authorization: "Bearer sk-xxxxxxxxxxxx"
 ```
 
-### Per-Server Timeouts
+### Tiempos de espera por servidor
 
 ```yaml
 mcp_servers:
@@ -82,44 +82,44 @@ mcp_servers:
     args: ["-y", "@modelcontextprotocol/server-postgres"]
     env:
       DATABASE_URL: "postgres://user:pass@localhost/mydb"
-    timeout: 300          # Tool call timeout (default: 120s)
-    connect_timeout: 90   # Initial connection timeout (default: 60s)
+    timeout: 300          # Tiempo de espera de llamada de herramienta (predeterminado: 120s)
+    connect_timeout: 90   # Tiempo de espera de conexión inicial (predeterminado: 60s)
 ```
 
-### Mixed Configuración Example
+### Ejemplo de configuración mixta
 
 ```yaml
 mcp_servers:
-  # Local filesystem via stdio
+  # Sistema de archivos local vía stdio
   filesystem:
     command: "npx"
     args: ["-y", "@modelcontextprotocol/server-filesystem", "/tmp"]
 
-  # GitHub API via stdio with auth
+  # API de GitHub vía stdio con autenticación
   github:
     command: "npx"
     args: ["-y", "@modelcontextprotocol/server-github"]
     env:
       GITHUB_PERSONAL_ACCESS_TOKEN: "ghp_xxxxxxxxxxxx"
 
-  # Remote database via HTTP
+  # Base de datos remota vía HTTP
   company_db:
     url: "https://mcp.internal.company.com/db"
     headers:
       Authorization: "Bearer sk-xxxxxxxxxxxx"
     timeout: 180
 
-  # Python-based server via uvx
+  # Servidor basado en Python vía uvx
   memory:
     command: "uvx"
     args: ["mcp-server-memory"]
 ```
 
-## Translating from Claude Desktop Config
+## Traducción desde la configuración de Claude Desktop
 
-Many MCP server docs show Claude Desktop JSON format. Here's the translation:
+Muchos documentos de servidores MCP muestran el formato JSON de Claude Desktop. Aquí está la traducción:
 
-**Claude Desktop JSON:**
+**JSON de Claude Desktop:**
 ```json
 {
   "mcpServers": {
@@ -131,7 +131,7 @@ Many MCP server docs show Claude Desktop JSON format. Here's the translation:
 }
 ```
 
-**Hermes YAML:**
+**YAML de Hermes:**
 ```yaml
 mcp_servers:                          # mcpServers → mcp_servers (snake_case)
   filesystem:
@@ -139,57 +139,57 @@ mcp_servers:                          # mcpServers → mcp_servers (snake_case)
     args: ["-y", "@modelcontextprotocol/server-filesystem", "/tmp"]
 ```
 
-Rules: `mcpServers` → `mcp_servers` (snake_case), JSON → YAML. Keys like `command`, `args`, `env` are identical.
+Reglas: `mcpServers` → `mcp_servers` (snake_case), JSON → YAML. Las claves como `command`, `args`, `env` son idénticas.
 
-## How It Works
+## Cómo Funciona
 
-### Tool Registration
+### Registro de herramientas
 
-Each MCP tool is registered with a prefixed name:
+Cada herramienta MCP se registra con un nombre prefijado:
 
 ```
 mcp_{server_name}_{tool_name}
 ```
 
-| Server Name | MCP Tool Name | Registered As |
+| Nombre del Servidor | Nombre de herramienta MCP | Registrado como |
 |-------------|--------------|---------------|
 | `filesystem` | `read_file` | `mcp_filesystem_read_file` |
 | `github` | `create-issue` | `mcp_github_create_issue` |
 | `my-api` | `query.data` | `mcp_my_api_query_data` |
 
-Herramientas appear alongside built-in tools — the agent calls them like any other tool.
+Las herramientas aparecen junto con herramientas integradas — el agente las llama como cualquier otra herramienta.
 
 :::info
-In addition to the server's own tools, each MCP server also gets 4 utility tools auto-registered: `list_resources`, `read_resource`, `list_prompts`, and `get_prompt`. These allow the agent to discover and use MCP resources and prompts exposed by the server.
+Además de las herramientas propias del servidor, cada servidor MCP también obtiene 4 herramientas de utilidad registradas automáticamente: `list_resources`, `read_resource`, `list_prompts` y `get_prompt`. Estos permiten que el agente descubra y use recursos y mensajes MCP expuestos por el servidor.
 :::
 
-### Reconnection
+### Reconexión
 
-If an MCP server disconnects, Hermes automatically reconnects with exponential backoff (1s, 2s, 4s, 8s, 16s — max 5 attempts). Initial connection failures are reported immediately.
+Si un servidor MCP se desconecta, Hermes se reconecta automáticamente con retroceso exponencial (1s, 2s, 4s, 8s, 16s — máx 5 intentos). Los fallos de conexión inicial se reportan inmediatamente.
 
-### Shutdown
+### Apagado
 
-On agent exit, all MCP server connections are cleanly shut down.
+Al salir del agente, todas las conexiones del servidor MCP se cierran correctamente.
 
-## Popular MCP Servers
+## Servidores MCP Populares
 
-| Server | Package | Description |
+| Servidor | Paquete | Descripción |
 |--------|---------|-------------|
-| Filesystem | `@modelcontextprotocol/server-filesystem` | Read/write/buscar local files |
-| GitHub | `@modelcontextprotocol/server-github` | Issues, PRs, repos, code buscar |
-| Git | `@modelcontextprotocol/server-git` | Git operations on local repos |
-| Fetch | `@modelcontextprotocol/server-fetch` | HTTP fetching and web content |
-| Memoria | `@modelcontextprotocol/server-memory` | Persistent key-value memory |
-| SQLite | `@modelcontextprotocol/server-sqlite` | Query SQLite databases |
-| PostgreSQL | `@modelcontextprotocol/server-postgres` | Query PostgreSQL databases |
-| Brave Search | `@modelcontextprotocol/server-brave-buscar` | Web buscar via Brave API |
-| Puppeteer | `@modelcontextprotocol/server-puppeteer` | Navegador automation |
+| Sistema de archivos | `@modelcontextprotocol/server-filesystem` | Leer/escribir/buscar archivos locales |
+| GitHub | `@modelcontextprotocol/server-github` | Problemas, PRs, repositorios, búsqueda de código |
+| Git | `@modelcontextprotocol/server-git` | Operaciones Git en repositorios locales |
+| Fetch | `@modelcontextprotocol/server-fetch` | Obtención HTTP y contenido web |
+| Memoria | `@modelcontextprotocol/server-memory` | Memoria de clave-valor persistente |
+| SQLite | `@modelcontextprotocol/server-sqlite` | Consultar bases de datos SQLite |
+| PostgreSQL | `@modelcontextprotocol/server-postgres` | Consultar bases de datos PostgreSQL |
+| Búsqueda Brave | `@modelcontextprotocol/server-brave-search` | Búsqueda web vía API de Brave |
+| Puppeteer | `@modelcontextprotocol/server-puppeteer` | Automatización de navegador |
 
-### Example Configs
+### Configuraciones de ejemplo
 
 ```yaml
 mcp_servers:
-  # No API key needed
+  # Sin clave API
   filesystem:
     command: "npx"
     args: ["-y", "@modelcontextprotocol/server-filesystem", "/home/user/projects"]
@@ -206,16 +206,16 @@ mcp_servers:
     command: "uvx"
     args: ["mcp-server-sqlite", "--db-path", "/home/user/data.db"]
 
-  # Requires API key
+  # Requiere clave API
   github:
     command: "npx"
     args: ["-y", "@modelcontextprotocol/server-github"]
     env:
       GITHUB_PERSONAL_ACCESS_TOKEN: "ghp_xxxxxxxxxxxx"
 
-  brave_buscar:
+  brave_search:
     command: "npx"
-    args: ["-y", "@modelcontextprotocol/server-brave-buscar"]
+    args: ["-y", "@modelcontextprotocol/server-brave-search"]
     env:
       BRAVE_API_KEY: "BSA_xxxxxxxxxxxx"
 ```
@@ -228,21 +228,21 @@ mcp_servers:
 pip install hermes-agent[mcp]
 ```
 
-### Server fails to start
+### El servidor no llega a iniciar
 
-The MCP server command (`npx`, `uvx`) is not on PATH. Install the required runtime:
+El comando del servidor MCP (`npx`, `uvx`) no está en PATH. Instale el tiempo de ejecución necesario:
 
 ```bash
-# For npm-based servers
-npm install -g npx    # or ensure Node.js 18+ is installed
+# Para servidores basados en npm
+npm install -g npx    # o asegúrese de que Node.js 18+ esté instalado
 
-# For Python-based servers
-pip install uv        # then use "uvx" as the command
+# Para servidores basados en Python
+pip install uv        # luego use "uvx" como comando
 ```
 
-### Server connects but tools fail with auth errors
+### El servidor se conecta pero las herramientas fallan con errores de autenticación
 
-Ensure the key is in the server's `env` block:
+Asegúrese de que la clave esté en el bloque `env` del servidor:
 
 ```yaml
 mcp_servers:
@@ -250,45 +250,45 @@ mcp_servers:
     command: "npx"
     args: ["-y", "@modelcontextprotocol/server-github"]
     env:
-      GITHUB_PERSONAL_ACCESS_TOKEN: "ghp_your_actual_token"  # Check this
+      GITHUB_PERSONAL_ACCESS_TOKEN: "ghp_your_actual_token"  # Verifique esto
 ```
 
-### Connection timeout
+### Tiempo de espera de conexión
 
-Increase `connect_timeout` for slow-starting servers:
+Aumente `connect_timeout` para servidores de inicio lento:
 
 ```yaml
 mcp_servers:
   slow_server:
     command: "npx"
     args: ["-y", "heavy-server-package"]
-    connect_timeout: 120   # default is 60
+    connect_timeout: 120   # predeterminado es 60
 ```
 
-### Reload MCP Servers
+### Recargar servidores MCP
 
-You can reload MCP servers without restarting Hermes:
+Puede recargar servidores MCP sin reiniciar Hermes:
 
-- In the CLI: the agent reconnects automatically
-- In messaging: send `/reload-mcp`
+- En la CLI: el agente se reconecta automáticamente
+- En mensajería: envíe `/reload-mcp`
 
-## Sampling (Server-Initiated LLM Requests)
+## Muestreo (Solicitudes de LLM iniciadas por el servidor)
 
-MCP's `sampling/createMessage` capability allows MCP servers to request LLM completions through the Hermes agent. This enables agent-in-the-loop workflows where servers can leverage the LLM during tool execution — for example, a database server asking the LLM to interpret query results, or a code analysis server requesting the LLM to review findings.
+La capacidad `sampling/createMessage` de MCP permite que los servidores MCP soliciten finalizaciones de LLM a través del agente Hermes. Esto permite flujos de trabajo de agente-en-bucle donde los servidores pueden aprovechar el LLM durante la ejecución de herramientas — por ejemplo, un servidor de base de datos pidiendo al LLM que interprete resultados de consulta, o un servidor de análisis de código solicitando al LLM que revise los hallazgos.
 
-### How It Works
+### Cómo Funciona
 
-When an MCP server sends a `sampling/createMessage` request:
+Cuando un servidor MCP envía una solicitud `sampling/createMessage`:
 
-1. The sampling callback validates against rate limits and model whitelist
-2. Resolves which model to use (config override > server hint > default)
-3. Converts MCP messages to OpenAI-compatible format
-4. Offloads the LLM call to a thread via `asyncio.to_thread()` (non-blocking)
-5. Returns the response (text or tool use) back to the server
+1. La devolución de llamada de muestreo valida contra límites de velocidad y lista blanca de modelos
+2. Resuelve qué modelo usar (anulación de config > sugerencia del servidor > predeterminado)
+3. Convierte mensajes MCP a formato compatible con OpenAI
+4. Descarga la llamada LLM a un hilo vía `asyncio.to_thread()` (sin bloqueo)
+5. Devuelve la respuesta (texto o uso de herramienta) de vuelta al servidor
 
 ### Configuración
 
-Sampling is **enabled by default** for all MCP servers. No extra setup needed — if you have an auxiliary LLM client configured, sampling works automatically.
+El muestreo está **habilitado de forma predeterminada** para todos los servidores MCP. No se necesita configuración adicional — si tiene un cliente LLM auxiliar configurado, el muestreo funciona automáticamente.
 
 ```yaml
 mcp_servers:
@@ -296,31 +296,31 @@ mcp_servers:
     command: "npx"
     args: ["-y", "my-analysis-server"]
     sampling:
-      enabled: true           # default: true
-      model: "gemini-3-flash" # override model (optional)
-      max_tokens_cap: 4096    # max tokens per request (default: 4096)
-      timeout: 30             # LLM call timeout in seconds (default: 30)
-      max_rpm: 10             # max requests per minute (default: 10)
-      allowed_models: []      # model whitelist (empty = allow all)
-      max_tool_rounds: 5      # max consecutive tool use rounds (0 = disable)
-      log_level: "info"       # audit verbosity: debug, info, warning
+      enabled: true           # predeterminado: true
+      model: "gemini-3-flash" # anular modelo (opcional)
+      max_tokens_cap: 4096    # máx tokens por solicitud (predeterminado: 4096)
+      timeout: 30             # tiempo de espera de llamada LLM en segundos (predeterminado: 30)
+      max_rpm: 10             # máx solicitudes por minuto (predeterminado: 10)
+      allowed_models: []      # lista blanca de modelos (vacío = permitir todos)
+      max_tool_rounds: 5      # máx rondas de uso de herramienta consecutivas (0 = deshabilitar)
+      log_level: "info"       # verbosidad de auditoría: debug, info, warning
 ```
 
-### Tool Use in Sampling
+### Uso de herramientas en muestreo
 
-Servers can include `tools` and `toolChoice` in sampling requests, enabling multi-turn tool-augmented workflows within a single sampling session. The callback forwards tool definitions to the LLM, handles tool use responses with proper `ToolUseContent` types, and enforces `max_tool_rounds` to prevent infinite loops.
+Los servidores pueden incluir `tools` y `toolChoice` en solicitudes de muestreo, habilitando flujos de trabajo de múltiples turnos aumentados por herramientas dentro de una sola sesión de muestreo. La devolución de llamada reenvía definiciones de herramientas al LLM, maneja respuestas de uso de herramientas con tipos `ToolUseContent` apropiados, y aplica `max_tool_rounds` para prevenir bucles infinitos.
 
-### Security
+### Seguridad
 
-- **Rate limiting**: Per-server sliding window (default: 10 req/min)
-- **Token cap**: Servers can't request more than `max_tokens_cap` (default: 4096)
-- **Model whitelist**: `allowed_models` restricts which models a server can use
-- **Tool loop limit**: `max_tool_rounds` caps consecutive tool use rounds
-- **Credential stripping**: LLM responses are sanitized before returning to the server
-- **Non-blocking**: LLM calls run in a separate thread via `asyncio.to_thread()`
-- **Typed errors**: All failures return structured `ErrorData` per MCP spec
+- **Limitación de velocidad**: Ventana deslizante por servidor (predeterminado: 10 req/min)
+- **Límite de tokens**: Los servidores no pueden solicitar más que `max_tokens_cap` (predeterminado: 4096)
+- **Lista blanca de modelos**: `allowed_models` restringe qué modelos puede usar un servidor
+- **Límite de bucle de herramientas**: `max_tool_rounds` cubre rondas de uso de herramientas consecutivas
+- **Eliminación de credenciales**: Las respuestas de LLM se desinfectan antes de devolverse al servidor
+- **Sin bloqueo**: Las llamadas LLM se ejecutan en un hilo separado vía `asyncio.to_thread()`
+- **Errores tipados**: Todos los fallos devuelven `ErrorData` estructurado por especificación MCP
 
-To disable sampling for untrusted servers:
+Para deshabilitar el muestreo para servidores que no son de confianza:
 
 ```yaml
 mcp_servers:
