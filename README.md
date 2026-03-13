@@ -60,31 +60,31 @@ hermes update       # Actualiza a la última versión
 hermes doctor       # Diagnostica cualquier problema
 ```
 
-📖 **[Documentación completa →](https://hermes-agent.nousresearch.com/docs/)**
+📖 **[Documentación completa →](DOCS/index.md)**
 
 ---
 
 ## Documentación
 
-Toda la documentación se encuentra en **[hermes-agent.nousresearch.com/docs](https://hermes-agent.nousresearch.com/docs/)**:
+Toda la documentación se encuentra localmente en la carpeta **[`DOCS`](DOCS/)**:
 
 | Sección | Qué se Cubre |
 |---------|-------------|
-| [Inicio Rápido](https://hermes-agent.nousresearch.com/docs/getting-started/quickstart) | Instalar → configurar → primera conversación en 2 minutos |
-| [Uso de CLI](https://hermes-agent.nousresearch.com/docs/user-guide/cli) | Comandos, atajos de teclado, personalidades, sesiones |
-| [Configuración](https://hermes-agent.nousresearch.com/docs/user-guide/configuration) | Archivo de configuración, proveedores, modelos, todas las opciones |
-| [Puerta de Enlace de Mensajería](https://hermes-agent.nousresearch.com/docs/user-guide/messaging) | Telegram, Discord, Slack, WhatsApp, Signal, Home Assistant |
-| [Seguridad](https://hermes-agent.nousresearch.com/docs/user-guide/security) | Aprobación de comandos, emparejamiento de DM, aislamiento de contenedor |
-| [Herramientas y Conjuntos de Herramientas](https://hermes-agent.nousresearch.com/docs/user-guide/features/tools) | 40+ herramientas, sistema de conjuntos de herramientas, backends de terminal |
-| [Sistema de Habilidades](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills) | Memoria procedimental, Centro de Habilidades, creación de habilidades |
-| [Memoria](https://hermes-agent.nousresearch.com/docs/user-guide/features/memory) | Memoria persistente, perfiles de usuario, mejores prácticas |
-| [Integración MCP](https://hermes-agent.nousresearch.com/docs/user-guide/features/mcp) | Conecta cualquier servidor MCP para capacidades extendidas |
-| [Programación Cron](https://hermes-agent.nousresearch.com/docs/user-guide/features/cron) | Tareas programadas con entrega de plataforma |
-| [Archivos de Contexto](https://hermes-agent.nousresearch.com/docs/user-guide/features/context-files) | Contexto del proyecto que moldea cada conversación |
-| [Arquitectura](https://hermes-agent.nousresearch.com/docs/developer-guide/architecture) | Estructura del proyecto, ciclo del agente, clases clave |
-| [Contribuyendo](https://hermes-agent.nousresearch.com/docs/developer-guide/contributing) | Configuración de desarrollo, proceso de PR, estilo de código |
-| [Referencia CLI](https://hermes-agent.nousresearch.com/docs/reference/cli-commands) | Todos los comandos y banderas |
-| [Variables de Entorno](https://hermes-agent.nousresearch.com/docs/reference/environment-variables) | Referencia completa de variables de entorno |
+| [Inicio Rápido](DOCS/getting-started/quickstart.md) | Instalar → configurar → primera conversación en 2 minutos |
+| [Uso de CLI](DOCS/user-guide/cli.md) | Comandos, atajos de teclado, personalidades, sesiones |
+| [Configuración](DOCS/user-guide/configuration.md) | Archivo de configuración, proveedores, modelos, todas las opciones |
+| [Puerta de Enlace de Mensajería](DOCS/user-guide/messaging/index.md) | Telegram, Discord, Slack, WhatsApp, Signal, Home Assistant |
+| [Seguridad](DOCS/user-guide/security.md) | Aprobación de comandos, emparejamiento de DM, aislamiento de contenedor |
+| [Herramientas y Conjuntos de Herramientas](DOCS/user-guide/features/tools.md) | 40+ herramientas, sistema de conjuntos de herramientas, backends de terminal |
+| [Sistema de Habilidades](DOCS/user-guide/features/tools.md) | Memoria procedimental, Centro de Habilidades, creación de habilidades |
+| [Memoria](DOCS/user-guide/features/memory.md) | Memoria persistente, perfiles de usuario, mejores prácticas |
+| [Integración MCP](DOCS/user-guide/features/tools.md) | Conecta cualquier servidor MCP para capacidades extendidas |
+| [Programación Cron](DOCS/user-guide/features/tools.md) | Tareas programadas con entrega de plataforma |
+| [Archivos de Contexto](DOCS/user-guide/features/context-files.md) | Contexto del proyecto que moldea cada conversación |
+| [Arquitectura](DOCS/developer-guide/architecture.md) | Estructura del proyecto, ciclo del agente, clases clave |
+| [Contribuyendo](DOCS/developer-guide/contributing.md) | Configuración de desarrollo, proceso de PR, estilo de código |
+| [Referencia CLI](DOCS/reference/cli-commands.md) | Todos los comandos y banderas |
+| [Variables de Entorno](DOCS/reference/environment-variables.md) | Referencia completa de variables de entorno |
 
 ---
 
